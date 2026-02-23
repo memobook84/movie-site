@@ -124,6 +124,35 @@ export async function getTvDetail(id: number): Promise<MovieDetail> {
   return tv;
 }
 
+export interface PersonDetail {
+  id: number;
+  name: string;
+  biography: string;
+  profile_path: string | null;
+  birthday: string | null;
+  place_of_birth: string | null;
+  known_for_department: string;
+  combined_credits?: {
+    cast: Movie[];
+  };
+}
+
+const emptyPerson: PersonDetail = {
+  id: 0, name: "", biography: "", profile_path: null,
+  birthday: null, place_of_birth: null, known_for_department: "",
+};
+
+export async function getPersonDetail(id: number): Promise<PersonDetail> {
+  const person = await fetchTMDb<PersonDetail>(
+    `/person/${id}?append_to_response=combined_credits`, emptyPerson
+  );
+  if (person.id !== 0 && !person.biography) {
+    const enPerson = await fetchTMDbEn<PersonDetail>(`/person/${id}`, emptyPerson);
+    if (enPerson.biography) person.biography = enPerson.biography;
+  }
+  return person;
+}
+
 // ジャンルID
 export const GENRES = {
   ACTION: 28,

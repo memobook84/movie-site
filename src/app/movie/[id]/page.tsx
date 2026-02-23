@@ -179,12 +179,12 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
             </h2>
             <div className="flex gap-5 overflow-x-auto pb-4 scrollbar-hide">
               {cast.map((person) => (
-                <div key={person.id} className="flex-shrink-0 text-center">
+                <Link key={person.id} href={`/person/${person.id}`} className="flex-shrink-0 text-center group">
                   {person.profile_path ? (
                     <img
                       src={`${IMAGE_BASE_URL}/w185${person.profile_path}`}
                       alt={person.name}
-                      className="h-20 w-20 rounded-none object-cover"
+                      className="h-20 w-20 rounded-none object-cover transition-opacity group-hover:opacity-80"
                       loading="lazy"
                     />
                   ) : (
@@ -192,11 +192,11 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                       ?
                     </div>
                   )}
-                  <p className="mt-2 w-20 truncate text-xs font-medium text-white">
+                  <p className="mt-2 w-20 truncate text-xs font-medium text-white group-hover:underline">
                     {person.name}
                   </p>
                   <p className="w-20 truncate text-xs text-gray-500">{person.character}</p>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
