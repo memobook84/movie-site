@@ -1,5 +1,6 @@
 import { getMovieDetail, getTvDetail, IMAGE_BASE_URL } from "@/lib/tmdb";
 import Link from "next/link";
+import FollowButton from "@/components/FollowButton";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -160,6 +161,12 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                   トレーラーを見る
                 </a>
               )}
+              <FollowButton
+                movieId={movie.id}
+                title={title}
+                posterPath={movie.poster_path}
+                mediaType={type || "movie"}
+              />
             </div>
           </div>
         </div>
@@ -239,7 +246,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
       </div>
 
-      <div className="h-20" />
+      <div className="h-28" />
     </main>
   );
 }

@@ -1,0 +1,18 @@
+{
+  "name": "CINEMA",
+  "short_name": "CINEMA",
+  "description": "映画・アニメ情報サイト",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f5f7",
+  "theme_color": "#3d1018",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
