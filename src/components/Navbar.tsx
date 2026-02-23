@@ -98,8 +98,9 @@ export default function Navbar() {
             <Link href="/" className="transition-colors hover:text-white">
               ホーム
             </Link>
-            <span className="hidden cursor-default text-white/40 sm:inline">映画</span>
-            <span className="hidden cursor-default text-white/40 sm:inline">ドラマ</span>
+            <Link href="/follows" className="transition-colors hover:text-white">
+              フォロー
+            </Link>
             <button
               onClick={() => setShowSearch(!showSearch)}
               className="transition-colors hover:text-white"
