@@ -98,6 +98,9 @@ export default function Navbar() {
             <Link href="/" className="transition-colors hover:text-white">
               ホーム
             </Link>
+            <Link href="/genres" className="transition-colors hover:text-white">
+              ジャンル
+            </Link>
             <Link href="/follows" className="transition-colors hover:text-white">
               フォロー
             </Link>
