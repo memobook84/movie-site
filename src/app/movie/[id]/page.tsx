@@ -177,25 +177,33 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
             <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
               キャスト
             </h2>
-            <div className="flex gap-5 overflow-x-auto pb-4 scrollbar-hide">
+            <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
               {cast.map((person) => (
-                <Link key={person.id} href={`/person/${person.id}`} className="flex-shrink-0 text-center group">
+                <Link
+                  key={person.id}
+                  href={`/person/${person.id}`}
+                  className="flex-shrink-0 group w-[120px] rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm overflow-hidden transition-all hover:border-white/20 hover:bg-white/10"
+                >
                   {person.profile_path ? (
                     <img
                       src={`${IMAGE_BASE_URL}/w185${person.profile_path}`}
                       alt={person.name}
-                      className="h-20 w-20 rounded-none object-cover transition-opacity group-hover:opacity-80"
+                      className="h-[140px] w-full object-cover transition-transform duration-300 group-hover:scale-105"
                       loading="lazy"
                     />
                   ) : (
-                    <div className="flex h-20 w-20 items-center justify-center rounded-none bg-white/5 text-lg text-gray-600">
+                    <div className="flex h-[140px] w-full items-center justify-center bg-white/5 text-2xl text-gray-600">
                       ?
                     </div>
                   )}
-                  <p className="mt-2 w-20 truncate text-xs font-medium text-white group-hover:underline">
-                    {person.name}
-                  </p>
-                  <p className="w-20 truncate text-xs text-gray-500">{person.character}</p>
+                  <div className="px-2.5 py-2.5">
+                    <p className="truncate text-xs font-semibold text-white">
+                      {person.name}
+                    </p>
+                    <p className="mt-0.5 truncate text-[10px] text-gray-500">
+                      {person.character}
+                    </p>
+                  </div>
                 </Link>
               ))}
             </div>
