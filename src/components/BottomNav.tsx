@@ -7,6 +7,8 @@ export default function BottomNav() {
   const router = useRouter();
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const isGenres = pathname.startsWith("/genre");
+  const isFollows = pathname === "/follows";
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-[#f0f0f0] pb-[env(safe-area-inset-bottom)] md:hidden">
@@ -14,7 +16,7 @@ export default function BottomNav() {
         {/* 戻る */}
         <button
           onClick={() => router.back()}
-          className="flex flex-col items-center gap-0.5 px-4 py-1 text-gray-400 transition-colors hover:text-gray-800"
+          className="flex flex-col items-center gap-0.5 px-3 py-1 text-gray-400 transition-colors hover:text-gray-800"
         >
           <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
             <path d="M15.75 19.5 8.25 12l7.5-7.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -25,7 +27,7 @@ export default function BottomNav() {
         {/* ホーム */}
         <Link
           href="/"
-          className={`flex flex-col items-center gap-0.5 px-4 py-1 transition-colors hover:text-gray-800 ${
+          className={`flex flex-col items-center gap-0.5 px-3 py-1 transition-colors hover:text-gray-800 ${
             isHome ? "text-gray-800" : "text-gray-400"
           }`}
         >
@@ -35,14 +37,27 @@ export default function BottomNav() {
           <span className="text-[10px]">ホーム</span>
         </Link>
 
+        {/* ジャンル */}
+        <Link
+          href="/genres"
+          className={`flex flex-col items-center gap-0.5 px-3 py-1 transition-colors hover:text-gray-800 ${
+            isGenres ? "text-gray-800" : "text-gray-400"
+          }`}
+        >
+          <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+            <path d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <span className="text-[10px]">ジャンル</span>
+        </Link>
+
         {/* フォロー */}
         <Link
           href="/follows"
-          className={`flex flex-col items-center gap-0.5 px-4 py-1 transition-colors hover:text-gray-800 ${
-            pathname === "/follows" ? "text-gray-800" : "text-gray-400"
+          className={`flex flex-col items-center gap-0.5 px-3 py-1 transition-colors hover:text-gray-800 ${
+            isFollows ? "text-gray-800" : "text-gray-400"
           }`}
         >
-          <svg className="h-6 w-6" fill={pathname === "/follows" ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+          <svg className="h-6 w-6" fill={isFollows ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           <span className="text-[10px]">フォロー</span>
