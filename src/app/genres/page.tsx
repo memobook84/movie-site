@@ -24,14 +24,13 @@ const GENRE_LIST = [
 
 export default function GenresPage() {
   return (
-    <main className="min-h-screen pt-24 pb-28 px-6 md:px-16">
-      <h1 className="text-2xl font-bold text-[#1d1d1f]">ジャンル</h1>
-      <div className="mt-8 flex flex-wrap gap-3">
+    <main className="min-h-screen pt-28 pb-28 px-6 md:px-16">
+      <div className="flex flex-wrap gap-x-6 gap-y-3 md:gap-x-10 md:gap-y-4">
         {GENRE_LIST.map((genre) => (
           <Link
             key={genre.id}
             href={`/genre/${genre.id}?name=${encodeURIComponent(genre.name)}`}
-            className="rounded-full border border-gray-300 px-5 py-2.5 text-sm font-medium text-[#1d1d1f] transition-all hover:border-[#3d1018] hover:bg-[#3d1018] hover:text-white"
+            className="text-2xl font-light text-gray-400 transition-all duration-300 hover:text-[#1d1d1f] hover:scale-105 md:text-4xl"
           >
             {genre.name}
           </Link>
