@@ -89,10 +89,10 @@ export default function Navbar() {
         <div className="flex items-center justify-between">
           <Link
             href="/"
-            className="hidden items-center gap-3 text-xl font-semibold tracking-[0.2em] text-white md:flex md:text-2xl"
+            className="flex items-center gap-3 text-xl font-semibold tracking-[0.2em] text-white md:text-2xl"
           >
-            <img src="/logo.png" alt="Logo" className="h-10 w-10 rounded object-contain" />
-            CINEMA
+            <img src="/logo.png" alt="Logo" className="h-9 w-9 rounded object-contain md:h-10 md:w-10" />
+            <span className="hidden md:inline">CINEMA</span>
           </Link>
           <div className="flex items-center gap-6 text-sm font-light text-white/70">
             <Link href="/" className="hidden transition-colors hover:text-white md:inline">
