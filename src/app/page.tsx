@@ -1,65 +1,97 @@
-import Image from "next/image";
+export const dynamic = "force-dynamic";
 
-export default function Home() {
+import MovieRow from "@/components/MovieRow";
+import { getTrending, getPopular, getTopRated, getUpcoming, getMoviesByGenre, GENRES, Movie } from "@/lib/tmdb";
+
+function shuffle(arr: Movie[]): Movie[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+export default async function Home() {
+  const [otherResults, animeMovies] = await Promise.all([
+    Promise.all([
+      getTrending(),
+      getPopular(),
+      getTopRated(),
+      getUpcoming(),
+      getMoviesByGenre(GENRES.ACTION),
+      getMoviesByGenre(GENRES.ADVENTURE),
+      getMoviesByGenre(GENRES.COMEDY),
+      getMoviesByGenre(GENRES.CRIME),
+      getMoviesByGenre(GENRES.DOCUMENTARY),
+      getMoviesByGenre(GENRES.DRAMA),
+      getMoviesByGenre(GENRES.FAMILY),
+      getMoviesByGenre(GENRES.FANTASY),
+      getMoviesByGenre(GENRES.HISTORY),
+      getMoviesByGenre(GENRES.HORROR),
+      getMoviesByGenre(GENRES.MUSIC),
+      getMoviesByGenre(GENRES.MYSTERY),
+      getMoviesByGenre(GENRES.ROMANCE),
+      getMoviesByGenre(GENRES.SCIENCE_FICTION),
+      getMoviesByGenre(GENRES.THRILLER),
+    ]),
+    // 日本のアニメを複数ページ取得して多めに確保
+    getMoviesByGenre(GENRES.ANIMATION, 10, "ja"),
+  ]);
+
+  // アニメ作品を重複除去・シャッフル
+  const animeSeen = new Set<number>();
+  const animeList: Movie[] = [];
+  for (const m of animeMovies) {
+    if (!animeSeen.has(m.id)) {
+      animeSeen.add(m.id);
+      animeList.push(m);
+    }
+  }
+  const shuffledAnime = shuffle(animeList);
+
+  // その他の作品を重複除去（アニメIDも除外）・シャッフル
+  const seen = new Set<number>(animeSeen);
+  const otherList: Movie[] = [];
+  for (const list of otherResults) {
+    for (const m of list) {
+      if (!seen.has(m.id)) {
+        seen.add(m.id);
+        otherList.push(m);
+      }
+    }
+  }
+  const shuffledOther = shuffle(otherList);
+
+  // 50:50 で混合（アニメとその他を交互に配置）
+  const totalCount = Math.min(shuffledAnime.length + shuffledOther.length, 400);
+  const halfCount = Math.floor(totalCount / 2);
+  const animePool = shuffledAnime.slice(0, halfCount);
+  const otherPool = shuffledOther.slice(0, halfCount);
+
+  // 交互にミックスしてからシャッフル
+  const mixed: Movie[] = [];
+  const maxLen = Math.max(animePool.length, otherPool.length);
+  for (let i = 0; i < maxLen; i++) {
+    if (i < animePool.length) mixed.push(animePool[i]);
+    if (i < otherPool.length) mixed.push(otherPool[i]);
+  }
+  const final = shuffle(mixed);
+
+  // 20行に分割
+  const rowCount = 20;
+  const perRow = Math.ceil(final.length / rowCount);
+  const rows: Movie[][] = [];
+  for (let i = 0; i < rowCount; i++) {
+    const chunk = final.slice(i * perRow, (i + 1) * perRow);
+    if (chunk.length > 0) rows.push(chunk);
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main className="pt-24 space-y-12 pb-12">
+      {rows.map((movies, i) => (
+        <MovieRow key={i} title="" movies={movies} />
+      ))}
+    </main>
   );
 }
