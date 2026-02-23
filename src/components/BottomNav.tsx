@@ -9,12 +9,12 @@ export default function BottomNav() {
   const isHome = pathname === "/";
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200/10 bg-[#3d1018] pb-[env(safe-area-inset-bottom)] md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-[#f0f0f0] pb-[env(safe-area-inset-bottom)] md:hidden">
       <div className="flex items-center justify-around py-2">
         {/* 戻る */}
         <button
           onClick={() => router.back()}
-          className="flex flex-col items-center gap-0.5 px-4 py-1 text-white/60 transition-colors hover:text-white"
+          className="flex flex-col items-center gap-0.5 px-4 py-1 text-gray-400 transition-colors hover:text-gray-800"
         >
           <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
             <path d="M15.75 19.5 8.25 12l7.5-7.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -25,8 +25,8 @@ export default function BottomNav() {
         {/* ホーム */}
         <Link
           href="/"
-          className={`flex flex-col items-center gap-0.5 px-4 py-1 transition-colors hover:text-white ${
-            isHome ? "text-white" : "text-white/60"
+          className={`flex flex-col items-center gap-0.5 px-4 py-1 transition-colors hover:text-gray-800 ${
+            isHome ? "text-gray-800" : "text-gray-400"
           }`}
         >
           <svg className="h-6 w-6" fill={isHome ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
@@ -38,8 +38,8 @@ export default function BottomNav() {
         {/* フォロー */}
         <Link
           href="/follows"
-          className={`flex flex-col items-center gap-0.5 px-4 py-1 transition-colors hover:text-white ${
-            pathname === "/follows" ? "text-white" : "text-white/60"
+          className={`flex flex-col items-center gap-0.5 px-4 py-1 transition-colors hover:text-gray-800 ${
+            pathname === "/follows" ? "text-gray-800" : "text-gray-400"
           }`}
         >
           <svg className="h-6 w-6" fill={pathname === "/follows" ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
