@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const GENRE_LIST = [
   { id: 28, name: "アクション" },
@@ -22,15 +25,54 @@ const GENRE_LIST = [
   { id: 37, name: "西部劇" },
 ];
 
+function seededRandom(seed: number) {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
+
+interface PlacedGenre {
+  id: number;
+  name: string;
+  x: number;
+  y: number;
+  size: number;
+  rotate: number;
+}
+
 export default function GenresPage() {
+  const [items, setItems] = useState<PlacedGenre[]>([]);
+
+  useEffect(() => {
+    const seed = Date.now();
+    const placed: PlacedGenre[] = GENRE_LIST.map((genre, i) => {
+      const r = (n: number) => seededRandom(seed + i * 100 + n);
+      return {
+        ...genre,
+        x: 5 + r(1) * 70,
+        y: 2 + (i / GENRE_LIST.length) * 80 + (r(2) - 0.5) * 15,
+        size: 24 + r(3) * 28,
+        rotate: (r(4) - 0.5) * 12,
+      };
+    });
+    setItems(placed);
+  }, []);
+
+  if (items.length === 0) return <main className="min-h-screen" />;
+
   return (
-    <main className="min-h-screen pt-28 pb-28 px-6 md:px-16">
-      <div className="flex flex-wrap gap-x-6 gap-y-3 md:gap-x-10 md:gap-y-4">
-        {GENRE_LIST.map((genre) => (
+    <main className="relative min-h-screen pt-20 pb-28">
+      <div className="relative w-full" style={{ height: "85vh" }}>
+        {items.map((genre) => (
           <Link
             key={genre.id}
             href={`/genre/${genre.id}?name=${encodeURIComponent(genre.name)}`}
-            className="text-2xl font-light text-gray-400 transition-all duration-300 hover:text-[#1d1d1f] hover:scale-105 md:text-4xl"
+            className="absolute font-bold text-[#1d1d1f] transition-all duration-300 hover:text-[#3d1018] hover:scale-110"
+            style={{
+              left: `${genre.x}%`,
+              top: `${genre.y}%`,
+              fontSize: `${genre.size}px`,
+              transform: `rotate(${genre.rotate}deg)`,
+            }}
           >
             {genre.name}
           </Link>
