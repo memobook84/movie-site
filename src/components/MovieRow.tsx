@@ -36,7 +36,7 @@ export default function MovieRow({ title, movies }: MovieRowProps) {
         </button>
         <div
           ref={rowRef}
-          className="flex gap-5 overflow-x-auto scroll-smooth scrollbar-hide md:gap-6"
+          className="flex gap-3 overflow-x-auto scroll-smooth scrollbar-hide md:gap-6"
           style={{ scrollbarWidth: "none" }}
         >
           {movies.map((movie) => (

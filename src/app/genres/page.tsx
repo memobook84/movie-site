@@ -39,17 +39,17 @@ export default function GenresPage() {
   return (
     <main className="min-h-screen pt-24 pb-28 px-6 md:px-16">
       <h1 className="text-2xl font-bold text-[#1d1d1f]">ジャンル</h1>
-      <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      <div className="mt-8 grid grid-cols-3 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {GENRE_LIST.map((genre) => {
           const Icon = genre.icon;
           return (
             <Link
               key={genre.id}
               href={`/genre/${genre.id}?name=${encodeURIComponent(genre.name)}`}
-              className="group relative flex flex-col items-center justify-center gap-3 rounded-2xl bg-white px-4 py-8 shadow-sm ring-1 ring-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:ring-[#3d1018]/20"
+              className="group relative flex flex-col items-center justify-center gap-2 rounded-2xl bg-white px-2 py-6 shadow-sm ring-1 ring-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:ring-[#3d1018]/20 md:gap-3 md:px-4 md:py-8"
             >
-              <Icon className="h-8 w-8 text-[#3d1018]/70 transition-all duration-300 group-hover:text-[#3d1018] group-hover:scale-110" />
-              <span className="text-sm font-semibold text-[#1d1d1f]">
+              <Icon className="h-7 w-7 text-[#3d1018]/70 transition-all duration-300 group-hover:text-[#3d1018] group-hover:scale-110 md:h-8 md:w-8" />
+              <span className="text-[11px] font-semibold text-[#1d1d1f] md:text-sm">
                 {genre.name}
               </span>
             </Link>

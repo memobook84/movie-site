@@ -88,7 +88,8 @@ export default async function Home() {
   }
 
   return (
-    <main className="pt-24 space-y-12 pb-12">
+    <main className="space-y-6 pb-12">
+      <div className="h-16 md:h-24" />
       {rows.map((movies, i) => (
         <MovieRow key={i} title="" movies={movies} />
       ))}

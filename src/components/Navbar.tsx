@@ -17,20 +17,47 @@ interface SearchResult {
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
+  const [history, setHistory] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const debounceRef = useRef<NodeJS.Timeout>(null);
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      setScrolled(currentY > 50);
+      setHidden(currentY > 50 && currentY > lastScrollY.current);
+      lastScrollY.current = currentY;
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // 検索履歴を読み込み
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem("cinema_search_history") || "[]");
+      setHistory(saved);
+    } catch { setHistory([]); }
+  }, []);
+
+  const saveHistory = (term: string) => {
+    const updated = [term, ...history.filter((h) => h !== term)].slice(0, 5);
+    setHistory(updated);
+    localStorage.setItem("cinema_search_history", JSON.stringify(updated));
+  };
+
+  const clearHistory = () => {
+    setHistory([]);
+    localStorage.removeItem("cinema_search_history");
+  };
 
   // 検索バーを開いたらフォーカス
   useEffect(() => {
@@ -71,6 +98,8 @@ export default function Navbar() {
   }, [query]);
 
   const handleSelect = (movie: SearchResult) => {
+    const term = movie.title || movie.name || "";
+    if (term) saveHistory(term);
     setShowSearch(false);
     setQuery("");
     setResults([]);
@@ -81,32 +110,41 @@ export default function Navbar() {
     <>
       <nav
         className={`fixed top-0 z-50 w-full px-6 py-4 transition-all duration-500 md:px-16 ${
+          hidden ? "-translate-y-full" : "translate-y-0"
+        } ${
           scrolled
-            ? "bg-[#3d1018]/95 backdrop-blur-xl shadow-sm"
-            : "bg-[#3d1018]"
+            ? "bg-[#424242]/95 backdrop-blur-xl shadow-sm"
+            : "bg-[#424242]"
         }`}
       >
-        <div className="flex items-center justify-between">
+        <div className="relative flex items-center justify-between">
           <Link
             href="/"
             className="flex items-center gap-3 text-xl font-semibold tracking-[0.2em] text-white md:text-2xl"
           >
-            <img src="/logo.png" alt="Logo" className="h-9 w-9 rounded object-contain md:h-10 md:w-10" />
-            <span className="hidden md:inline">CINEMA</span>
+            <img src="/logo.png?v=2" alt="Logo" className="h-10 w-10 object-contain md:h-11 md:w-11" />
+            <span className="hidden lg:inline">ARD CINEMA</span>
           </Link>
-          <div className="flex items-center gap-6 text-sm font-light text-white/70">
-            <Link href="/" className="hidden transition-colors hover:text-white md:inline">
-              ホーム
+          {/* スマホ: 中央タイトル */}
+          <span className="absolute left-1/2 -translate-x-1/2 font-[family-name:var(--font-noto-sans-jp)] text-sm font-bold tracking-widest text-white lg:hidden">
+            ARD CINEMA
+          </span>
+          <div className="flex items-center gap-6 font-[family-name:var(--font-noto-sans-jp)] text-sm font-medium text-white">
+            <Link href="/reviews" className="hidden transition-opacity hover:opacity-60 lg:inline">
+              レビュー
             </Link>
-            <Link href="/genres" className="hidden transition-colors hover:text-white md:inline">
+            <Link href="/genres" className="hidden transition-opacity hover:opacity-60 lg:inline">
               ジャンル
             </Link>
-            <Link href="/follows" className="hidden transition-colors hover:text-white md:inline">
+            <Link href="/ranking" className="hidden transition-opacity hover:opacity-60 lg:inline">
+              トレンド
+            </Link>
+            <Link href="/follows" className="hidden transition-opacity hover:opacity-60 lg:inline">
               フォロー
             </Link>
             <button
               onClick={() => setShowSearch(!showSearch)}
-              className="transition-colors hover:text-white"
+              className="text-white transition-opacity hover:opacity-60"
               aria-label="検索"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -189,6 +227,45 @@ export default function Navbar() {
             {query && !loading && results.length === 0 && (
               <div className="border-t border-gray-100 px-5 py-4 text-center text-xs text-gray-400">
                 該当する作品が見つかりません
+              </div>
+            )}
+
+            {/* 検索履歴・人気ワード（クエリ未入力時） */}
+            {!query && !loading && results.length === 0 && (
+              <div className="border-t border-gray-100 px-5 py-4 space-y-4">
+                {history.length > 0 && (
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">検索履歴</p>
+                      <button onClick={clearHistory} className="text-[10px] text-gray-400 hover:text-gray-600">クリア</button>
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {history.map((term) => (
+                        <button
+                          key={term}
+                          onClick={() => setQuery(term)}
+                          className="rounded-full bg-gray-100 px-3 py-1.5 text-xs text-gray-600 transition-colors hover:bg-gray-200"
+                        >
+                          {term}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">人気ワード</p>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {["ジブリ", "ワンピース", "マーベル", "ハリーポッター", "新海誠"].map((word) => (
+                      <button
+                        key={word}
+                        onClick={() => setQuery(word)}
+                        className="rounded-full bg-gray-100 px-3 py-1.5 text-xs text-gray-600 transition-colors hover:bg-gray-200"
+                      >
+                        {word}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
           </div>

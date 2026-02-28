@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { getFollowed, FollowedItem } from "@/components/FollowButton";
 
 export default function FollowsPage() {
@@ -28,9 +29,11 @@ export default function FollowsPage() {
             >
               <div className="overflow-hidden rounded-xl transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-black/15">
                 {item.posterPath ? (
-                  <img
+                  <Image
                     src={`https://image.tmdb.org/t/p/w342${item.posterPath}`}
                     alt={item.title}
+                    width={342}
+                    height={513}
                     className="aspect-[2/3] w-full object-cover"
                   />
                 ) : (

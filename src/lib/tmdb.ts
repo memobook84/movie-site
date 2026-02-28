@@ -1,6 +1,7 @@
 const API_KEY = process.env.TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 export const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
+export const BLUR_DATA_URL = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzQyIiBoZWlnaHQ9IjUxMyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZTVlN2ViIi8+PC9zdmc+";
 
 export interface Movie {
   id: number;
@@ -17,6 +18,16 @@ export interface Movie {
   media_type?: string;
 }
 
+export interface Season {
+  id: number;
+  name: string;
+  season_number: number;
+  episode_count: number;
+  air_date: string | null;
+  poster_path: string | null;
+  overview: string;
+}
+
 export interface MovieDetail extends Movie {
   runtime: number;
   genres: { id: number; name: string }[];
@@ -30,7 +41,11 @@ export interface MovieDetail extends Movie {
   };
   credits?: {
     cast: { id: number; name: string; character: string; profile_path: string | null }[];
+    crew: { id: number; name: string; job: string; profile_path: string | null }[];
   };
+  seasons?: Season[];
+  number_of_seasons?: number;
+  number_of_episodes?: number;
 }
 
 interface TMDbResponse {
@@ -80,6 +95,19 @@ export async function getMoviesByGenre(genreId: number, pages = 1, language?: st
   );
   const results = await Promise.all(requests);
   return results.flatMap((d) => d.results);
+}
+
+interface PaginatedResponse {
+  results: Movie[];
+  total_pages: number;
+}
+
+export async function getMoviesByGenrePage(genreId: number, page = 1): Promise<{ movies: Movie[]; totalPages: number }> {
+  const data = await fetchTMDb<PaginatedResponse>(
+    `/discover/movie?with_genres=${genreId}&sort_by=popularity.desc&page=${page}`,
+    { results: [], total_pages: 1 }
+  );
+  return { movies: data.results, totalPages: Math.min(data.total_pages, 500) };
 }
 
 const emptyDetail: MovieDetail = {
@@ -151,6 +179,58 @@ export async function getPersonDetail(id: number): Promise<PersonDetail> {
     if (enPerson.biography) person.biography = enPerson.biography;
   }
   return person;
+}
+
+// 画像
+export interface TMDbImage {
+  file_path: string;
+  width: number;
+  height: number;
+}
+
+interface ImagesResponse {
+  backdrops: TMDbImage[];
+  posters: TMDbImage[];
+  logos: TMDbImage[];
+}
+
+const emptyImages: ImagesResponse = { backdrops: [], posters: [], logos: [] };
+
+export async function getMovieImages(id: number, mediaType: string = "movie"): Promise<TMDbImage[]> {
+  const endpoint = mediaType === "tv" ? `/tv/${id}/images` : `/movie/${id}/images`;
+  // include_image_language で日本語+英語+言語なし画像を取得
+  const data = await fetchTMDb<ImagesResponse>(
+    `${endpoint}?include_image_language=ja,en,null`,
+    emptyImages
+  );
+  return [...data.backdrops, ...data.posters].slice(0, 16);
+}
+
+// 関連作品
+export async function getRecommendations(id: number, mediaType: string = "movie"): Promise<Movie[]> {
+  const endpoint = mediaType === "tv" ? `/tv/${id}/recommendations` : `/movie/${id}/recommendations`;
+  const data = await fetchTMDb<TMDbResponse>(endpoint, emptyResponse);
+  return data.results;
+}
+
+// 配信先情報
+export interface WatchProvider {
+  provider_id: number;
+  provider_name: string;
+  logo_path: string;
+}
+
+export interface WatchProviders {
+  flatrate?: WatchProvider[];
+  rent?: WatchProvider[];
+  buy?: WatchProvider[];
+  link?: string;
+}
+
+export async function getWatchProviders(id: number, mediaType: string = "movie"): Promise<WatchProviders | null> {
+  const endpoint = mediaType === "tv" ? `/tv/${id}/watch/providers` : `/movie/${id}/watch/providers`;
+  const data = await fetchTMDb<{ results: Record<string, WatchProviders> }>(endpoint, { results: {} });
+  return data.results?.JP || null;
 }
 
 // ジャンルID

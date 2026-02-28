@@ -4,12 +4,18 @@
   "description": "映画・アニメ情報サイト",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f5f5f7",
-  "theme_color": "#3d1018",
+  "background_color": "#DCDCDC",
+  "theme_color": "#DCDCDC",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/logo.png",
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
