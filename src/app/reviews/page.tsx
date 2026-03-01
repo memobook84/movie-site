@@ -30,6 +30,7 @@ const REVIEWED_ITEMS: { id: number; type: "movie" | "tv" }[] = [
   { id: 581734, type: "movie" },
   { id: 475557, type: "movie" },
   { id: 671, type: "movie" },
+  { id: 8392, type: "movie" },
 ];
 
 export default async function ReviewsPage() {
