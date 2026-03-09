@@ -1,6 +1,5 @@
 import { getTrending, getPopular, getTopRated, IMAGE_BASE_URL, Movie } from "@/lib/tmdb";
 import Link from "next/link";
-import Image from "next/image";
 
 function RankBadge({ rank }: { rank: number }) {
   const colors =
@@ -56,12 +55,11 @@ function RankingSection({
               {/* ポスター */}
               <div className="h-16 w-11 flex-shrink-0 overflow-hidden rounded-lg md:h-20 md:w-14">
                 {movie.poster_path ? (
-                  <Image
+                  <img
                     src={`${IMAGE_BASE_URL}/w185${movie.poster_path}`}
                     alt={title}
-                    width={56}
-                    height={80}
                     className="h-full w-full object-cover"
+                    loading="lazy"
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-gray-100 text-[10px] text-gray-400">

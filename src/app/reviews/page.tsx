@@ -1,5 +1,4 @@
 import { getMovieDetail, getTvDetail, IMAGE_BASE_URL } from "@/lib/tmdb";
-import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -61,12 +60,11 @@ export default async function ReviewsPage() {
             >
               <div className="relative overflow-hidden rounded-xl transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-black/15">
                 {movie.poster_path ? (
-                  <Image
+                  <img
                     src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}
                     alt={title}
-                    width={342}
-                    height={513}
                     className="aspect-[2/3] w-full object-cover"
+                    loading="lazy"
                   />
                 ) : (
                   <div className="flex aspect-[2/3] items-center justify-center bg-gray-200 text-xs text-gray-400">

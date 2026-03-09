@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 import MovieRow from "@/components/MovieRow";
 import { getTrending, getPopular, getTopRated, getUpcoming, getMoviesByGenre, GENRES, Movie } from "@/lib/tmdb";
@@ -36,7 +36,7 @@ export default async function Home() {
       getMoviesByGenre(GENRES.THRILLER),
     ]),
     // 日本のアニメを複数ページ取得して多めに確保
-    getMoviesByGenre(GENRES.ANIMATION, 10, "ja"),
+    getMoviesByGenre(GENRES.ANIMATION, 3, "ja"),
   ]);
 
   // アニメ作品を重複除去・シャッフル

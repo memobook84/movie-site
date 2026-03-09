@@ -1,6 +1,5 @@
-import { getMoviesByGenrePage, IMAGE_BASE_URL, BLUR_DATA_URL } from "@/lib/tmdb";
+import { getMoviesByGenrePage, IMAGE_BASE_URL } from "@/lib/tmdb";
 import Link from "next/link";
-import Image from "next/image";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -52,14 +51,11 @@ export default async function GenrePage({ params, searchParams }: PageProps) {
             >
               <div className="overflow-hidden rounded-lg transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:shadow-black/10">
                 {movie.poster_path ? (
-                  <Image
+                  <img
                     src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}
                     alt={title}
-                    width={342}
-                    height={513}
                     className="aspect-[2/3] w-full object-cover"
-                    placeholder="blur"
-                    blurDataURL={BLUR_DATA_URL}
+                    loading="lazy"
                   />
                 ) : (
                   <div className="flex aspect-[2/3] items-center justify-center bg-gray-200 text-xs text-gray-400">

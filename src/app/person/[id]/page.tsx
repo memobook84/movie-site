@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { getPersonDetail, IMAGE_BASE_URL, BLUR_DATA_URL } from "@/lib/tmdb";
+import { getPersonDetail, IMAGE_BASE_URL } from "@/lib/tmdb";
 import Link from "next/link";
-import Image from "next/image";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -50,14 +49,10 @@ export default async function PersonPage({ params }: PageProps) {
       {/* プロフィール */}
       <div className="flex flex-col items-start gap-6 sm:flex-row">
         {person.profile_path ? (
-          <Image
+          <img
             src={`${IMAGE_BASE_URL}/w342${person.profile_path}`}
             alt={person.name}
-            width={342}
-            height={513}
             className="w-32 rounded-xl shadow-lg sm:w-40"
-            placeholder="blur"
-            blurDataURL={BLUR_DATA_URL}
           />
         ) : (
           <div className="flex h-48 w-32 items-center justify-center rounded-xl bg-gray-200 text-2xl text-gray-400 sm:w-40">
@@ -101,12 +96,11 @@ export default async function PersonPage({ params }: PageProps) {
                 className="group"
               >
                 <div className="overflow-hidden rounded-lg transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:shadow-black/10">
-                  <Image
+                  <img
                     src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}
                     alt={title}
-                    width={342}
-                    height={513}
                     className="aspect-[2/3] w-full object-cover"
+                    loading="lazy"
                   />
                 </div>
                 <p className="mt-1.5 truncate text-xs font-medium text-[#1d1d1f]">{title}</p>

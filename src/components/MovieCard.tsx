@@ -1,6 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
-import { IMAGE_BASE_URL, BLUR_DATA_URL, Movie } from "@/lib/tmdb";
+import { IMAGE_BASE_URL, Movie } from "@/lib/tmdb";
 
 interface MovieCardProps {
   movie: Movie;
@@ -14,14 +13,11 @@ export default function MovieCard({ movie }: MovieCardProps) {
       {/* スマホ: 縦型ポスター */}
       <div className="w-[105px] overflow-hidden rounded-xl transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-black/15 md:hidden">
         {movie.poster_path ? (
-          <Image
+          <img
             src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}
             alt={title}
-            width={342}
-            height={513}
             className="aspect-[2/3] w-full object-cover"
-            placeholder="blur"
-            blurDataURL={BLUR_DATA_URL}
+            loading="lazy"
           />
         ) : (
           <div className="flex aspect-[2/3] items-center justify-center bg-gray-200 text-xs text-gray-400">
@@ -32,22 +28,18 @@ export default function MovieCard({ movie }: MovieCardProps) {
       {/* PC: 横型backdrop */}
       <div className="hidden w-[260px] overflow-hidden rounded-xl transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-black/15 md:block">
         {movie.backdrop_path ? (
-          <Image
+          <img
             src={`${IMAGE_BASE_URL}/w780${movie.backdrop_path}`}
             alt={title}
-            width={780}
-            height={439}
             className="aspect-video w-full object-cover"
-            placeholder="blur"
-            blurDataURL={BLUR_DATA_URL}
+            loading="lazy"
           />
         ) : movie.poster_path ? (
-          <Image
+          <img
             src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}
             alt={title}
-            width={342}
-            height={192}
             className="aspect-video w-full object-cover"
+            loading="lazy"
           />
         ) : (
           <div className="flex aspect-video items-center justify-center bg-gray-200 text-xs text-gray-400">
