@@ -227,20 +227,19 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               </div>
             )}
 
-            {/* ボタン */}
-            <div className="flex gap-3 pt-2 md:gap-3">
+            {/* ボタン（スマホのみ表示） */}
+            <div className="flex gap-3 pt-2 md:hidden">
               {trailer && (
                 <a
                   href={`https://www.youtube.com/watch?v=${trailer.key}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center h-11 w-11 rounded-full bg-gray-900 text-white transition-all hover:bg-gray-800 hover:shadow-lg md:h-auto md:w-auto md:gap-2 md:px-7 md:py-3"
+                  className="inline-flex items-center justify-center h-11 w-11 rounded-full bg-gray-900 text-white transition-all hover:bg-gray-800 hover:shadow-lg"
                   aria-label="トレーラーを見る"
                 >
                   <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M8 5v14l11-7z" />
                   </svg>
-                  <span className="hidden md:inline text-sm font-semibold">トレーラー</span>
                 </a>
               )}
               <FollowButton
@@ -693,6 +692,32 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
             </div>
           </div>
         )}
+
+        {/* ボタン（PC版のみ表示） */}
+        <div className="mt-16 hidden gap-3 md:flex">
+          {trailer && (
+            <a
+              href={`https://www.youtube.com/watch?v=${trailer.key}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full bg-gray-900 px-7 py-3 text-white transition-all hover:bg-gray-800 hover:shadow-lg"
+              aria-label="トレーラーを見る"
+            >
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              <span className="text-sm font-semibold">トレーラー</span>
+            </a>
+          )}
+          <FollowButton
+            movieId={movie.id}
+            title={title}
+            posterPath={movie.poster_path}
+            mediaType={type || "movie"}
+          />
+          <GalleryModal images={images} imageBase={IMAGE_BASE_URL} />
+          <ShareButton title={`${title} | CINEMA`} />
+        </div>
 
         {/* キャスト */}
         {cast.length > 0 && (
