@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { getMovieDetail, getTvDetail, getMovieImages, getRecommendations, getWatchProviders, IMAGE_BASE_URL } from "@/lib/tmdb";
 import Link from "next/link";
-import Image from "next/image";
 import FollowButton from "@/components/FollowButton";
 import GalleryModal from "@/components/GalleryModal";
 import ShareButton from "@/components/ShareButton";
@@ -116,14 +115,10 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
           {/* ポスター */}
           {movie.poster_path && (
             <div className="flex-shrink-0">
-              <Image
+              <img
                 src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}
                 alt={title}
-                width={342}
-                height={513}
                 className="w-48 rounded-2xl shadow-2xl md:w-64"
-                placeholder="blur"
-                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzQyIiBoZWlnaHQ9IjUxMyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZTVlN2ViIi8+PC9zdmc+"
               />
             </div>
           )}
@@ -169,6 +164,68 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
             <div className="max-w-xs">
               <RatingBar score={movie.vote_average} />
             </div>
+
+            {/* 作品情報 */}
+            {(directors.length > 0 || movie.runtime > 0 || movie.budget > 0 || movie.revenue > 0 || movie.production_companies.length > 0) && (
+              <div className="space-y-3">
+                <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
+                  作品情報
+                </h2>
+                <div className="grid max-w-2xl grid-cols-2 gap-4 text-sm">
+                  {directors.length > 0 && (
+                    <div>
+                      <p className="text-xs text-gray-400">監督</p>
+                      <p className="text-gray-700">
+                        {directors.map((d, i) => (
+                          <span key={d.id}>
+                            {i > 0 && ", "}
+                            <Link href={`/person/${d.id}`} className="text-blue-600 hover:underline">{d.name}</Link>
+                          </span>
+                        ))}
+                      </p>
+                    </div>
+                  )}
+                  {movie.runtime > 0 && (
+                    <div>
+                      <p className="text-xs text-gray-400">上映時間</p>
+                      <p className="text-gray-700">{Math.floor(movie.runtime / 60)}時間{movie.runtime % 60}分</p>
+                    </div>
+                  )}
+                  {movie.status && (
+                    <div>
+                      <p className="text-xs text-gray-400">ステータス</p>
+                      <p className="text-gray-700">{movie.status}</p>
+                    </div>
+                  )}
+                  {movie.release_date && (
+                    <div>
+                      <p className="text-xs text-gray-400">公開日</p>
+                      <p className="text-gray-700">{movie.release_date}</p>
+                    </div>
+                  )}
+                  {movie.budget > 0 && (
+                    <div>
+                      <p className="text-xs text-gray-400">予算</p>
+                      <p className="text-gray-700">${movie.budget.toLocaleString()}（{(movie.budget * 150).toLocaleString()}円）</p>
+                    </div>
+                  )}
+                  {movie.revenue > 0 && (
+                    <div>
+                      <p className="text-xs text-gray-400">興行収入</p>
+                      <p className="text-gray-700">${movie.revenue.toLocaleString()}（{(movie.revenue * 150).toLocaleString()}円）</p>
+                    </div>
+                  )}
+                  {movie.production_companies.length > 0 && (
+                    <div className="col-span-2">
+                      <p className="text-xs text-gray-400">制作会社</p>
+                      <p className="text-gray-700">
+                        {movie.production_companies.map((c) => c.name).join(", ")}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* あらすじ */}
             <div className="space-y-2">
@@ -585,12 +642,11 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                   <div className="flex flex-wrap gap-2">
                     {watchProviders.flatrate.map((p) => (
                       <div key={p.provider_id} className="flex items-center gap-1.5">
-                        <Image
+                        <img
                           src={`${IMAGE_BASE_URL}/w92${p.logo_path}`}
                           alt={p.provider_name}
-                          width={32}
-                          height={32}
                           className="h-8 w-8 rounded-full"
+                          loading="lazy"
                         />
                         <span className="text-xs text-gray-700">{p.provider_name}</span>
                       </div>
@@ -604,12 +660,11 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                   <div className="flex flex-wrap gap-2">
                     {watchProviders.rent.map((p) => (
                       <div key={p.provider_id} className="flex items-center gap-1.5">
-                        <Image
+                        <img
                           src={`${IMAGE_BASE_URL}/w92${p.logo_path}`}
                           alt={p.provider_name}
-                          width={32}
-                          height={32}
                           className="h-8 w-8 rounded-full"
+                          loading="lazy"
                         />
                         <span className="text-xs text-gray-700">{p.provider_name}</span>
                       </div>
@@ -623,12 +678,11 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                   <div className="flex flex-wrap gap-2">
                     {watchProviders.buy.map((p) => (
                       <div key={p.provider_id} className="flex items-center gap-1.5">
-                        <Image
+                        <img
                           src={`${IMAGE_BASE_URL}/w92${p.logo_path}`}
                           alt={p.provider_name}
-                          width={32}
-                          height={32}
                           className="h-8 w-8 rounded-full"
+                          loading="lazy"
                         />
                         <span className="text-xs text-gray-700">{p.provider_name}</span>
                       </div>
@@ -656,12 +710,11 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                   <div className="relative flex items-center justify-center pt-3">
                     {person.profile_path ? (
                       <>
-                        <Image
+                        <img
                           src={`${IMAGE_BASE_URL}/w185${person.profile_path}`}
                           alt={person.name}
-                          width={80}
-                          height={80}
                           className="h-[80px] w-[80px] rounded-md object-cover contrast-[1.2] grayscale transition-all duration-500 group-hover:contrast-100 group-hover:grayscale-0"
+                          loading="lazy"
                         />
                         {/* ビネット */}
                         <div className="pointer-events-none absolute inset-x-[20px] top-3 h-[80px] rounded-md shadow-[inset_0_0_15px_rgba(0,0,0,0.4)] transition-opacity duration-500 group-hover:opacity-0" />
@@ -701,12 +754,11 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                   className="flex gap-4 rounded-2xl bg-gray-50 p-4 transition-all hover:bg-gray-100"
                 >
                   {season.poster_path ? (
-                    <Image
+                    <img
                       src={`${IMAGE_BASE_URL}/w185${season.poster_path}`}
                       alt={season.name}
-                      width={60}
-                      height={90}
                       className="h-[90px] w-[60px] flex-shrink-0 rounded-lg object-cover"
+                      loading="lazy"
                     />
                   ) : (
                     <div className="flex h-[90px] w-[60px] flex-shrink-0 items-center justify-center rounded-lg bg-gray-200 text-xs text-gray-400">
@@ -729,61 +781,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
           </div>
         )}
 
-        {/* 作品情報 */}
-        {(directors.length > 0 || movie.budget > 0 || movie.revenue > 0 || movie.production_companies.length > 0) && (
-          <div className="mt-16 space-y-5">
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
-              作品情報
-            </h2>
-            <div className="grid max-w-2xl grid-cols-2 gap-4 text-sm">
-              {directors.length > 0 && (
-                <div>
-                  <p className="text-xs text-gray-400">監督</p>
-                  <p className="text-gray-700">
-                    {directors.map((d, i) => (
-                      <span key={d.id}>
-                        {i > 0 && ", "}
-                        <Link href={`/person/${d.id}`} className="text-blue-600 hover:underline">{d.name}</Link>
-                      </span>
-                    ))}
-                  </p>
-                </div>
-              )}
-              {movie.status && (
-                <div>
-                  <p className="text-xs text-gray-400">ステータス</p>
-                  <p className="text-gray-700">{movie.status}</p>
-                </div>
-              )}
-              {movie.release_date && (
-                <div>
-                  <p className="text-xs text-gray-400">公開日</p>
-                  <p className="text-gray-700">{movie.release_date}</p>
-                </div>
-              )}
-              {movie.budget > 0 && (
-                <div>
-                  <p className="text-xs text-gray-400">予算</p>
-                  <p className="text-gray-700">${movie.budget.toLocaleString()}</p>
-                </div>
-              )}
-              {movie.revenue > 0 && (
-                <div>
-                  <p className="text-xs text-gray-400">興行収入</p>
-                  <p className="text-gray-700">${movie.revenue.toLocaleString()}</p>
-                </div>
-              )}
-              {movie.production_companies.length > 0 && (
-                <div className="col-span-2">
-                  <p className="text-xs text-gray-400">制作会社</p>
-                  <p className="text-gray-700">
-                    {movie.production_companies.map((c) => c.name).join(", ")}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+        {/* 作品情報は上部ヒーローエリアに移動済み */}
         {/* 関連作品 */}
         {recommendations.length > 0 && (
           <div className="mt-16 space-y-5">
@@ -798,12 +796,11 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                   className="flex-shrink-0 w-[130px] group"
                 >
                   {rec.poster_path ? (
-                    <Image
+                    <img
                       src={`${IMAGE_BASE_URL}/w185${rec.poster_path}`}
                       alt={rec.title || rec.name || ""}
-                      width={185}
-                      height={278}
                       className="w-full rounded-xl shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:scale-105"
+                      loading="lazy"
                     />
                   ) : (
                     <div className="w-full aspect-[2/3] rounded-xl bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
