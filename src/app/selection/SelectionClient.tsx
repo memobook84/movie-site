@@ -110,7 +110,7 @@ export default function SelectionClient({
         {/* 4位以降 小さいカードグリッド */}
         {rest.length > 0 && (
           <div className="mt-10 grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
-            {rest.map((movie) => {
+            {rest.map((movie, i) => {
               const title = movie.title || movie.name || "";
               return (
                 <Link
@@ -118,7 +118,7 @@ export default function SelectionClient({
                   href={`/movie/${movie.id}`}
                   className="group"
                 >
-                  <div className="overflow-hidden rounded-xl">
+                  <div className="relative overflow-hidden rounded-xl">
                     {movie.poster_path ? (
                       <img
                         src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}
@@ -131,6 +131,9 @@ export default function SelectionClient({
                         No Image
                       </div>
                     )}
+                    <div className="absolute top-1.5 left-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-white/90 text-[10px] font-bold text-gray-900 shadow-sm backdrop-blur-sm">
+                      {i + 4}
+                    </div>
                   </div>
                   <p className="mt-1.5 truncate text-xs font-medium text-gray-700">
                     {title}
