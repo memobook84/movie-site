@@ -100,7 +100,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
       <div className="relative mt-16 h-[55vh] w-full md:h-[65vh]">
         {movie.backdrop_path && (
           <div
-            className="absolute inset-0 bg-cover bg-center"
+            className="absolute inset-0 bg-cover bg-top"
             style={{
               backgroundImage: `url(${IMAGE_BASE_URL}/original${movie.backdrop_path})`,
             }}
