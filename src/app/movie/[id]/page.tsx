@@ -165,81 +165,30 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               <RatingBar score={movie.vote_average} />
             </div>
 
-            {/* 作品情報 */}
-            {(directors.length > 0 || movie.runtime > 0 || movie.budget > 0 || movie.revenue > 0 || movie.production_companies.length > 0) && (
-              <div className="space-y-3">
-                <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
-                  作品情報
-                </h2>
-                <div className="grid max-w-2xl grid-cols-2 gap-4 text-sm">
-                  {directors.length > 0 && (
-                    <div>
-                      <p className="text-xs text-gray-400">監督</p>
-                      <p className="text-gray-700">
-                        {directors.map((d, i) => (
-                          <span key={d.id}>
-                            {i > 0 && ", "}
-                            <Link href={`/person/${d.id}`} className="text-blue-600 hover:underline">{d.name}</Link>
-                          </span>
-                        ))}
-                      </p>
-                    </div>
-                  )}
-                  {movie.runtime > 0 && (
-                    <div>
-                      <p className="text-xs text-gray-400">上映時間</p>
-                      <p className="text-gray-700">{Math.floor(movie.runtime / 60)}時間{movie.runtime % 60}分</p>
-                    </div>
-                  )}
-                  {movie.status && (
-                    <div>
-                      <p className="text-xs text-gray-400">ステータス</p>
-                      <p className="text-gray-700">{movie.status}</p>
-                    </div>
-                  )}
-                  {movie.release_date && (
-                    <div>
-                      <p className="text-xs text-gray-400">公開日</p>
-                      <p className="text-gray-700">{movie.release_date}</p>
-                    </div>
-                  )}
-                  {movie.budget > 0 && (
-                    <div>
-                      <p className="text-xs text-gray-400">予算</p>
-                      <p className="text-gray-700">${movie.budget.toLocaleString()}（{(movie.budget * 150).toLocaleString()}円）</p>
-                    </div>
-                  )}
-                  {movie.revenue > 0 && (
-                    <div>
-                      <p className="text-xs text-gray-400">興行収入</p>
-                      <p className="text-gray-700">${movie.revenue.toLocaleString()}（{(movie.revenue * 150).toLocaleString()}円）</p>
-                    </div>
-                  )}
-                  {movie.production_companies.length > 0 && (
-                    <div className="col-span-2">
-                      <p className="text-xs text-gray-400">制作会社</p>
-                      <p className="text-gray-700">
-                        {movie.production_companies.map((c) => c.name).join(", ")}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
+            {/* あらすじ */}
+            <div className="space-y-2">
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
+                ストーリー
+              </h2>
+              <p className="max-w-2xl text-sm leading-7 text-gray-600">
+                {movie.overview || "この作品の説明はまだ登録されていません。"}
+              </p>
+            </div>
 
-            {/* ボタン（スマホのみ表示） */}
-            <div className="flex gap-3 pt-2 md:hidden">
+            {/* ボタン */}
+            <div className="flex gap-3 pt-2 md:gap-3">
               {trailer && (
                 <a
                   href={`https://www.youtube.com/watch?v=${trailer.key}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center h-11 w-11 rounded-full bg-gray-900 text-white transition-all hover:bg-gray-800 hover:shadow-lg"
+                  className="inline-flex items-center justify-center h-11 w-11 rounded-full bg-gray-900 text-white transition-all hover:bg-gray-800 hover:shadow-lg md:h-auto md:w-auto md:gap-2 md:px-7 md:py-3"
                   aria-label="トレーラーを見る"
                 >
                   <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M8 5v14l11-7z" />
                   </svg>
+                  <span className="hidden md:inline text-sm font-semibold">トレーラー</span>
                 </a>
               )}
               <FollowButton
@@ -252,16 +201,6 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               <ShareButton title={`${title} | CINEMA`} />
             </div>
           </div>
-        </div>
-
-        {/* あらすじ */}
-        <div className="mt-10 space-y-2">
-          <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
-            ストーリー
-          </h2>
-          <p className="max-w-2xl text-sm leading-7 text-gray-600">
-            {movie.overview || "この作品の説明はまだ登録されていません。"}
-          </p>
         </div>
 
         {/* レビュー: ターミネーター2 */}
@@ -693,32 +632,6 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
           </div>
         )}
 
-        {/* ボタン（PC版のみ表示） */}
-        <div className="mt-16 hidden gap-3 md:flex">
-          {trailer && (
-            <a
-              href={`https://www.youtube.com/watch?v=${trailer.key}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-gray-900 px-7 py-3 text-white transition-all hover:bg-gray-800 hover:shadow-lg"
-              aria-label="トレーラーを見る"
-            >
-              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-              <span className="text-sm font-semibold">トレーラー</span>
-            </a>
-          )}
-          <FollowButton
-            movieId={movie.id}
-            title={title}
-            posterPath={movie.poster_path}
-            mediaType={type || "movie"}
-          />
-          <GalleryModal images={images} imageBase={IMAGE_BASE_URL} />
-          <ShareButton title={`${title} | CINEMA`} />
-        </div>
-
         {/* キャスト */}
         {cast.length > 0 && (
           <div className="mt-16 space-y-5">
@@ -806,7 +719,67 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
           </div>
         )}
 
-        {/* 作品情報は上部ヒーローエリアに移動済み */}
+        {/* 作品情報 */}
+        {(directors.length > 0 || movie.runtime > 0 || movie.budget > 0 || movie.revenue > 0 || movie.production_companies.length > 0) && (
+          <div className="mt-16 space-y-5">
+            <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
+              作品情報
+            </h2>
+            <div className="grid max-w-2xl grid-cols-2 gap-4 text-sm">
+              {directors.length > 0 && (
+                <div>
+                  <p className="text-xs text-gray-400">監督</p>
+                  <p className="text-gray-700">
+                    {directors.map((d, i) => (
+                      <span key={d.id}>
+                        {i > 0 && ", "}
+                        <Link href={`/person/${d.id}`} className="text-blue-600 hover:underline">{d.name}</Link>
+                      </span>
+                    ))}
+                  </p>
+                </div>
+              )}
+              {movie.runtime > 0 && (
+                <div>
+                  <p className="text-xs text-gray-400">上映時間</p>
+                  <p className="text-gray-700">{Math.floor(movie.runtime / 60)}時間{movie.runtime % 60}分</p>
+                </div>
+              )}
+              {movie.status && (
+                <div>
+                  <p className="text-xs text-gray-400">ステータス</p>
+                  <p className="text-gray-700">{movie.status}</p>
+                </div>
+              )}
+              {movie.release_date && (
+                <div>
+                  <p className="text-xs text-gray-400">公開日</p>
+                  <p className="text-gray-700">{movie.release_date}</p>
+                </div>
+              )}
+              {movie.budget > 0 && (
+                <div>
+                  <p className="text-xs text-gray-400">予算</p>
+                  <p className="text-gray-700">${movie.budget.toLocaleString()}（{(movie.budget * 150).toLocaleString()}円）</p>
+                </div>
+              )}
+              {movie.revenue > 0 && (
+                <div>
+                  <p className="text-xs text-gray-400">興行収入</p>
+                  <p className="text-gray-700">${movie.revenue.toLocaleString()}（{(movie.revenue * 150).toLocaleString()}円）</p>
+                </div>
+              )}
+              {movie.production_companies.length > 0 && (
+                <div className="col-span-2">
+                  <p className="text-xs text-gray-400">制作会社</p>
+                  <p className="text-gray-700">
+                    {movie.production_companies.map((c) => c.name).join(", ")}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
         {/* 関連作品 */}
         {recommendations.length > 0 && (
           <div className="mt-16 space-y-5">
