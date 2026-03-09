@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 interface SearchResult {
   id: number;
@@ -26,6 +26,7 @@ export default function Navbar() {
   const inputRef = useRef<HTMLInputElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const pathname = usePathname();
   const debounceRef = useRef<NodeJS.Timeout>(null);
   const lastScrollY = useRef(0);
 
@@ -130,16 +131,16 @@ export default function Navbar() {
             ARD CINEMA
           </span>
           <div className="flex items-center gap-6 font-[family-name:var(--font-noto-sans-jp)] text-sm font-medium text-white">
-            <Link href="/reviews" className="hidden transition-opacity hover:opacity-60 lg:inline">
+            <Link href="/reviews" className={`hidden lg:inline transition-opacity hover:opacity-60 pb-1 ${pathname === "/reviews" ? "border-b-2 border-white" : ""}`}>
               レビュー
             </Link>
-            <Link href="/genres" className="hidden transition-opacity hover:opacity-60 lg:inline">
+            <Link href="/genres" className={`hidden lg:inline transition-opacity hover:opacity-60 pb-1 ${pathname.startsWith("/genre") ? "border-b-2 border-white" : ""}`}>
               ジャンル
             </Link>
-            <Link href="/selection" className="hidden transition-opacity hover:opacity-60 lg:inline">
+            <Link href="/selection" className={`hidden lg:inline transition-opacity hover:opacity-60 pb-1 ${pathname === "/selection" ? "border-b-2 border-white" : ""}`}>
               セレクション
             </Link>
-            <Link href="/follows" className="hidden transition-opacity hover:opacity-60 lg:inline">
+            <Link href="/follows" className={`hidden lg:inline transition-opacity hover:opacity-60 pb-1 ${pathname === "/follows" ? "border-b-2 border-white" : ""}`}>
               ウォッチリスト
             </Link>
             <button

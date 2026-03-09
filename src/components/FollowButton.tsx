@@ -63,9 +63,9 @@ export default function FollowButton({ movieId, title, posterPath, mediaType = "
       }`}
       aria-label={followed ? "ウォッチリストに追加済み" : "ウォッチリストに追加"}
     >
-      <svg className="h-4 w-4" viewBox="0 0 24 24" fill={followed ? "currentColor" : "none"} stroke={followed ? "currentColor" : "#9ca3af"} strokeWidth="2">
-        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" strokeLinecap="round" strokeLinejoin="round" />
-        <circle cx="12" cy="12" r="3" />
+      <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke={followed ? "currentColor" : "#9ca3af"} strokeWidth="2">
+        <circle cx="12" cy="12" r="10" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M12 6v6l4 2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
       <span className="hidden md:inline text-sm font-semibold">{followed ? "ウォッチリスト" : "ウォッチリスト"}</span>
     </button>

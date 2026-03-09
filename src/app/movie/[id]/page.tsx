@@ -160,10 +160,11 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               })}
             </div>
 
-            {/* レーティング */}
+            {/* レーティング（一時非表示）
             <div className="max-w-xs">
               <RatingBar score={movie.vote_average} />
             </div>
+            */}
 
             {/* あらすじ */}
             <div className="space-y-2">
@@ -760,13 +761,13 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               {movie.budget > 0 && (
                 <div>
                   <p className="text-xs text-gray-400">予算</p>
-                  <p className="text-gray-700">${movie.budget.toLocaleString()}（{(movie.budget * 150).toLocaleString()}円）</p>
+                  <p className="text-gray-700">${movie.budget.toLocaleString()}（約{(movie.budget * 150 / 100000000).toFixed(1)}億円）</p>
                 </div>
               )}
               {movie.revenue > 0 && (
                 <div>
                   <p className="text-xs text-gray-400">興行収入</p>
-                  <p className="text-gray-700">${movie.revenue.toLocaleString()}（{(movie.revenue * 150).toLocaleString()}円）</p>
+                  <p className="text-gray-700">${movie.revenue.toLocaleString()}（約{(movie.revenue * 150 / 100000000).toFixed(1)}億円）</p>
                 </div>
               )}
               {movie.production_companies.length > 0 && (
