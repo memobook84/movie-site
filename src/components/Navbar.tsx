@@ -136,8 +136,8 @@ export default function Navbar() {
             <Link href="/genres" className="hidden transition-opacity hover:opacity-60 lg:inline">
               ジャンル
             </Link>
-            <Link href="/ranking" className="hidden transition-opacity hover:opacity-60 lg:inline">
-              トレンド
+            <Link href="/selection" className="hidden transition-opacity hover:opacity-60 lg:inline">
+              セレクション
             </Link>
             <Link href="/follows" className="hidden transition-opacity hover:opacity-60 lg:inline">
               フォロー
