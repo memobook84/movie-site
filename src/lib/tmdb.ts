@@ -54,16 +54,24 @@ interface TMDbResponse {
 
 async function fetchTMDb<T>(endpoint: string, fallback: T): Promise<T> {
   if (!API_KEY || API_KEY === "YOUR_API_KEY_HERE") return fallback;
-  try {
-    const res = await fetch(`${BASE_URL}${endpoint}${endpoint.includes("?") ? "&" : "?"}api_key=${API_KEY}&language=ja-JP`, {
-      next: { revalidate: 3600 },
-    });
-    if (!res.ok) throw new Error(`TMDb API error: ${res.status}`);
-    return res.json();
-  } catch (e) {
-    console.error("TMDb fetch error:", e);
-    return fallback;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const res = await fetch(`${BASE_URL}${endpoint}${endpoint.includes("?") ? "&" : "?"}api_key=${API_KEY}&language=ja-JP`, {
+        next: { revalidate: 3600 },
+      });
+      if (res.status === 429) {
+        await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
+        continue;
+      }
+      if (!res.ok) throw new Error(`TMDb API error: ${res.status}`);
+      return res.json();
+    } catch (e) {
+      console.error("TMDb fetch error:", e);
+      if (attempt === 2) return fallback;
+      await new Promise((r) => setTimeout(r, 1000));
+    }
   }
+  return fallback;
 }
 
 const emptyResponse: TMDbResponse = { results: [] };
@@ -80,6 +88,14 @@ export async function getPopular(): Promise<Movie[]> {
 
 export async function getTopRated(): Promise<Movie[]> {
   const data = await fetchTMDb<TMDbResponse>("/movie/top_rated", emptyResponse);
+  return data.results;
+}
+
+export async function getPopularByDecade(startYear: number, endYear: number): Promise<Movie[]> {
+  const data = await fetchTMDb<TMDbResponse>(
+    `/discover/movie?sort_by=popularity.desc&primary_release_date.gte=${startYear}-01-01&primary_release_date.lte=${endYear}-12-31&vote_count.gte=100`,
+    emptyResponse
+  );
   return data.results;
 }
 

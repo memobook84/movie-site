@@ -7,19 +7,34 @@ import { IMAGE_BASE_URL, Movie } from "@/lib/tmdb";
 const TABS = [
   { key: "trending", label: "トレンド" },
   { key: "topRated", label: "高評価" },
+  { key: "1980", label: "1980年代" },
+  { key: "1990", label: "1990年代" },
+  { key: "2000", label: "2000年代" },
+  { key: "2010", label: "2010年代" },
+  { key: "2020", label: "2020年代" },
 ] as const;
 
 type TabKey = (typeof TABS)[number]["key"];
+type DecadeKey = "1980" | "1990" | "2000" | "2010" | "2020";
 
 export default function SelectionClient({
   trending,
   topRated,
+  decades,
 }: {
   trending: Movie[];
   topRated: Movie[];
+  decades: Record<DecadeKey, Movie[]>;
 }) {
   const [tab, setTab] = useState<TabKey>("trending");
-  const movies = tab === "trending" ? trending : topRated;
+
+  const movies =
+    tab === "trending"
+      ? trending
+      : tab === "topRated"
+      ? topRated
+      : decades[tab as DecadeKey];
+
   const top3 = movies.slice(0, 3);
   const rest = movies.slice(3, 20);
 
@@ -33,12 +48,12 @@ export default function SelectionClient({
         <p className="mt-1 text-sm text-gray-400">厳選された映画をチェック</p>
 
         {/* タブ */}
-        <div className="mt-6 flex gap-2">
+        <div className="mt-6 flex flex-wrap gap-2">
           {TABS.map((t) => (
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
-              className={`rounded-full px-5 py-2 text-sm font-semibold transition-colors ${
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
                 tab === t.key
                   ? "bg-gray-900 text-white"
                   : "bg-gray-100 text-gray-500 hover:bg-gray-200"
@@ -95,7 +110,7 @@ export default function SelectionClient({
         {/* 4位以降 小さいカードグリッド */}
         {rest.length > 0 && (
           <div className="mt-10 grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
-            {rest.map((movie, i) => {
+            {rest.map((movie) => {
               const title = movie.title || movie.name || "";
               return (
                 <Link
