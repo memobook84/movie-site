@@ -227,16 +227,6 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               </div>
             )}
 
-            {/* あらすじ */}
-            <div className="space-y-2">
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
-                ストーリー
-              </h2>
-              <p className="max-w-2xl text-sm leading-7 text-gray-600">
-                {movie.overview || "この作品の説明はまだ登録されていません。"}
-              </p>
-            </div>
-
             {/* ボタン */}
             <div className="flex gap-3 pt-2 md:gap-3">
               {trailer && (
@@ -263,6 +253,16 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               <ShareButton title={`${title} | CINEMA`} />
             </div>
           </div>
+        </div>
+
+        {/* あらすじ */}
+        <div className="mt-10 space-y-2">
+          <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
+            ストーリー
+          </h2>
+          <p className="max-w-2xl text-sm leading-7 text-gray-600">
+            {movie.overview || "この作品の説明はまだ登録されていません。"}
+          </p>
         </div>
 
         {/* レビュー: ターミネーター2 */}
