@@ -97,17 +97,16 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
   return (
     <main className="min-h-screen bg-white">
       {/* 背景画像 */}
-      <div className="relative mt-16 w-full">
-        {movie.backdrop_path ? (
-          <img
-            src={`${IMAGE_BASE_URL}/original${movie.backdrop_path}`}
-            alt=""
-            className="w-full object-contain"
+      <div className="relative mt-16 h-[55vh] w-full md:h-[65vh]">
+        {movie.backdrop_path && (
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{
+              backgroundImage: `url(${IMAGE_BASE_URL}/original${movie.backdrop_path})`,
+            }}
           />
-        ) : (
-          <div className="h-[40vh]" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/50 to-black/20" />
       </div>
 
       {/* コンテンツ */}
