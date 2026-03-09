@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import BottomNav from "@/components/BottomNav";
 import ScrollToTop from "@/components/ScrollToTop";
 import ServiceWorker from "@/components/ServiceWorker";
+import SplashScreen from "@/components/SplashScreen";
 
 const inter = Inter({ subsets: ["latin"] });
 const notoSansJP = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--font-noto-sans-jp" });
@@ -52,6 +53,7 @@ export default function RootLayout({
     <html lang="ja">
       <body className={`${inter.className} ${notoSansJP.variable}`}>
         <ServiceWorker />
+        <SplashScreen />
         <Navbar />
         {children}
         <Footer />
