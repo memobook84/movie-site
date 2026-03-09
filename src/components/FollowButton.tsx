@@ -61,12 +61,13 @@ export default function FollowButton({ movieId, title, posterPath, mediaType = "
           ? "border-gray-900 bg-gray-900 text-white hover:bg-gray-800"
           : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
       }`}
-      aria-label={followed ? "フォロー中" : "フォロー"}
+      aria-label={followed ? "ウォッチリストに追加済み" : "ウォッチリストに追加"}
     >
       <svg className="h-4 w-4" viewBox="0 0 24 24" fill={followed ? "currentColor" : "none"} stroke={followed ? "currentColor" : "#9ca3af"} strokeWidth="2">
-        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="12" cy="12" r="3" />
       </svg>
-      <span className="hidden md:inline text-sm font-semibold">{followed ? "フォロー中" : "フォロー"}</span>
+      <span className="hidden md:inline text-sm font-semibold">{followed ? "ウォッチリスト" : "ウォッチリスト"}</span>
     </button>
   );
 }

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { getFollowed, FollowedItem } from "@/components/FollowButton";
 
 export default function FollowsPage() {
@@ -14,10 +13,10 @@ export default function FollowsPage() {
 
   return (
     <main className="min-h-screen pt-24 pb-24 px-6 md:px-16">
-      <h1 className="text-2xl font-bold text-[#1d1d1f]">フォロー中</h1>
+      <h1 className="text-2xl font-bold text-[#1d1d1f]">ウォッチリスト</h1>
       {items.length === 0 ? (
         <p className="mt-8 text-center text-gray-400">
-          フォローした作品はまだありません
+          ウォッチリストに追加された作品はまだありません
         </p>
       ) : (
         <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
@@ -29,12 +28,11 @@ export default function FollowsPage() {
             >
               <div className="overflow-hidden rounded-xl transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-black/15">
                 {item.posterPath ? (
-                  <Image
+                  <img
                     src={`https://image.tmdb.org/t/p/w342${item.posterPath}`}
                     alt={item.title}
-                    width={342}
-                    height={513}
                     className="aspect-[2/3] w-full object-cover"
+                    loading="lazy"
                   />
                 ) : (
                   <div className="flex aspect-[2/3] items-center justify-center bg-gray-200 text-xs text-gray-400">

@@ -17,7 +17,7 @@ export default function PrivacyPage() {
           <p className="mt-2">当サイトでは、以下の情報をお客様のブラウザに保存しています。</p>
           <ul className="mt-2 list-disc pl-5 space-y-1">
             <li>
-              <strong>フォロー情報（localStorage）</strong> — お気に入りに追加した映画・ドラマの情報をブラウザ内に保存します。
+              <strong>ウォッチリスト情報（localStorage）</strong> — お気に入りに追加した映画・ドラマの情報をブラウザ内に保存します。
               この情報はサーバーには送信されず、お客様のブラウザ内にのみ保存されます。
             </li>
           </ul>
@@ -51,7 +51,7 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-base font-semibold text-gray-800">5. データの削除</h2>
           <p className="mt-2">
-            ブラウザのlocalStorageに保存されたフォロー情報は、ブラウザの設定からいつでも削除できます。
+            ブラウザのlocalStorageに保存されたウォッチリスト情報は、ブラウザの設定からいつでも削除できます。
             具体的には、ブラウザの「サイトデータの削除」機能をご利用ください。
           </p>
         </section>

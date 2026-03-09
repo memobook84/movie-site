@@ -64,7 +64,7 @@ export default function BottomNav() {
           <span className="text-[10px]">トレンド</span>
         </Link>
 
-        {/* フォロー */}
+        {/* ウォッチリスト */}
         <Link
           href="/follows"
           className={`flex flex-col items-center gap-0.5 px-3 py-1 transition-colors hover:text-gray-800 ${
@@ -72,9 +72,10 @@ export default function BottomNav() {
           }`}
         >
           <svg className="h-6 w-6" fill={isFollows ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" strokeLinecap="round" strokeLinejoin="round" />
+            <circle cx="12" cy="12" r="3" />
           </svg>
-          <span className="text-[10px]">フォロー</span>
+          <span className="text-[10px]">ウォッチリスト</span>
         </Link>
       </div>
     </div>
