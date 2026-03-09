@@ -140,7 +140,7 @@ export default function Navbar() {
               セレクション
             </Link>
             <Link href="/follows" className="hidden transition-opacity hover:opacity-60 lg:inline">
-              フォロー
+              ウォッチリスト
             </Link>
             <button
               onClick={() => setShowSearch(!showSearch)}
