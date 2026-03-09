@@ -8,7 +8,7 @@ export default function BottomNav() {
   const pathname = usePathname();
   const isHome = pathname === "/";
   const isGenres = pathname.startsWith("/genre");
-  const isRanking = pathname === "/ranking";
+  const isSelection = pathname === "/selection";
   const isFollows = pathname === "/follows";
 
   return (
@@ -51,17 +51,17 @@ export default function BottomNav() {
           <span className="text-[10px]">ジャンル</span>
         </Link>
 
-        {/* トレンド */}
+        {/* セレクション */}
         <Link
-          href="/ranking"
+          href="/selection"
           className={`flex flex-col items-center gap-0.5 px-3 py-1 transition-colors hover:text-gray-800 ${
-            isRanking ? "text-gray-800" : "text-gray-400"
+            isSelection ? "text-gray-800" : "text-gray-400"
           }`}
         >
           <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
             <path d="M3 21h18M5 21V7l5-4 5 4v14M10 21v-6h4v6" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <span className="text-[10px]">トレンド</span>
+          <span className="text-[10px]">セレクション</span>
         </Link>
 
         {/* ウォッチリスト */}
