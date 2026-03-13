@@ -4,6 +4,8 @@ import Link from "next/link";
 import FollowButton from "@/components/FollowButton";
 import GalleryModal from "@/components/GalleryModal";
 import ShareButton from "@/components/ShareButton";
+import RelationButton from "@/components/RelationButton";
+import { getRelationData } from "@/lib/relations-data";
 import {
   Zap, Compass, Sparkles, Laugh, SearchCheck,
   Film, Drama, Home, Wand2, Landmark,
@@ -93,6 +95,10 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
   const watchProviders = await getWatchProviders(Number(id), type || "movie");
   const year = movie.release_date?.slice(0, 4);
   const directors = movie.credits?.crew?.filter((c) => c.job === "Director") || [];
+
+  // 人物相関図データ
+  const relationData = getRelationData(movie.id);
+  const allCast = movie.credits?.cast || [];
 
   return (
     <main className="min-h-screen bg-white">
@@ -199,6 +205,15 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                 mediaType={type || "movie"}
               />
               <GalleryModal images={images} imageBase={IMAGE_BASE_URL} />
+              {relationData && (
+                <RelationButton
+                  title={title}
+                  characters={relationData.characters}
+                  relationships={relationData.relationships}
+                  imageBase={IMAGE_BASE_URL}
+                  cast={allCast}
+                />
+              )}
               <ShareButton title={`${title} | CINEMA`} />
             </div>
           </div>
