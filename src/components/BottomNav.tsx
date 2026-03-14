@@ -2,6 +2,7 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
+import { Film, Glasses, Tent } from "lucide-react";
 
 export default function BottomNav() {
   const router = useRouter();
@@ -12,7 +13,7 @@ export default function BottomNav() {
   const isFollows = pathname === "/follows";
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-[#DCDCDC] pb-[env(safe-area-inset-bottom)] lg:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-[#DCDCDC] pb-[env(safe-area-inset-bottom)] xl:hidden">
       <div className="flex items-center justify-around py-2">
         {/* 戻る */}
         <button
@@ -45,9 +46,7 @@ export default function BottomNav() {
             isGenres ? "text-gray-900" : "text-gray-400"
           }`}
         >
-          <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={isGenres ? "2" : "1.5"} viewBox="0 0 24 24">
-            <path d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <Tent className="h-6 w-6" strokeWidth={isGenres ? 2 : 1.5} />
           <span className={`text-[10px] ${isGenres ? "font-semibold" : ""}`}>ジャンル</span>
         </Link>
 
@@ -58,10 +57,7 @@ export default function BottomNav() {
             isSelection ? "text-gray-900" : "text-gray-400"
           }`}
         >
-          <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={isSelection ? "2" : "1.5"} viewBox="0 0 24 24">
-            <path d="M6 3h12l4 7-10 11L2 10l4-7z" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M2 10h20M12 21L8 10l4-7 4 7-4 11z" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <Film className="h-6 w-6" strokeWidth={isSelection ? 2 : 1.5} />
           <span className={`text-[10px] ${isSelection ? "font-semibold" : ""}`}>セレクション</span>
         </Link>
 
@@ -72,10 +68,7 @@ export default function BottomNav() {
             isFollows ? "text-gray-900" : "text-gray-400"
           }`}
         >
-          <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={isFollows ? "2" : "1.5"} viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M12 6v6l4 2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <Glasses className="h-6 w-6" strokeWidth={isFollows ? 2 : 1.5} />
           <span className={`text-[10px] ${isFollows ? "font-semibold" : ""}`}>リスト</span>
         </Link>
       </div>

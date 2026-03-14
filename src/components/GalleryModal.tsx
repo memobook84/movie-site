@@ -24,7 +24,7 @@ export default function GalleryModal({ images, imageBase }: GalleryModalProps) {
       {/* ギャラリーボタン */}
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center justify-center h-11 w-11 rounded-full border border-gray-300 bg-white text-gray-700 transition-all hover:bg-gray-50 md:h-auto md:w-auto md:gap-2 md:px-7 md:py-3"
+        className="inline-flex items-center justify-center h-11 w-11 rounded-full border border-gray-300 bg-white text-gray-700 transition-all hover:bg-gray-50 xl:h-auto xl:w-auto xl:gap-2 xl:px-7 xl:py-3"
         aria-label="ピクチャー"
       >
         <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -33,7 +33,7 @@ export default function GalleryModal({ images, imageBase }: GalleryModalProps) {
           <rect x="3" y="14" width="7" height="7" rx="1" />
           <rect x="14" y="14" width="7" height="7" rx="1" />
         </svg>
-        <span className="hidden md:inline text-sm font-semibold">ピクチャー</span>
+        <span className="hidden xl:inline text-sm font-semibold">ピクチャー</span>
       </button>
 
       {/* ポップアップ */}

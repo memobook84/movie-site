@@ -42,7 +42,7 @@ export default function ShareButton({ title }: ShareButtonProps) {
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="inline-flex items-center justify-center h-11 w-11 rounded-full border border-gray-300 bg-white text-gray-700 transition-all hover:bg-gray-50 md:h-auto md:w-auto md:gap-2 md:px-7 md:py-3"
+        className="inline-flex items-center justify-center h-11 w-11 rounded-full border border-gray-300 bg-white text-gray-700 transition-all hover:bg-gray-50 xl:h-auto xl:w-auto xl:gap-2 xl:px-7 xl:py-3"
         aria-label="シェア"
       >
         <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -52,7 +52,7 @@ export default function ShareButton({ title }: ShareButtonProps) {
           <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
           <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
         </svg>
-        <span className="hidden md:inline text-sm font-semibold">シェア</span>
+        <span className="hidden xl:inline text-sm font-semibold">シェア</span>
       </button>
 
       {open && (

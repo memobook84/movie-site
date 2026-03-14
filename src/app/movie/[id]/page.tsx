@@ -5,6 +5,7 @@ import FollowButton from "@/components/FollowButton";
 import GalleryModal from "@/components/GalleryModal";
 import ShareButton from "@/components/ShareButton";
 import RelationButton from "@/components/RelationButton";
+import PosterTappable from "@/components/PosterTappable";
 import { getRelationData } from "@/lib/relations-data";
 import {
   Zap, Compass, Sparkles, Laugh, SearchCheck,
@@ -120,13 +121,12 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         <div className="flex flex-col gap-10 md:flex-row">
           {/* ポスター */}
           {movie.poster_path && (
-            <div className="flex-shrink-0">
-              <img
-                src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}
-                alt={title}
-                className="w-48 rounded-2xl shadow-2xl md:w-64"
-              />
-            </div>
+            <PosterTappable
+              posterPath={movie.poster_path}
+              title={title}
+              imageBase={IMAGE_BASE_URL}
+              images={images}
+            />
           )}
 
           {/* 詳細情報 */}
@@ -189,13 +189,13 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                   href={`https://www.youtube.com/watch?v=${trailer.key}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center h-11 w-11 rounded-full bg-gray-900 text-white transition-all hover:bg-gray-800 hover:shadow-lg md:h-auto md:w-auto md:gap-2 md:px-7 md:py-3"
+                  className="inline-flex items-center justify-center h-11 w-11 rounded-full bg-gray-900 text-white transition-all hover:bg-gray-800 hover:shadow-lg xl:h-auto xl:w-auto xl:gap-2 xl:px-7 xl:py-3"
                   aria-label="トレーラーを見る"
                 >
                   <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M8 5v14l11-7z" />
                   </svg>
-                  <span className="hidden md:inline text-sm font-semibold">トレーラー</span>
+                  <span className="hidden xl:inline text-sm font-semibold">トレーラー</span>
                 </a>
               )}
               <FollowButton
@@ -648,47 +648,53 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
           </div>
         )}
 
-        {/* キャスト */}
+        {/* キャスト（ポラロイド風） */}
         {cast.length > 0 && (
           <div className="mt-16 space-y-5">
             <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
               キャスト
             </h2>
-            <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
-              {cast.map((person) => (
-                <Link
-                  key={person.id}
-                  href={`/person/${person.id}`}
-                  className="flex-shrink-0 group w-[120px] rounded-xl border border-gray-200 bg-white overflow-hidden transition-all hover:border-gray-300 hover:shadow-md"
-                >
-                  <div className="relative flex items-center justify-center pt-3">
-                    {person.profile_path ? (
-                      <>
-                        <img
-                          src={`${IMAGE_BASE_URL}/w185${person.profile_path}`}
-                          alt={person.name}
-                          className="h-[80px] w-[80px] rounded-md object-cover contrast-[1.2] grayscale transition-all duration-500 group-hover:contrast-100 group-hover:grayscale-0"
-                          loading="lazy"
-                        />
-                        {/* ビネット */}
-                        <div className="pointer-events-none absolute inset-x-[20px] top-3 h-[80px] rounded-md shadow-[inset_0_0_15px_rgba(0,0,0,0.4)] transition-opacity duration-500 group-hover:opacity-0" />
-                      </>
-                    ) : (
-                      <div className="flex h-[80px] w-[80px] items-center justify-center rounded-md bg-gray-100 text-2xl text-gray-400">
-                        ?
+            <div className="flex gap-2 overflow-x-auto pb-8 scrollbar-hide md:gap-4">
+              {cast.map((person, i) => {
+                const rotations = [-3, 2, -1.5, 3, -2, 1.5, -2.5, 2.5, -1, 3.5];
+                const rot = rotations[i % rotations.length];
+                return (
+                  <Link
+                    key={person.id}
+                    href={`/person/${person.id}`}
+                    className="flex-shrink-0 group transition-all duration-300 hover:scale-110 hover:z-10"
+                  >
+                    <div className="w-[110px] rounded-sm bg-[#faf8f5] p-2 pb-8 shadow-md transition-shadow duration-300 group-hover:shadow-xl md:w-[130px] md:p-2.5 md:pb-10" style={{ boxShadow: '2px 3px 12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.08)' }}>
+                      {person.profile_path ? (
+                        <div className="relative">
+                          <img
+                            src={`${IMAGE_BASE_URL}/w185${person.profile_path}`}
+                            alt={person.name}
+                            className="aspect-[3/4] w-full object-cover grayscale contrast-[1.2] transition-all duration-500 group-hover:grayscale-0 group-hover:contrast-100"
+                            loading="lazy"
+                          />
+                          <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_8px_rgba(0,0,0,0.3)]" />
+                        </div>
+                      ) : (
+                        <div className="relative">
+                          <div className="flex aspect-[3/4] w-full items-center justify-center bg-gray-100 text-3xl text-gray-300">
+                            ?
+                          </div>
+                          <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_8px_rgba(0,0,0,0.3)]" />
+                        </div>
+                      )}
+                      <div className="mt-2 text-center">
+                        <p className="truncate text-[11px] font-semibold text-gray-800">
+                          {person.name}
+                        </p>
+                        <p className="mt-0.5 truncate text-[10px] text-gray-400">
+                          {person.character}
+                        </p>
                       </div>
-                    )}
-                  </div>
-                  <div className="px-2.5 py-2.5">
-                    <p className="truncate text-xs font-semibold text-gray-900">
-                      {person.name}
-                    </p>
-                    <p className="mt-0.5 truncate text-[10px] text-gray-500">
-                      {person.character}
-                    </p>
-                  </div>
-                </Link>
-              ))}
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         )}
