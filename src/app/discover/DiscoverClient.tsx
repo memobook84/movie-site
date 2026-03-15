@@ -178,17 +178,19 @@ export default function DiscoverClient() {
   }, [router]);
 
   return (
-    <main className="min-h-screen pb-28 pt-24 px-4 md:px-16">
+    <main className="fixed inset-0 flex flex-col pt-16 pb-16 px-4 md:relative md:inset-auto md:min-h-screen md:pb-28 md:pt-24 md:px-16 xl:pb-12">
       {/* タイトル */}
-      <h1 className="font-[family-name:var(--font-noto-sans-jp)] text-xl font-bold tracking-wide text-gray-900 md:text-2xl">
-        ディスカバー
-      </h1>
-      <p className="mt-1 text-xs text-gray-400">興行収入とジャンルで映画を探す</p>
+      <div className="flex items-baseline gap-3 pt-2">
+        <h1 className="font-[family-name:var(--font-noto-sans-jp)] text-lg font-bold tracking-wide text-gray-900 md:text-2xl">
+          ディスカバー
+        </h1>
+        <p className="text-[10px] text-gray-400 md:text-xs">興行収入とジャンルで映画を探す</p>
+      </div>
 
       {/* 興行収入スライダー */}
-      <div className="mt-6">
-        <label className="text-xs font-semibold text-gray-500">興行収入</label>
-        <div className="mt-2 flex items-center gap-4">
+      <div className="mt-3 md:mt-6">
+        <div className="flex items-center gap-4">
+          <span className="text-[10px] font-semibold text-gray-500 md:text-xs">興行収入</span>
           <input
             type="range"
             min={1}
@@ -196,23 +198,22 @@ export default function DiscoverClient() {
             step={1}
             value={minRevenue}
             onChange={(e) => setMinRevenue(Number(e.target.value))}
-            className="h-2 w-full cursor-pointer appearance-none rounded-full bg-gray-200 accent-gray-700 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gray-700"
+            className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gray-200 accent-gray-700 md:h-2 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gray-700 md:[&::-webkit-slider-thumb]:h-5 md:[&::-webkit-slider-thumb]:w-5"
           />
-          <span className="min-w-[80px] whitespace-nowrap text-right text-sm font-bold text-gray-800">
+          <span className="min-w-[70px] whitespace-nowrap text-right text-xs font-bold text-gray-800 md:text-sm">
             {revenueInOku.toLocaleString()}億円〜
           </span>
         </div>
       </div>
 
       {/* ジャンル選択 */}
-      <div className="mt-5">
-        <label className="text-xs font-semibold text-gray-500">ジャンル</label>
-        <div className="mt-2 flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+      <div className="mt-2 md:mt-5">
+        <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide md:gap-2 md:pb-2">
           {GENRE_LIST.map((g) => (
             <button
               key={g.id}
               onClick={() => setSelectedGenre(g.id)}
-              className={`flex-shrink-0 rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
+              className={`flex-shrink-0 rounded-full px-3 py-1 text-[10px] font-medium transition-colors md:px-4 md:py-1.5 md:text-xs ${
                 selectedGenre === g.id
                   ? "bg-gray-800 text-white"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
@@ -224,14 +225,14 @@ export default function DiscoverClient() {
         </div>
       </div>
 
-      {/* カード表示エリア */}
-      <div className="mt-8">
+      {/* カード表示エリア（残りの高さを使い切る） */}
+      <div className="mt-3 flex-1 min-h-0 md:mt-8">
         {loading ? (
-          <div className="flex h-[400px] items-center justify-center">
+          <div className="flex h-full items-center justify-center">
             <div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-300 border-t-gray-700" />
           </div>
         ) : movies.length === 0 ? (
-          <div className="flex h-[400px] flex-col items-center justify-center text-gray-400">
+          <div className="flex h-full flex-col items-center justify-center text-gray-400">
             <svg className="h-12 w-12 mb-3" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
               <path d="M15.182 16.318A4.486 4.486 0 0 0 12.016 15a4.486 4.486 0 0 0-3.198 1.318M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
@@ -239,7 +240,7 @@ export default function DiscoverClient() {
             <p className="mt-1 text-xs">スライダーを下げてみてください</p>
           </div>
         ) : (
-          <div className="relative">
+          <div className="relative flex h-full flex-col">
             {/* PC左矢印 */}
             {current > 0 && (
               <button
@@ -255,14 +256,14 @@ export default function DiscoverClient() {
             {/* スワイプ可能エリア */}
             <div
               ref={containerRef}
-              className="overflow-hidden mx-auto max-w-sm"
+              className="overflow-hidden mx-auto w-full max-w-sm flex-1 min-h-0"
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
               style={{ touchAction: "pan-y" }}
             >
               <div
-                className="flex"
+                className="flex h-full"
                 style={{
                   transform: cardWidth
                     ? `translateX(${-current * cardWidth + offsetX}px)`
@@ -276,44 +277,44 @@ export default function DiscoverClient() {
                 {movies.map((m) => (
                   <div
                     key={m.id}
-                    className="flex-shrink-0 px-3"
+                    className="flex-shrink-0 flex flex-col h-full px-3"
                     style={{ width: cardWidth || "100%" }}
                     onClick={() => handleCardClick(m.id)}
                   >
-                    <div className="overflow-hidden rounded-2xl bg-white shadow-xl cursor-pointer">
+                    <div className="overflow-hidden rounded-2xl bg-white shadow-xl cursor-pointer flex flex-col h-full">
                       {m.poster_path ? (
                         <img
                           src={`${IMAGE_BASE_URL}/w500${m.poster_path}`}
                           alt={m.title}
-                          className="aspect-[2/3] w-full object-cover select-none"
+                          className="w-full flex-1 min-h-0 object-cover select-none"
                           draggable={false}
                         />
                       ) : (
-                        <div className="flex aspect-[2/3] w-full items-center justify-center bg-gray-100 text-gray-400 text-sm">
+                        <div className="flex w-full flex-1 min-h-0 items-center justify-center bg-gray-100 text-gray-400 text-sm">
                           No Image
                         </div>
                       )}
-                      <div className="p-4">
-                        <h2 className="font-[family-name:var(--font-noto-sans-jp)] text-base font-bold text-gray-900 leading-snug line-clamp-2">
+                      <div className="p-3 md:p-4">
+                        <h2 className="font-[family-name:var(--font-noto-sans-jp)] text-sm font-bold text-gray-900 leading-snug line-clamp-1 md:text-base md:line-clamp-2">
                           {m.title}
                         </h2>
-                        <div className="mt-2 flex items-center gap-3 text-xs text-gray-500">
+                        <div className="mt-1.5 flex items-center gap-3 text-[10px] text-gray-500 md:mt-2 md:text-xs">
                           <span>{m.release_date?.slice(0, 4) || "—"}</span>
                           <span className="font-semibold text-gray-700">
                             {formatRevenue(m.revenue)}
                           </span>
                           <span className="flex items-center gap-0.5">
-                            <svg className="h-3.5 w-3.5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                            <svg className="h-3 w-3 text-yellow-500 md:h-3.5 md:w-3.5" fill="currentColor" viewBox="0 0 20 20">
                               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292Z" />
                             </svg>
                             {m.vote_average.toFixed(1)}
                           </span>
                         </div>
-                        <div className="mt-3 flex flex-wrap gap-1.5">
+                        <div className="mt-2 flex flex-wrap gap-1 md:mt-3 md:gap-1.5">
                           {m.genres.slice(0, 3).map((g) => (
                             <span
                               key={g.id}
-                              className="rounded-full bg-gray-100 px-2.5 py-0.5 text-[10px] font-medium text-gray-500"
+                              className="rounded-full bg-gray-100 px-2 py-0.5 text-[9px] font-medium text-gray-500 md:px-2.5 md:text-[10px]"
                             >
                               {g.name}
                             </span>
@@ -338,27 +339,25 @@ export default function DiscoverClient() {
               </button>
             )}
 
-            {/* カウンター */}
-            <div className="mt-4 flex items-center justify-center">
-              <span className="text-xs text-gray-400">
+            {/* カウンター + ドット */}
+            <div className="mt-2 flex flex-col items-center gap-1 md:mt-4">
+              <span className="text-[10px] text-gray-400 md:text-xs">
                 {current + 1} / {movies.length}
               </span>
+              {movies.length > 1 && movies.length <= 20 && (
+                <div className="flex justify-center gap-1">
+                  {movies.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => goTo(i)}
+                      className={`h-1 rounded-full transition-all duration-300 ${
+                        i === current ? "w-3 bg-gray-700" : "w-1 bg-gray-300"
+                      } md:h-1.5 ${i === current ? "md:w-4" : "md:w-1.5"}`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
-
-            {/* ドットインジケーター */}
-            {movies.length > 1 && movies.length <= 20 && (
-              <div className="mt-2 flex justify-center gap-1.5">
-                {movies.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => goTo(i)}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      i === current ? "w-4 bg-gray-700" : "w-1.5 bg-gray-300"
-                    }`}
-                  />
-                ))}
-              </div>
-            )}
           </div>
         )}
       </div>
