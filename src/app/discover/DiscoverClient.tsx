@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { IMAGE_BASE_URL } from "@/lib/tmdb";
 
 interface DiscoverMovie {
@@ -46,28 +46,48 @@ function formatRevenue(usd: number): string {
 }
 
 export default function DiscoverClient() {
-  const [minRevenue, setMinRevenue] = useState(5); // 100億円単位のインデックス (5 = 500億円)
+  const router = useRouter();
+  const [minRevenue, setMinRevenue] = useState(5);
   const [selectedGenre, setSelectedGenre] = useState(0);
   const [movies, setMovies] = useState<DiscoverMovie[]>([]);
   const [loading, setLoading] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [current, setCurrent] = useState(0);
+  const [offsetX, setOffsetX] = useState(0);
+  const [transitioning, setTransitioning] = useState(false);
+  const [cardWidth, setCardWidth] = useState(0);
   const debounceRef = useRef<NodeJS.Timeout>(null);
-  const genreScrollRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // スワイプ用
-  const touchStartX = useRef(0);
-  const touchDeltaX = useRef(0);
-  const cardRef = useRef<HTMLDivElement>(null);
-  const isSwiping = useRef(false);
+  const startX = useRef(0);
+  const startY = useRef(0);
+  const isDragging = useRef(false);
+  const isHorizontalSwipe = useRef<boolean | null>(null);
+  const hasMoved = useRef(false);
 
-  const revenueInOku = minRevenue * 100; // 億円表示
-  const revenueInUSD = (revenueInOku * 1_0000_0000) / USD_TO_JPY; // USD換算
+  const THRESHOLD = 50;
+
+  const revenueInOku = minRevenue * 100;
+  const revenueInUSD = (revenueInOku * 1_0000_0000) / USD_TO_JPY;
+
+  // カード幅を計測
+  useEffect(() => {
+    const measure = () => {
+      if (containerRef.current) {
+        setCardWidth(containerRef.current.offsetWidth);
+      }
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
   const fetchMovies = useCallback(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(async () => {
       setLoading(true);
-      setCurrentIndex(0);
+      setCurrent(0);
+      setOffsetX(0);
       try {
         const params = new URLSearchParams();
         if (selectedGenre > 0) params.set("genre", String(selectedGenre));
@@ -86,42 +106,75 @@ export default function DiscoverClient() {
     fetchMovies();
   }, [fetchMovies]);
 
-  // カード切り替え
-  const goNext = () => {
-    if (currentIndex < movies.length - 1) setCurrentIndex((i) => i + 1);
-  };
-  const goPrev = () => {
-    if (currentIndex > 0) setCurrentIndex((i) => i - 1);
-  };
+  const goTo = useCallback((index: number) => {
+    setTransitioning(true);
+    setCurrent(index);
+    setOffsetX(0);
+    setTimeout(() => setTransitioning(false), 300);
+  }, []);
 
-  // スワイプハンドラ
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchDeltaX.current = 0;
-    isSwiping.current = true;
-  };
+  // タッチハンドラ（PosterGalleryと同じパターン）
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (transitioning) return;
+    isDragging.current = true;
+    isHorizontalSwipe.current = null;
+    hasMoved.current = false;
+    startX.current = e.touches[0].clientX;
+    startY.current = e.touches[0].clientY;
+    setOffsetX(0);
+  }, [transitioning]);
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isSwiping.current) return;
-    touchDeltaX.current = e.touches[0].clientX - touchStartX.current;
-    if (cardRef.current) {
-      cardRef.current.style.transition = "none";
-      cardRef.current.style.transform = `translateX(${touchDeltaX.current}px)`;
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!isDragging.current) return;
+    const dx = e.touches[0].clientX - startX.current;
+    const dy = e.touches[0].clientY - startY.current;
+
+    // 水平/垂直の判定（最初の動きで決定）
+    if (isHorizontalSwipe.current === null) {
+      if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+        isHorizontalSwipe.current = Math.abs(dx) > Math.abs(dy);
+      }
+      return;
     }
-  };
 
-  const handleTouchEnd = () => {
-    isSwiping.current = false;
-    if (cardRef.current) {
-      cardRef.current.style.transition = "transform 0.3s ease";
-      cardRef.current.style.transform = "translateX(0)";
+    // 垂直スワイプなら何もしない（通常スクロール）
+    if (!isHorizontalSwipe.current) return;
+    hasMoved.current = true;
+
+    // 端でのラバーバンド効果
+    if ((current === 0 && dx > 0) || (current === movies.length - 1 && dx < 0)) {
+      setOffsetX(dx * 0.3);
+    } else {
+      setOffsetX(dx);
     }
-    const threshold = 80;
-    if (touchDeltaX.current < -threshold) goNext();
-    else if (touchDeltaX.current > threshold) goPrev();
-  };
+  }, [current, movies.length]);
 
-  const movie = movies[currentIndex];
+  const handleTouchEnd = useCallback(() => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+
+    if (isHorizontalSwipe.current && Math.abs(offsetX) > THRESHOLD) {
+      if (offsetX < 0 && current < movies.length - 1) {
+        goTo(current + 1);
+      } else if (offsetX > 0 && current > 0) {
+        goTo(current - 1);
+      } else {
+        setTransitioning(true);
+        setOffsetX(0);
+        setTimeout(() => setTransitioning(false), 300);
+      }
+    } else {
+      setTransitioning(true);
+      setOffsetX(0);
+      setTimeout(() => setTransitioning(false), 300);
+    }
+  }, [offsetX, current, movies.length, goTo]);
+
+  // カードタップで遷移（スワイプ中は無視）
+  const handleCardClick = useCallback((movieId: number) => {
+    if (hasMoved.current) return;
+    router.push(`/movie/${movieId}`);
+  }, [router]);
 
   return (
     <main className="min-h-screen pb-28 pt-24 px-4 md:px-16">
@@ -133,9 +186,7 @@ export default function DiscoverClient() {
 
       {/* 興行収入スライダー */}
       <div className="mt-6">
-        <label className="text-xs font-semibold text-gray-500">
-          興行収入
-        </label>
+        <label className="text-xs font-semibold text-gray-500">興行収入</label>
         <div className="mt-2 flex items-center gap-4">
           <input
             type="range"
@@ -155,10 +206,7 @@ export default function DiscoverClient() {
       {/* ジャンル選択 */}
       <div className="mt-5">
         <label className="text-xs font-semibold text-gray-500">ジャンル</label>
-        <div
-          ref={genreScrollRef}
-          className="mt-2 flex gap-2 overflow-x-auto pb-2 scrollbar-hide"
-        >
+        <div className="mt-2 flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
           {GENRE_LIST.map((g) => (
             <button
               key={g.id}
@@ -189,109 +237,127 @@ export default function DiscoverClient() {
             <p className="text-sm">条件に合う映画が見つかりません</p>
             <p className="mt-1 text-xs">スライダーを下げてみてください</p>
           </div>
-        ) : movie ? (
-          <div className="relative flex items-center justify-center">
+        ) : (
+          <div className="relative">
             {/* PC左矢印 */}
-            <button
-              onClick={goPrev}
-              disabled={currentIndex === 0}
-              className="absolute -left-2 z-10 hidden h-10 w-10 items-center justify-center rounded-full bg-white shadow-lg transition-opacity hover:bg-gray-50 disabled:opacity-20 md:flex"
-            >
-              <svg className="h-5 w-5 text-gray-700" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path d="M15.75 19.5 8.25 12l7.5-7.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
+            {current > 0 && (
+              <button
+                onClick={() => goTo(current - 1)}
+                className="absolute -left-5 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-lg transition-opacity hover:bg-gray-50 md:flex"
+              >
+                <svg className="h-5 w-5 text-gray-700" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path d="M15.75 19.5 8.25 12l7.5-7.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            )}
 
-            {/* カード */}
+            {/* スワイプ可能エリア */}
             <div
-              ref={cardRef}
+              ref={containerRef}
+              className="overflow-hidden mx-auto max-w-sm"
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
-              className="w-full max-w-sm mx-auto"
+              style={{ touchAction: "pan-y" }}
             >
-              <Link href={`/movie/${movie.id}`} className="block">
-                <div className="overflow-hidden rounded-2xl bg-white shadow-xl">
-                  {/* ポスター */}
-                  {movie.poster_path ? (
-                    <img
-                      src={`${IMAGE_BASE_URL}/w500${movie.poster_path}`}
-                      alt={movie.title}
-                      className="aspect-[2/3] w-full object-cover"
-                    />
-                  ) : (
-                    <div className="flex aspect-[2/3] w-full items-center justify-center bg-gray-100 text-gray-400 text-sm">
-                      No Image
-                    </div>
-                  )}
-
-                  {/* 情報 */}
-                  <div className="p-4">
-                    <h2 className="font-[family-name:var(--font-noto-sans-jp)] text-base font-bold text-gray-900 leading-snug line-clamp-2">
-                      {movie.title}
-                    </h2>
-                    <div className="mt-2 flex items-center gap-3 text-xs text-gray-500">
-                      <span>{movie.release_date?.slice(0, 4) || "—"}</span>
-                      <span className="font-semibold text-gray-700">
-                        {formatRevenue(movie.revenue)}
-                      </span>
-                      <span className="flex items-center gap-0.5">
-                        <svg className="h-3.5 w-3.5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292Z" />
-                        </svg>
-                        {movie.vote_average.toFixed(1)}
-                      </span>
-                    </div>
-                    {/* ジャンルタグ */}
-                    <div className="mt-3 flex flex-wrap gap-1.5">
-                      {movie.genres.slice(0, 3).map((g) => (
-                        <span
-                          key={g.id}
-                          className="rounded-full bg-gray-100 px-2.5 py-0.5 text-[10px] font-medium text-gray-500"
-                        >
-                          {g.name}
-                        </span>
-                      ))}
+              <div
+                className="flex"
+                style={{
+                  transform: cardWidth
+                    ? `translateX(${-current * cardWidth + offsetX}px)`
+                    : undefined,
+                  transition: transitioning
+                    ? "transform 300ms cubic-bezier(0.25, 0.1, 0.25, 1)"
+                    : "none",
+                  width: cardWidth ? `${movies.length * cardWidth}px` : undefined,
+                }}
+              >
+                {movies.map((m) => (
+                  <div
+                    key={m.id}
+                    className="flex-shrink-0"
+                    style={{ width: cardWidth || "100%" }}
+                    onClick={() => handleCardClick(m.id)}
+                  >
+                    <div className="overflow-hidden rounded-2xl bg-white shadow-xl cursor-pointer">
+                      {m.poster_path ? (
+                        <img
+                          src={`${IMAGE_BASE_URL}/w500${m.poster_path}`}
+                          alt={m.title}
+                          className="aspect-[2/3] w-full object-cover select-none"
+                          draggable={false}
+                        />
+                      ) : (
+                        <div className="flex aspect-[2/3] w-full items-center justify-center bg-gray-100 text-gray-400 text-sm">
+                          No Image
+                        </div>
+                      )}
+                      <div className="p-4">
+                        <h2 className="font-[family-name:var(--font-noto-sans-jp)] text-base font-bold text-gray-900 leading-snug line-clamp-2">
+                          {m.title}
+                        </h2>
+                        <div className="mt-2 flex items-center gap-3 text-xs text-gray-500">
+                          <span>{m.release_date?.slice(0, 4) || "—"}</span>
+                          <span className="font-semibold text-gray-700">
+                            {formatRevenue(m.revenue)}
+                          </span>
+                          <span className="flex items-center gap-0.5">
+                            <svg className="h-3.5 w-3.5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292Z" />
+                            </svg>
+                            {m.vote_average.toFixed(1)}
+                          </span>
+                        </div>
+                        <div className="mt-3 flex flex-wrap gap-1.5">
+                          {m.genres.slice(0, 3).map((g) => (
+                            <span
+                              key={g.id}
+                              className="rounded-full bg-gray-100 px-2.5 py-0.5 text-[10px] font-medium text-gray-500"
+                            >
+                              {g.name}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
+                ))}
+              </div>
             </div>
 
             {/* PC右矢印 */}
-            <button
-              onClick={goNext}
-              disabled={currentIndex === movies.length - 1}
-              className="absolute -right-2 z-10 hidden h-10 w-10 items-center justify-center rounded-full bg-white shadow-lg transition-opacity hover:bg-gray-50 disabled:opacity-20 md:flex"
-            >
-              <svg className="h-5 w-5 text-gray-700" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path d="m8.25 4.5 7.5 7.5-7.5 7.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </div>
-        ) : null}
-
-        {/* カウンター */}
-        {!loading && movies.length > 0 && (
-          <div className="mt-4 flex items-center justify-center gap-1">
-            <span className="text-xs text-gray-400">
-              {currentIndex + 1} / {movies.length}
-            </span>
-          </div>
-        )}
-
-        {/* ドットインジケーター */}
-        {!loading && movies.length > 1 && movies.length <= 20 && (
-          <div className="mt-2 flex justify-center gap-1.5">
-            {movies.map((_, i) => (
+            {current < movies.length - 1 && (
               <button
-                key={i}
-                onClick={() => setCurrentIndex(i)}
-                className={`h-1.5 rounded-full transition-all ${
-                  i === currentIndex ? "w-4 bg-gray-700" : "w-1.5 bg-gray-300"
-                }`}
-              />
-            ))}
+                onClick={() => goTo(current + 1)}
+                className="absolute -right-5 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-lg transition-opacity hover:bg-gray-50 md:flex"
+              >
+                <svg className="h-5 w-5 text-gray-700" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path d="m8.25 4.5 7.5 7.5-7.5 7.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            )}
+
+            {/* カウンター */}
+            <div className="mt-4 flex items-center justify-center">
+              <span className="text-xs text-gray-400">
+                {current + 1} / {movies.length}
+              </span>
+            </div>
+
+            {/* ドットインジケーター */}
+            {movies.length > 1 && movies.length <= 20 && (
+              <div className="mt-2 flex justify-center gap-1.5">
+                {movies.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => goTo(i)}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      i === current ? "w-4 bg-gray-700" : "w-1.5 bg-gray-300"
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>
