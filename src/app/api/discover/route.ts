@@ -55,9 +55,9 @@ export async function GET(req: NextRequest) {
   const minRevenue = Number(searchParams.get("minRevenue")) || 0;
   const maxRevenue = Number(searchParams.get("maxRevenue")) || Infinity;
 
-  // 3ページ分取得（60件）
+  // 5ページ分取得（100件）
   const genreFilter = genre ? `&with_genres=${genre}` : "";
-  const pagePromises = [1, 2, 3].map((page) =>
+  const pagePromises = [1, 2, 3, 4, 5].map((page) =>
     fetchTMDb<{ results: DiscoverMovie[] }>(
       `/discover/movie?sort_by=revenue.desc${genreFilter}&page=${page}`
     )
@@ -65,12 +65,24 @@ export async function GET(req: NextRequest) {
   const pages = await Promise.all(pagePromises);
   const allMovies = pages.flatMap((p) => p?.results || []);
 
-  // 上位30件の詳細を並列取得
-  const top30 = allMovies.slice(0, 30);
-  const detailPromises = top30.map((m) =>
-    fetchTMDb<MovieDetailResult>(`/movie/${m.id}`)
-  );
-  const details = await Promise.all(detailPromises);
+  // 重複除去
+  const seen = new Set<number>();
+  const unique = allMovies.filter((m) => {
+    if (seen.has(m.id)) return false;
+    seen.add(m.id);
+    return true;
+  });
+
+  // 上位60件の詳細を並列取得（10件ずつバッチ処理でレート制限回避）
+  const top = unique.slice(0, 60);
+  const details: (MovieDetailResult | null)[] = [];
+  for (let i = 0; i < top.length; i += 10) {
+    const batch = top.slice(i, i + 10);
+    const batchResults = await Promise.all(
+      batch.map((m) => fetchTMDb<MovieDetailResult>(`/movie/${m.id}`))
+    );
+    details.push(...batchResults);
+  }
 
   // 範囲フィルタリング
   const filtered = details.filter(
