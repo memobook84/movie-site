@@ -200,8 +200,8 @@ export default function DiscoverClient() {
             onChange={(e) => setMinRevenue(Number(e.target.value))}
             className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gray-200 accent-gray-700 md:h-2 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gray-700 md:[&::-webkit-slider-thumb]:h-5 md:[&::-webkit-slider-thumb]:w-5"
           />
-          <span className="min-w-[70px] whitespace-nowrap text-right text-xs font-bold text-gray-800 md:text-sm">
-            {revenueInOku.toLocaleString()}億円〜
+          <span className="min-w-[60px] whitespace-nowrap text-right text-xs font-bold text-gray-800 md:text-sm">
+            {revenueInOku.toLocaleString()}億円
           </span>
         </div>
       </div>
@@ -263,7 +263,7 @@ export default function DiscoverClient() {
               style={{ touchAction: "pan-y" }}
             >
               <div
-                className="flex h-full"
+                className="flex"
                 style={{
                   transform: cardWidth
                     ? `translateX(${-current * cardWidth + offsetX}px)`
@@ -277,20 +277,20 @@ export default function DiscoverClient() {
                 {movies.map((m) => (
                   <div
                     key={m.id}
-                    className="flex-shrink-0 flex flex-col h-full px-3"
+                    className="flex-shrink-0 px-3"
                     style={{ width: cardWidth || "100%" }}
                     onClick={() => handleCardClick(m.id)}
                   >
-                    <div className="overflow-hidden rounded-2xl bg-white shadow-xl cursor-pointer flex flex-col h-full">
+                    <div className="overflow-hidden rounded-2xl bg-white shadow-xl cursor-pointer">
                       {m.poster_path ? (
                         <img
-                          src={`${IMAGE_BASE_URL}/w500${m.poster_path}`}
+                          src={`${IMAGE_BASE_URL}/w342${m.poster_path}`}
                           alt={m.title}
-                          className="w-full flex-1 min-h-0 object-cover select-none"
+                          className="aspect-[27/32] w-full object-cover select-none md:aspect-[2/3]"
                           draggable={false}
                         />
                       ) : (
-                        <div className="flex w-full flex-1 min-h-0 items-center justify-center bg-gray-100 text-gray-400 text-sm">
+                        <div className="flex aspect-[27/32] w-full items-center justify-center bg-gray-100 text-gray-400 text-sm md:aspect-[2/3]">
                           No Image
                         </div>
                       )}
