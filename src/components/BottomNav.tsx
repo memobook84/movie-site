@@ -2,7 +2,7 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { Compass, Film, Glasses, Tent } from "lucide-react";
+import { Film, Glasses, Tent } from "lucide-react";
 
 export default function BottomNav() {
   const router = useRouter();
@@ -10,7 +10,6 @@ export default function BottomNav() {
   const isHome = pathname === "/";
   const isGenres = pathname.startsWith("/genre");
   const isSelection = pathname === "/selection";
-  const isDiscover = pathname === "/discover";
   const isFollows = pathname === "/follows";
 
   return (
@@ -49,17 +48,6 @@ export default function BottomNav() {
         >
           <Tent className="h-6 w-6" strokeWidth={isGenres ? 2 : 1.5} />
           <span className={`text-[10px] ${isGenres ? "font-semibold" : ""}`}>ジャンル</span>
-        </Link>
-
-        {/* ディスカバー */}
-        <Link
-          href="/discover"
-          className={`flex flex-col items-center gap-0.5 px-3 py-1 transition-colors hover:text-gray-800 ${
-            isDiscover ? "text-gray-900" : "text-gray-400"
-          }`}
-        >
-          <Compass className="h-6 w-6" strokeWidth={isDiscover ? 2 : 1.5} />
-          <span className={`text-[10px] ${isDiscover ? "font-semibold" : ""}`}>ディスカバー</span>
         </Link>
 
         {/* セレクション */}

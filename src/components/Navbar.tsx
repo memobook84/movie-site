@@ -137,9 +137,6 @@ export default function Navbar() {
             <Link href="/genres" className={`hidden xl:inline transition-opacity hover:opacity-60 pb-1 ${pathname.startsWith("/genre") ? "border-b-2 border-white" : ""}`}>
               ジャンル
             </Link>
-            <Link href="/discover" className={`hidden xl:inline transition-opacity hover:opacity-60 pb-1 ${pathname === "/discover" ? "border-b-2 border-white" : ""}`}>
-              ディスカバー
-            </Link>
             <Link href="/selection" className={`hidden xl:inline transition-opacity hover:opacity-60 pb-1 ${pathname === "/selection" ? "border-b-2 border-white" : ""}`}>
               セレクション
             </Link>
