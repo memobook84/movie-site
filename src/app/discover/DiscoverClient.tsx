@@ -178,7 +178,7 @@ export default function DiscoverClient() {
   }, [router]);
 
   return (
-    <main className="fixed inset-0 flex flex-col pt-16 pb-16 px-4 md:relative md:inset-auto md:min-h-screen md:pb-28 md:pt-24 md:px-16 xl:pb-12">
+    <main className="fixed inset-0 z-10 flex flex-col bg-white pt-16 pb-16 px-4 md:relative md:inset-auto md:z-auto md:min-h-screen md:pb-28 md:pt-24 md:px-16 xl:pb-12">
       {/* タイトル */}
       <div className="flex items-baseline gap-3 pt-2">
         <h1 className="font-[family-name:var(--font-noto-sans-jp)] text-lg font-bold tracking-wide text-gray-900 md:text-2xl">
