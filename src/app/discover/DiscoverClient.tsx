@@ -276,7 +276,7 @@ export default function DiscoverClient() {
                 {movies.map((m) => (
                   <div
                     key={m.id}
-                    className="flex-shrink-0"
+                    className="flex-shrink-0 px-3"
                     style={{ width: cardWidth || "100%" }}
                     onClick={() => handleCardClick(m.id)}
                   >
