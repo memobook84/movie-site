@@ -53,6 +53,7 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const genre = searchParams.get("genre") || "";
   const minRevenue = Number(searchParams.get("minRevenue")) || 0;
+  const maxRevenue = Number(searchParams.get("maxRevenue")) || Infinity;
 
   // 3ページ分取得（60件）
   const genreFilter = genre ? `&with_genres=${genre}` : "";
@@ -71,9 +72,9 @@ export async function GET(req: NextRequest) {
   );
   const details = await Promise.all(detailPromises);
 
-  // フィルタリング
+  // 範囲フィルタリング
   const filtered = details.filter(
-    (d): d is MovieDetailResult => d !== null && d.revenue >= minRevenue
+    (d): d is MovieDetailResult => d !== null && d.revenue >= minRevenue && d.revenue < maxRevenue
   );
 
   // シャッフルして返却
