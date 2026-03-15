@@ -11,18 +11,14 @@
 }
 
 html {
-  height: 100%;
-  overflow: hidden;
+  background: #424242;
 }
 
 body {
-  height: 100%;
-  overflow: auto;
   background: var(--background);
   color: var(--foreground);
   font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
-  overscroll-behavior: none;
-  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: none;
 }
 
 /* スクロールバー非表示 */
