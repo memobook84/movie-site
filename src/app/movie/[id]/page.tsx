@@ -648,48 +648,68 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
           </div>
         )}
 
-        {/* キャスト（ポラロイド風） */}
+        {/* キャスト（クリップ風） */}
         {cast.length > 0 && (
           <div className="mt-16 space-y-5">
             <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
               キャスト
             </h2>
-            <div className="flex gap-2 overflow-x-auto pb-8 scrollbar-hide md:gap-4">
+            <div className="flex gap-2 overflow-x-auto pb-4 pt-8 scrollbar-hide md:gap-4">
               {cast.map((person, i) => {
-                const rotations = [-3, 2, -1.5, 3, -2, 1.5, -2.5, 2.5, -1, 3.5];
+                const rotations = [-2, 1.5, -1, 2.5, -1.5, 1, -2.5, 2, -0.5, 3];
                 const rot = rotations[i % rotations.length];
+                const clipColors = ["#b0b0b0", "#a0a0a0", "#909090", "#888", "#a8a8a8"];
+                const clipColor = clipColors[i % clipColors.length];
                 return (
                   <Link
                     key={person.id}
                     href={`/person/${person.id}`}
                     className="flex-shrink-0 group transition-all duration-300 hover:scale-110 hover:z-10"
+                    style={{ transform: `rotate(${rot}deg)` }}
                   >
-                    <div className="w-[110px] rounded-sm bg-[#faf8f5] p-2 pb-8 shadow-md transition-shadow duration-300 group-hover:shadow-xl md:w-[130px] md:p-2.5 md:pb-10" style={{ boxShadow: '2px 3px 12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.08)' }}>
-                      {person.profile_path ? (
-                        <div className="relative">
-                          <img
-                            src={`${IMAGE_BASE_URL}/w185${person.profile_path}`}
-                            alt={person.name}
-                            className="aspect-[3/4] w-full object-cover grayscale contrast-[1.2] transition-all duration-500 group-hover:grayscale-0 group-hover:contrast-100"
-                            loading="lazy"
-                          />
-                          <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_8px_rgba(0,0,0,0.3)]" />
-                        </div>
-                      ) : (
-                        <div className="relative">
-                          <div className="flex aspect-[3/4] w-full items-center justify-center bg-gray-100 text-3xl text-gray-300">
-                            ?
+                    <div className="relative w-[110px] md:w-[130px]">
+                      {/* クリップ */}
+                      <div className="absolute -top-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center">
+                        <div
+                          className="w-[14px] h-[22px] rounded-t-full border-2 border-b-0"
+                          style={{ borderColor: clipColor }}
+                        />
+                        <div
+                          className="w-[8px] h-[10px] border-2 border-t-0 rounded-b-sm"
+                          style={{ borderColor: clipColor }}
+                        />
+                      </div>
+                      {/* カード本体 */}
+                      <div
+                        className="rounded-sm bg-[#faf8f5] p-2 pb-6 shadow-md transition-shadow duration-300 group-hover:shadow-xl md:p-2.5 md:pb-8"
+                        style={{ boxShadow: '2px 3px 12px rgba(0,0,0,0.13), 0 1px 3px rgba(0,0,0,0.06)' }}
+                      >
+                        {person.profile_path ? (
+                          <div className="relative">
+                            <img
+                              src={`${IMAGE_BASE_URL}/w185${person.profile_path}`}
+                              alt={person.name}
+                              className="aspect-[3/4] w-full object-cover grayscale contrast-[1.1] transition-all duration-500 group-hover:grayscale-0 group-hover:contrast-100"
+                              loading="lazy"
+                            />
+                            <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_6px_rgba(0,0,0,0.2)]" />
                           </div>
-                          <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_8px_rgba(0,0,0,0.3)]" />
+                        ) : (
+                          <div className="relative">
+                            <div className="flex aspect-[3/4] w-full items-center justify-center bg-gray-100 text-3xl text-gray-300">
+                              ?
+                            </div>
+                            <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_6px_rgba(0,0,0,0.2)]" />
+                          </div>
+                        )}
+                        <div className="mt-2 text-center">
+                          <p className="truncate text-[11px] font-semibold text-gray-800">
+                            {person.name}
+                          </p>
+                          <p className="mt-0.5 truncate text-[10px] text-gray-400">
+                            {person.character}
+                          </p>
                         </div>
-                      )}
-                      <div className="mt-2 text-center">
-                        <p className="truncate text-[11px] font-semibold text-gray-800">
-                          {person.name}
-                        </p>
-                        <p className="mt-0.5 truncate text-[10px] text-gray-400">
-                          {person.character}
-                        </p>
                       </div>
                     </div>
                   </Link>
