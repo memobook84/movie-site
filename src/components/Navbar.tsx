@@ -110,12 +110,10 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`fixed top-0 z-50 w-full px-6 py-4 transition-all duration-500 md:px-16 ${
+        className={`fixed top-0 z-50 w-full px-6 py-4 transition-all duration-500 md:px-16 bg-[#424242] ${
           hidden ? "-translate-y-full" : "translate-y-0"
         } ${
-          scrolled
-            ? "bg-[#424242]/95 backdrop-blur-xl shadow-sm"
-            : "bg-[#424242]"
+          scrolled ? "shadow-sm" : ""
         }`}
       >
         <div className="relative flex items-center justify-between">
