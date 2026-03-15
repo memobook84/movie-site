@@ -70,17 +70,18 @@ export default function DiscoverClient() {
   const revenueInOku = minRevenue * 100;
   const revenueInUSD = (revenueInOku * 1_0000_0000) / USD_TO_JPY;
 
-  // カード幅を計測
+  // カード幅を計測（movies変更後にコンテナが出現するので依存に含める）
   useEffect(() => {
     const measure = () => {
       if (containerRef.current) {
         setCardWidth(containerRef.current.offsetWidth);
       }
     };
-    measure();
+    // コンテナ出現を待つ
+    requestAnimationFrame(measure);
     window.addEventListener("resize", measure);
     return () => window.removeEventListener("resize", measure);
-  }, []);
+  }, [movies]);
 
   const fetchMovies = useCallback(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
