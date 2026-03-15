@@ -109,6 +109,8 @@ export default function Navbar() {
 
   return (
     <>
+      {/* オーバースクロール時の白い隙間を防ぐ背景 */}
+      <div className="fixed -top-[200px] left-0 right-0 z-40 h-[250px] bg-[#424242]" />
       <nav
         className={`fixed top-0 z-50 w-full px-6 py-4 transition-all duration-500 md:px-16 bg-[#424242] ${
           hidden ? "-translate-y-full" : "translate-y-0"
