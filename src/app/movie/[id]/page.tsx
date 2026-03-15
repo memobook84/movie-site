@@ -22,6 +22,13 @@ const GENRE_ICONS: Record<number, ComponentType<{ className?: string }>> = {
   10770: Tv, 53: Flame, 10752: Swords, 37: Sun,
 };
 
+function formatUSD(amount: number): string {
+  if (amount >= 1_000_000_000) return `$${(amount / 1_000_000_000).toFixed(1)}B`;
+  if (amount >= 1_000_000) return `$${(amount / 1_000_000).toFixed(0)}M`;
+  if (amount >= 1_000) return `$${(amount / 1_000).toFixed(0)}K`;
+  return `$${amount}`;
+}
+
 interface PageProps {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ type?: string }>;
@@ -782,13 +789,13 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               {movie.budget > 0 && (
                 <div>
                   <p className="text-xs text-gray-400">予算</p>
-                  <p className="text-gray-700">${movie.budget.toLocaleString()}（約{(movie.budget * 150 / 100000000).toFixed(1)}億円）</p>
+                  <p className="text-gray-700">{formatUSD(movie.budget)}（約{(movie.budget * 150 / 100000000).toFixed(1)}億円）</p>
                 </div>
               )}
               {movie.revenue > 0 && (
                 <div>
                   <p className="text-xs text-gray-400">興行収入</p>
-                  <p className="text-gray-700">${movie.revenue.toLocaleString()}（約{(movie.revenue * 150 / 100000000).toFixed(1)}億円）</p>
+                  <p className="text-gray-700">{formatUSD(movie.revenue)}（約{(movie.revenue * 150 / 100000000).toFixed(1)}億円）</p>
                 </div>
               )}
               {movie.production_companies.length > 0 && (
