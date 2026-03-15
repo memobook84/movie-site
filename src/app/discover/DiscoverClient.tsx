@@ -67,10 +67,8 @@ export default function DiscoverClient() {
 
   const THRESHOLD = 50;
 
-  const revenueMinOku = minRevenue * 100;
-  const revenueMaxOku = revenueMinOku + 100;
-  const revenueMinUSD = (revenueMinOku * 1_0000_0000) / USD_TO_JPY;
-  const revenueMaxUSD = (revenueMaxOku * 1_0000_0000) / USD_TO_JPY;
+  const revenueInOku = minRevenue * 100;
+  const revenueInUSD = (revenueInOku * 1_0000_0000) / USD_TO_JPY;
 
   // カード幅を計測（movies変更後にコンテナが出現するので依存に含める）
   useEffect(() => {
@@ -94,8 +92,7 @@ export default function DiscoverClient() {
       try {
         const params = new URLSearchParams();
         if (selectedGenre > 0) params.set("genre", String(selectedGenre));
-        params.set("minRevenue", String(Math.round(revenueMinUSD)));
-        params.set("maxRevenue", String(Math.round(revenueMaxUSD)));
+        params.set("minRevenue", String(Math.round(revenueInUSD)));
         const res = await fetch(`/api/discover?${params}`);
         const data = await res.json();
         setMovies(data.results || []);
@@ -104,7 +101,7 @@ export default function DiscoverClient() {
       }
       setLoading(false);
     }, 500);
-  }, [selectedGenre, revenueMinUSD, revenueMaxUSD]);
+  }, [selectedGenre, revenueInUSD]);
 
   useEffect(() => {
     fetchMovies();
@@ -203,8 +200,8 @@ export default function DiscoverClient() {
             onChange={(e) => setMinRevenue(Number(e.target.value))}
             className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gray-200 accent-gray-700 md:h-2 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gray-700 md:[&::-webkit-slider-thumb]:h-5 md:[&::-webkit-slider-thumb]:w-5"
           />
-          <span className="min-w-[100px] whitespace-nowrap text-right text-[10px] font-bold text-gray-800 md:min-w-[120px] md:text-sm">
-            {revenueMinOku.toLocaleString()}〜{revenueMaxOku.toLocaleString()}億円
+          <span className="min-w-[70px] whitespace-nowrap text-right text-[10px] font-bold text-gray-800 md:text-sm">
+            {revenueInOku.toLocaleString()}億円以上
           </span>
         </div>
       </div>
