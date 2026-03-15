@@ -10,15 +10,10 @@
   --color-foreground: var(--foreground);
 }
 
-html {
-  background: #424242;
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
-  overscroll-behavior-y: none;
 }
 
 /* スクロールバー非表示 */
