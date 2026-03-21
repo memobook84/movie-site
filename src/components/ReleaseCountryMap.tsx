@@ -1,0 +1,115 @@
+"use client";
+
+import { memo } from "react";
+import {
+  ComposableMap,
+  Geographies,
+  Geography,
+} from "react-simple-maps";
+
+const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+
+// ISO 3166-1 alpha-2 → ISO 3166-1 numeric mapping (used by TopoJSON)
+const COUNTRY_CODE_MAP: Record<string, string> = {
+  AF:"004",AL:"008",DZ:"012",AS:"016",AD:"020",AO:"024",AG:"028",AR:"032",
+  AM:"051",AU:"036",AT:"040",AZ:"031",BS:"044",BH:"048",BD:"050",BB:"052",
+  BY:"112",BE:"056",BZ:"084",BJ:"204",BT:"064",BO:"068",BA:"070",BW:"072",
+  BR:"076",BN:"096",BG:"100",BF:"854",BI:"108",KH:"116",CM:"120",CA:"124",
+  CV:"132",CF:"140",TD:"148",CL:"152",CN:"156",CO:"170",KM:"174",CG:"178",
+  CD:"180",CR:"188",CI:"384",HR:"191",CU:"192",CY:"196",CZ:"203",DK:"208",
+  DJ:"262",DM:"212",DO:"214",EC:"218",EG:"818",SV:"222",GQ:"226",ER:"232",
+  EE:"233",ET:"231",FJ:"242",FI:"246",FR:"250",GA:"266",GM:"270",GE:"268",
+  DE:"276",GH:"288",GR:"300",GD:"308",GT:"320",GN:"324",GW:"624",GY:"328",
+  HT:"332",HN:"340",HU:"348",IS:"352",IN:"356",ID:"360",IR:"364",IQ:"368",
+  IE:"372",IL:"376",IT:"380",JM:"388",JP:"392",JO:"400",KZ:"398",KE:"404",
+  KI:"296",KP:"408",KR:"410",KW:"414",KG:"417",LA:"418",LV:"428",LB:"422",
+  LS:"426",LR:"430",LY:"434",LI:"438",LT:"440",LU:"442",MK:"807",MG:"450",
+  MW:"454",MY:"458",MV:"462",ML:"466",MT:"470",MH:"584",MR:"478",MU:"480",
+  MX:"484",FM:"583",MD:"498",MC:"492",MN:"496",ME:"499",MA:"504",MZ:"508",
+  MM:"104",NA:"516",NR:"520",NP:"524",NL:"528",NZ:"554",NI:"558",NE:"562",
+  NG:"566",NO:"578",OM:"512",PK:"586",PW:"585",PA:"591",PG:"598",PY:"600",
+  PE:"604",PH:"608",PL:"616",PT:"620",QA:"634",RO:"642",RU:"643",RW:"646",
+  KN:"659",LC:"662",VC:"670",WS:"882",SM:"674",ST:"678",SA:"682",SN:"686",
+  RS:"688",SC:"690",SL:"694",SG:"702",SK:"703",SI:"705",SB:"090",SO:"706",
+  ZA:"710",SS:"728",ES:"724",LK:"144",SD:"729",SR:"740",SZ:"748",SE:"752",
+  CH:"756",SY:"760",TW:"158",TJ:"762",TZ:"834",TH:"764",TL:"626",TG:"768",
+  TO:"776",TT:"780",TN:"788",TR:"792",TM:"795",TV:"798",UG:"800",UA:"804",
+  AE:"784",GB:"826",US:"840",UY:"858",UZ:"860",VU:"548",VE:"862",VN:"704",
+  YE:"887",ZM:"894",ZW:"716",PS:"275",XK:"383",HK:"344",PR:"630",
+};
+
+interface Props {
+  releaseCountries: string[];
+  productionCountries: string[];
+}
+
+function ReleaseCountryMap({ releaseCountries, productionCountries }: Props) {
+  const releaseCodes = new Set(
+    releaseCountries.map((code) => COUNTRY_CODE_MAP[code]).filter(Boolean)
+  );
+  const productionCodes = new Set(
+    productionCountries.map((code) => COUNTRY_CODE_MAP[code]).filter(Boolean)
+  );
+
+  return (
+    <div className="mt-16 space-y-5">
+      <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
+        公開国・製作国
+      </h2>
+      <div className="w-full max-w-4xl">
+        <ComposableMap
+          projection="geoNaturalEarth1"
+          projectionConfig={{ scale: 155, center: [0, 20] }}
+          width={800}
+          height={400}
+          style={{ width: "100%", height: "auto" }}
+        >
+          <Geographies geography={GEO_URL}>
+            {({ geographies }) =>
+              geographies.map((geo) => {
+                const isProduction = productionCodes.has(geo.id);
+                const isRelease = releaseCodes.has(geo.id);
+                const fill = isProduction
+                  ? "#dc2626"
+                  : isRelease
+                    ? "#1f2937"
+                    : "#e5e7eb";
+                const hoverFill = isProduction
+                  ? "#b91c1c"
+                  : isRelease
+                    ? "#111827"
+                    : "#d1d5db";
+                return (
+                  <Geography
+                    key={geo.rsmKey}
+                    geography={geo}
+                    fill={fill}
+                    stroke="#fff"
+                    strokeWidth={0.5}
+                    style={{
+                      default: { outline: "none" },
+                      hover: { outline: "none", fill: hoverFill },
+                      pressed: { outline: "none" },
+                    }}
+                  />
+                );
+              })
+            }
+          </Geographies>
+        </ComposableMap>
+      </div>
+      <div className="flex items-center gap-6 text-sm text-gray-500">
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block h-3 w-3 rounded-sm bg-red-600" />
+          製作国（{productionCountries.length}）
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block h-3 w-3 rounded-sm bg-gray-800" />
+          公開国（{releaseCountries.length}）
+        </span>
+      </div>
+    </div>
+  );
+}
+
+export default memo(ReleaseCountryMap);

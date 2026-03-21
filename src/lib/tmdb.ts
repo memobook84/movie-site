@@ -36,6 +36,7 @@ export interface MovieDetail extends Movie {
   budget: number;
   revenue: number;
   production_companies: { id: number; name: string; logo_path: string | null }[];
+  production_countries?: { iso_3166_1: string; name: string }[];
   videos?: {
     results: { key: string; site: string; type: string }[];
   };
@@ -247,6 +248,19 @@ export async function getWatchProviders(id: number, mediaType: string = "movie")
   const endpoint = mediaType === "tv" ? `/tv/${id}/watch/providers` : `/movie/${id}/watch/providers`;
   const data = await fetchTMDb<{ results: Record<string, WatchProviders> }>(endpoint, { results: {} });
   return data.results?.JP || null;
+}
+
+// 公開国情報
+interface ReleaseDatesResponse {
+  results: { iso_3166_1: string }[];
+}
+
+export async function getReleaseDates(id: number): Promise<string[]> {
+  const data = await fetchTMDb<ReleaseDatesResponse>(
+    `/movie/${id}/release_dates`,
+    { results: [] }
+  );
+  return data.results.map((r) => r.iso_3166_1);
 }
 
 // ジャンルID

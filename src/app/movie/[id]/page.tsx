@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getMovieDetail, getTvDetail, getMovieImages, getRecommendations, getWatchProviders, IMAGE_BASE_URL } from "@/lib/tmdb";
+import { getMovieDetail, getTvDetail, getMovieImages, getRecommendations, getWatchProviders, getReleaseDates, IMAGE_BASE_URL } from "@/lib/tmdb";
 import Link from "next/link";
 import FollowButton from "@/components/FollowButton";
 import GalleryModal from "@/components/GalleryModal";
@@ -7,6 +7,7 @@ import ShareButton from "@/components/ShareButton";
 import RelationButton from "@/components/RelationButton";
 import PosterTappable from "@/components/PosterTappable";
 import { getRelationData } from "@/lib/relations-data";
+import ReleaseCountryMap from "@/components/ReleaseCountryMap";
 import {
   Zap, Compass, Sparkles, Laugh, SearchCheck,
   Film, Drama, Home, Wand2, Landmark,
@@ -101,6 +102,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
   const images = await getMovieImages(Number(id), type || "movie");
   const recommendations = await getRecommendations(Number(id), type || "movie");
   const watchProviders = await getWatchProviders(Number(id), type || "movie");
+  const releaseCountries = type !== "tv" ? await getReleaseDates(Number(id)) : [];
   const year = movie.release_date?.slice(0, 4);
   const directors = movie.credits?.crew?.filter((c) => c.job === "Director") || [];
 
@@ -809,6 +811,11 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
             </div>
           </div>
         )}
+        {/* 公開国マップ */}
+        {releaseCountries.length > 0 && (
+          <ReleaseCountryMap releaseCountries={releaseCountries} productionCountries={movie.production_countries?.map(c => c.iso_3166_1) || []} />
+        )}
+
         {/* 関連作品 */}
         {recommendations.length > 0 && (
           <div className="mt-16 space-y-5">
