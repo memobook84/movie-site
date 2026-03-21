@@ -105,6 +105,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
   const releaseCountries = type !== "tv" ? await getReleaseDates(Number(id)) : [];
   const year = movie.release_date?.slice(0, 4);
   const directors = movie.credits?.crew?.filter((c) => c.job === "Director") || [];
+  const composers = movie.credits?.crew?.filter((c) => c.job === "Original Music Composer") || [];
 
   // 人物相関図データ
   const relationData = getRelationData(movie.id);
@@ -751,7 +752,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* 作品情報 */}
-        {(directors.length > 0 || movie.runtime > 0 || movie.budget > 0 || movie.revenue > 0 || movie.production_companies.length > 0) && (
+        {(directors.length > 0 || composers.length > 0 || movie.runtime > 0 || movie.budget > 0 || movie.revenue > 0 || movie.production_companies.length > 0) && (
           <div className="mt-16 space-y-5">
             <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
               作品情報
@@ -767,6 +768,14 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                         <Link href={`/person/${d.id}`} className="text-blue-600 hover:underline">{d.name}</Link>
                       </span>
                     ))}
+                  </p>
+                </div>
+              )}
+              {composers.length > 0 && (
+                <div>
+                  <p className="text-xs text-gray-400">音楽</p>
+                  <p className="text-gray-700">
+                    {composers.map((c) => c.name).join(", ")}
                   </p>
                 </div>
               )}
@@ -798,6 +807,14 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                 <div>
                   <p className="text-xs text-gray-400">興行収入</p>
                   <p className="text-gray-700">{formatUSD(movie.revenue)}（約{(movie.revenue * 150 / 100000000).toFixed(1)}億円）</p>
+                </div>
+              )}
+              {movie.production_countries && movie.production_countries.length > 0 && (
+                <div>
+                  <p className="text-xs text-gray-400">製作国</p>
+                  <p className="text-gray-700">
+                    {movie.production_countries.map((c) => c.name).join(", ")}
+                  </p>
                 </div>
               )}
               {movie.production_companies.length > 0 && (
