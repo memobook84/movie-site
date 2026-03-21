@@ -179,6 +179,7 @@ export interface PersonDetail {
   known_for_department: string;
   combined_credits?: {
     cast: Movie[];
+    crew: (Movie & { job?: string })[];
   };
 }
 
@@ -261,6 +262,23 @@ export async function getReleaseDates(id: number): Promise<string[]> {
     { results: [] }
   );
   return data.results.map((r) => r.iso_3166_1);
+}
+
+// 外部ID（SNS）
+export interface ExternalIds {
+  instagram_id: string | null;
+  twitter_id: string | null;
+  facebook_id: string | null;
+  tiktok_id?: string | null;
+}
+
+const emptyExternalIds: ExternalIds = {
+  instagram_id: null, twitter_id: null, facebook_id: null, tiktok_id: null,
+};
+
+export async function getExternalIds(id: number, mediaType: string = "movie"): Promise<ExternalIds> {
+  const endpoint = mediaType === "tv" ? `/tv/${id}/external_ids` : `/movie/${id}/external_ids`;
+  return fetchTMDb<ExternalIds>(endpoint, emptyExternalIds);
 }
 
 // ジャンルID

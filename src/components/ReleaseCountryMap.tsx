@@ -54,7 +54,7 @@ function ReleaseCountryMap({ releaseCountries, productionCountries }: Props) {
   return (
     <div className="mt-16 space-y-5">
       <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
-        公開国・製作国
+        製作国・公開国
       </h2>
       <div className="w-full max-w-4xl">
         <ComposableMap

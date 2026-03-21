@@ -17,7 +17,6 @@ interface SearchResult {
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -29,12 +28,17 @@ export default function Navbar() {
   const pathname = usePathname();
   const debounceRef = useRef<NodeJS.Timeout>(null);
   const lastScrollY = useRef(0);
+  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       const currentY = window.scrollY;
       setScrolled(currentY > 50);
-      setHidden(currentY > 50 && currentY > lastScrollY.current);
+      if (currentY > lastScrollY.current && currentY > 80) {
+        setHidden(true);
+      } else {
+        setHidden(false);
+      }
       lastScrollY.current = currentY;
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -111,10 +115,8 @@ export default function Navbar() {
     <>
       <nav
         className={`fixed top-0 z-50 w-full px-6 py-4 transition-all duration-500 md:px-16 bg-[#424242] ${
-          hidden ? "-translate-y-full" : "translate-y-0"
-        } ${
           scrolled ? "shadow-sm" : ""
-        }`}
+        } ${hidden ? "-translate-y-full" : "translate-y-0"}`}
       >
         <div className="relative flex items-center justify-between">
           <Link

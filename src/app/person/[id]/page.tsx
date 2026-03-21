@@ -34,18 +34,55 @@ export default async function PersonPage({ params }: PageProps) {
   const { id } = await params;
   const person = await getPersonDetail(Number(id));
 
-  // 出演作品を人気順でソート、重複除去
-  const seen = new Set<number>();
-  const credits = (person.combined_credits?.cast || [])
+  // 出演作品（cast）
+  const castSeen = new Set<number>();
+  const castCredits = (person.combined_credits?.cast || [])
     .filter((m) => {
-      if (seen.has(m.id)) return false;
-      seen.add(m.id);
+      if (castSeen.has(m.id)) return false;
+      castSeen.add(m.id);
       return m.poster_path;
     })
     .sort((a, b) => b.vote_average - a.vote_average);
 
+  // 監督作品（crew: Director）
+  const directorSeen = new Set<number>();
+  const directorCredits = (person.combined_credits?.crew || [])
+    .filter((m) => {
+      if (m.job !== "Director") return false;
+      if (directorSeen.has(m.id)) return false;
+      directorSeen.add(m.id);
+      return m.poster_path;
+    })
+    .sort((a, b) => b.vote_average - a.vote_average);
+
+  const renderGrid = (items: typeof castCredits) => (
+    <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
+      {items.map((movie) => {
+        const title = movie.title || movie.name || "";
+        const type = movie.media_type === "tv" ? "tv" : "movie";
+        return (
+          <Link
+            key={`${type}-${movie.id}`}
+            href={`/movie/${movie.id}?type=${type}`}
+            className="group"
+          >
+            <div className="overflow-hidden rounded-lg transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:shadow-black/10">
+              <img
+                src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}
+                alt={title}
+                className="aspect-[2/3] w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+            <p className="mt-1.5 truncate text-xs font-medium text-[#1d1d1f]">{title}</p>
+          </Link>
+        );
+      })}
+    </div>
+  );
+
   return (
-    <main className="min-h-screen pt-24 pb-28 px-6 md:px-16">
+    <main className="min-h-screen pt-24 pb-28 px-6 md:px-16 max-w-7xl mx-auto">
       {/* プロフィール */}
       <div className="flex flex-col items-start gap-6 sm:flex-row">
         {person.profile_path ? (
@@ -80,35 +117,25 @@ export default async function PersonPage({ params }: PageProps) {
         </div>
       </div>
 
-      {/* 出演作品 */}
-      <div className="mt-12">
-        <h2 className="text-lg font-semibold text-[#1d1d1f]">
-          出演作品（{credits.length}）
-        </h2>
-        <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
-          {credits.map((movie) => {
-            const title = movie.title || movie.name || "";
-            const type = movie.media_type === "tv" ? "tv" : "movie";
-            return (
-              <Link
-                key={`${type}-${movie.id}`}
-                href={`/movie/${movie.id}?type=${type}`}
-                className="group"
-              >
-                <div className="overflow-hidden rounded-lg transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:shadow-black/10">
-                  <img
-                    src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}
-                    alt={title}
-                    className="aspect-[2/3] w-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
-                <p className="mt-1.5 truncate text-xs font-medium text-[#1d1d1f]">{title}</p>
-              </Link>
-            );
-          })}
+      {/* 監督作品 */}
+      {directorCredits.length > 0 && (
+        <div className="mt-12">
+          <h2 className="text-lg font-semibold text-[#1d1d1f]">
+            監督作品（{directorCredits.length}）
+          </h2>
+          {renderGrid(directorCredits)}
         </div>
-      </div>
+      )}
+
+      {/* 出演作品 */}
+      {castCredits.length > 0 && (
+        <div className="mt-12">
+          <h2 className="text-lg font-semibold text-[#1d1d1f]">
+            出演作品（{castCredits.length}）
+          </h2>
+          {renderGrid(castCredits)}
+        </div>
+      )}
     </main>
   );
 }
