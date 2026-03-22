@@ -57,7 +57,7 @@ export default function FollowButton({ movieId, title, posterPath, mediaType = "
   return (
     <button
       onClick={toggle}
-      className={`inline-flex items-center justify-center h-11 w-11 rounded-full border transition-all xl:h-auto xl:w-auto xl:gap-2 xl:px-7 xl:py-3 ${
+      className={`inline-flex items-center justify-center h-11 w-11 rounded-full border transition-all xl:h-auto xl:w-auto xl:gap-1.5 xl:px-4 xl:py-2 ${
         followed
           ? "border-gray-900 bg-gray-900 text-white hover:bg-gray-800"
           : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
@@ -65,7 +65,7 @@ export default function FollowButton({ movieId, title, posterPath, mediaType = "
       aria-label={followed ? "ウォッチリストに追加済み" : "ウォッチリストに追加"}
     >
       <Glasses className="h-4 w-4" strokeWidth={2} />
-      <span className="hidden xl:inline text-sm font-semibold">{followed ? "ウォッチリスト" : "ウォッチリスト"}</span>
+      <span className="hidden xl:inline text-sm font-semibold">ウォッチリスト</span>
     </button>
   );
 }

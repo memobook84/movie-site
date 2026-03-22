@@ -26,7 +26,7 @@ export default function RelationButton({ title, characters, relationships, image
     <>
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center justify-center h-11 w-11 rounded-full border border-gray-300 bg-white text-gray-700 transition-all hover:bg-gray-50 xl:h-auto xl:w-auto xl:gap-2 xl:px-7 xl:py-3"
+        className="inline-flex items-center justify-center h-11 w-11 rounded-full border border-gray-300 bg-white text-gray-700 transition-all hover:bg-gray-50 xl:h-auto xl:w-auto xl:gap-1.5 xl:px-4 xl:py-2"
         aria-label="相関図"
       >
         <GitFork className="h-4 w-4" />

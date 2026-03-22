@@ -24,6 +24,32 @@ const GENRE_ICONS: Record<number, ComponentType<{ className?: string }>> = {
   10770: Tv, 53: Flame, 10752: Swords, 37: Sun,
 };
 
+const COUNTRY_NAMES: Record<string, string> = {
+  US: "アメリカ", GB: "イギリス", JP: "日本", FR: "フランス", DE: "ドイツ",
+  IT: "イタリア", ES: "スペイン", CA: "カナダ", AU: "オーストラリア", KR: "韓国",
+  CN: "中国", IN: "インド", BR: "ブラジル", MX: "メキシコ", RU: "ロシア",
+  NZ: "ニュージーランド", SE: "スウェーデン", NO: "ノルウェー", DK: "デンマーク",
+  FI: "フィンランド", NL: "オランダ", BE: "ベルギー", AT: "オーストリア",
+  CH: "スイス", IE: "アイルランド", PT: "ポルトガル", PL: "ポーランド",
+  CZ: "チェコ", HU: "ハンガリー", GR: "ギリシャ", TR: "トルコ", ZA: "南アフリカ",
+  AR: "アルゼンチン", CL: "チリ", CO: "コロンビア", TH: "タイ", PH: "フィリピン",
+  ID: "インドネシア", MY: "マレーシア", SG: "シンガポール", VN: "ベトナム",
+  TW: "台湾", HK: "香港", IL: "イスラエル", AE: "アラブ首長国連邦",
+  EG: "エジプト", NG: "ナイジェリア", KE: "ケニア", UA: "ウクライナ",
+  RO: "ルーマニア", BG: "ブルガリア", HR: "クロアチア", RS: "セルビア",
+  LU: "ルクセンブルク", IS: "アイスランド", EE: "エストニア", LT: "リトアニア",
+  LV: "ラトビア", SK: "スロバキア", SI: "スロベニア", MT: "マルタ",
+  CY: "キプロス", PE: "ペルー", VE: "ベネズエラ", EC: "エクアドル",
+  UY: "ウルグアイ", PK: "パキスタン", BD: "バングラデシュ", LK: "スリランカ",
+  MM: "ミャンマー", KH: "カンボジア", NP: "ネパール", SA: "サウジアラビア",
+  QA: "カタール", KW: "クウェート", JO: "ヨルダン", LB: "レバノン",
+  IR: "イラン", IQ: "イラク", MA: "モロッコ", TN: "チュニジア", GH: "ガーナ",
+};
+
+function getCountryName(code: string, fallback: string): string {
+  return COUNTRY_NAMES[code] || fallback;
+}
+
 function formatUSD(amount: number): string {
   if (amount >= 1_000_000_000) return `$${(amount / 1_000_000_000).toFixed(1)}B`;
   if (amount >= 1_000_000) return `$${(amount / 1_000_000).toFixed(0)}M`;
@@ -129,7 +155,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
       </div>
 
       {/* ポスター（ヒーロー画像に重なる） + テキスト情報 */}
-      <div className="-mt-28 relative z-10 px-6 md:-mt-40 md:px-16">
+      <div className="mt-0 relative z-10 px-6 md:-mt-40 md:px-16">
         <div className="flex flex-col gap-6 md:flex-row md:gap-10">
           {/* ポスター */}
           {movie.poster_path && (
@@ -189,6 +215,31 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                 {movie.overview || "この作品の説明はまだ登録されていません。"}
               </p>
             </div>
+
+            {/* コレクション（シリーズ）リンク */}
+            {movie.belongs_to_collection && (
+              <Link
+                href={`/collection/${movie.belongs_to_collection.id}`}
+                className="flex items-center gap-3 rounded-2xl bg-gray-50 px-4 py-3 transition-all hover:bg-gray-100 hover:shadow-md group"
+              >
+                {movie.belongs_to_collection.poster_path && (
+                  <img
+                    src={`${IMAGE_BASE_URL}/w92${movie.belongs_to_collection.poster_path}`}
+                    alt={movie.belongs_to_collection.name}
+                    className="h-12 w-8 rounded object-cover"
+                  />
+                )}
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs text-gray-400">シリーズ</p>
+                  <p className="text-sm font-semibold text-gray-800 truncate">
+                    {movie.belongs_to_collection.name}
+                  </p>
+                </div>
+                <svg className="h-4 w-4 flex-shrink-0 text-gray-400 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            )}
 
             {/* ボタン */}
             <div className="flex gap-3 pt-2">
@@ -652,9 +703,20 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* キャスト（ポラロイド風） */}
         {cast.length > 0 && (
           <div className="mt-16 space-y-5">
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
-              キャスト
-            </h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
+                キャスト
+              </h2>
+              <Link
+                href={`/movie/${id}/cast?type=${type || "movie"}`}
+                className="flex items-center gap-1 text-xs text-gray-400 transition-colors hover:text-gray-700"
+              >
+                出演者一覧
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
             <div className="flex gap-2 overflow-x-auto pb-8 scrollbar-hide md:gap-4">
               {cast.map((person, i) => {
                 const rotations = [-3, 2, -1.5, 3, -2, 1.5, -2.5, 2.5, -1, 3.5];
@@ -804,7 +866,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                 <div>
                   <p className="text-xs text-gray-400">製作国</p>
                   <p className="text-gray-700">
-                    {movie.production_countries.map((c) => c.name).join(", ")}
+                    {movie.production_countries.map((c) => getCountryName(c.iso_3166_1, c.name)).join(", ")}
                   </p>
                 </div>
               )}

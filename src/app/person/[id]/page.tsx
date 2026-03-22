@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getPersonDetail, IMAGE_BASE_URL } from "@/lib/tmdb";
 import Link from "next/link";
+import PersonCreditsGrid from "@/components/PersonCreditsGrid";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -55,32 +56,6 @@ export default async function PersonPage({ params }: PageProps) {
     })
     .sort((a, b) => b.vote_average - a.vote_average);
 
-  const renderGrid = (items: typeof castCredits) => (
-    <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
-      {items.map((movie) => {
-        const title = movie.title || movie.name || "";
-        const type = movie.media_type === "tv" ? "tv" : "movie";
-        return (
-          <Link
-            key={`${type}-${movie.id}`}
-            href={`/movie/${movie.id}?type=${type}`}
-            className="group"
-          >
-            <div className="overflow-hidden rounded-lg transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:shadow-black/10">
-              <img
-                src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}
-                alt={title}
-                className="aspect-[2/3] w-full object-cover"
-                loading="lazy"
-              />
-            </div>
-            <p className="mt-1.5 truncate text-xs font-medium text-[#1d1d1f]">{title}</p>
-          </Link>
-        );
-      })}
-    </div>
-  );
-
   return (
     <main className="min-h-screen pt-24 pb-28 px-6 md:px-16 max-w-7xl mx-auto">
       {/* プロフィール */}
@@ -119,22 +94,12 @@ export default async function PersonPage({ params }: PageProps) {
 
       {/* 監督作品 */}
       {directorCredits.length > 0 && (
-        <div className="mt-12">
-          <h2 className="text-lg font-semibold text-[#1d1d1f]">
-            監督作品（{directorCredits.length}）
-          </h2>
-          {renderGrid(directorCredits)}
-        </div>
+        <PersonCreditsGrid label="監督作品" credits={directorCredits} />
       )}
 
       {/* 出演作品 */}
       {castCredits.length > 0 && (
-        <div className="mt-12">
-          <h2 className="text-lg font-semibold text-[#1d1d1f]">
-            出演作品（{castCredits.length}）
-          </h2>
-          {renderGrid(castCredits)}
-        </div>
+        <PersonCreditsGrid label="出演作品" credits={castCredits} />
       )}
     </main>
   );

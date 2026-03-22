@@ -28,6 +28,22 @@ export interface Season {
   overview: string;
 }
 
+export interface CollectionInfo {
+  id: number;
+  name: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
+}
+
+export interface CollectionDetail {
+  id: number;
+  name: string;
+  overview: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
+  parts: Movie[];
+}
+
 export interface MovieDetail extends Movie {
   runtime: number;
   genres: { id: number; name: string }[];
@@ -35,6 +51,7 @@ export interface MovieDetail extends Movie {
   status: string;
   budget: number;
   revenue: number;
+  belongs_to_collection?: CollectionInfo | null;
   production_companies: { id: number; name: string; logo_path: string | null }[];
   production_countries?: { iso_3166_1: string; name: string }[];
   videos?: {
@@ -279,6 +296,27 @@ const emptyExternalIds: ExternalIds = {
 export async function getExternalIds(id: number, mediaType: string = "movie"): Promise<ExternalIds> {
   const endpoint = mediaType === "tv" ? `/tv/${id}/external_ids` : `/movie/${id}/external_ids`;
   return fetchTMDb<ExternalIds>(endpoint, emptyExternalIds);
+}
+
+// コレクション詳細
+const emptyCollection: CollectionDetail = {
+  id: 0, name: "", overview: "", poster_path: null, backdrop_path: null, parts: [],
+};
+
+export async function getCollectionDetail(id: number): Promise<CollectionDetail> {
+  const collection = await fetchTMDb<CollectionDetail>(`/collection/${id}`, emptyCollection);
+  // 日本語の概要がない場合、英語版をフォールバック
+  if (collection.id !== 0 && !collection.overview) {
+    const enCollection = await fetchTMDbEn<CollectionDetail>(`/collection/${id}`, emptyCollection);
+    if (enCollection.overview) collection.overview = enCollection.overview;
+  }
+  // 公開日順にソート
+  collection.parts.sort((a, b) => {
+    const dateA = a.release_date || a.first_air_date || "";
+    const dateB = b.release_date || b.first_air_date || "";
+    return dateA.localeCompare(dateB);
+  });
+  return collection;
 }
 
 // ジャンルID
