@@ -57,15 +57,12 @@ export default function FollowButton({ movieId, title, posterPath, mediaType = "
   return (
     <button
       onClick={toggle}
-      className={`inline-flex items-center justify-center h-11 w-11 rounded-full border transition-all xl:h-auto xl:w-auto xl:gap-1.5 xl:px-4 xl:py-2 ${
-        followed
-          ? "border-gray-900 bg-gray-900 text-white hover:bg-gray-800"
-          : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
-      }`}
+      className="group/btn relative inline-flex items-center justify-center h-9 w-9 rounded-[30em] bg-white border-none overflow-hidden shadow-[6px_6px_12px_#c5c5c5,_-6px_-6px_12px_#ffffff] cursor-pointer xl:h-9 xl:w-auto xl:gap-1.5 xl:px-6"
       aria-label={followed ? "ウォッチリストに追加済み" : "ウォッチリストに追加"}
     >
-      <Glasses className="h-4 w-4" strokeWidth={2} />
-      <span className="hidden xl:inline text-sm font-semibold">ウォッチリスト</span>
+      <span className={`absolute left-0 top-0 h-full rounded-[30em] bg-gradient-to-r from-[#7b2ff7] to-[#ff2d87] z-0 transition-all duration-500 ease-in-out group-hover/btn:w-full ${followed ? "w-full" : "w-0"}`} />
+      <Glasses className={`relative z-10 h-3.5 w-3.5 ${followed ? "text-white" : ""}`} strokeWidth={2} />
+      <span className={`relative z-10 hidden xl:inline text-[13px] font-extrabold ${followed ? "text-white" : ""}`}>ウォッチリスト</span>
     </button>
   );
 }

@@ -20,13 +20,14 @@ export default function TrailerModal({ videoKey }: { videoKey: string }) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center justify-center h-11 w-11 rounded-full bg-gray-900 text-white transition-all hover:bg-gray-800 hover:shadow-lg xl:h-auto xl:w-auto xl:gap-1.5 xl:px-4 xl:py-2"
+        className="group/btn relative inline-flex items-center justify-center h-9 w-9 rounded-[30em] bg-white border-none overflow-hidden shadow-[6px_6px_12px_#c5c5c5,_-6px_-6px_12px_#ffffff] cursor-pointer xl:h-9 xl:w-auto xl:gap-1.5 xl:px-6"
         aria-label="トレーラーを見る"
       >
-        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+        <span className="absolute left-0 top-0 h-full w-0 rounded-[30em] bg-gradient-to-r from-[#7b2ff7] to-[#ff2d87] z-0 transition-all duration-500 ease-in-out group-hover/btn:w-full" />
+        <svg className="relative z-10 h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
           <path d="M8 5v14l11-7z" />
         </svg>
-        <span className="hidden xl:inline text-sm font-semibold">トレーラー</span>
+        <span className="relative z-10 hidden xl:inline text-[13px] font-extrabold">トレーラー</span>
       </button>
 
       {open && (

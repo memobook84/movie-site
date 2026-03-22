@@ -46,14 +46,14 @@ export default async function CastPage({ params, searchParams }: PageProps) {
       </h1>
 
       {/* キャスト一覧（ポラロイド風） */}
-      <div className="mt-8 flex flex-wrap gap-4 md:gap-5">
+      <div className="mt-8 grid grid-cols-3 gap-3 md:flex md:flex-wrap md:gap-5">
         {allCast.map((person) => (
           <Link
             key={person.id}
             href={`/person/${person.id}`}
-            className="flex-shrink-0 group transition-all duration-300 hover:scale-110 hover:z-10"
+            className="group transition-all duration-300 hover:scale-110 hover:z-10"
           >
-            <div className="w-[110px] rounded-sm bg-[#faf8f5] p-2 pb-8 shadow-md transition-shadow duration-300 group-hover:shadow-xl md:w-[130px] md:p-2.5 md:pb-10" style={{ boxShadow: '2px 3px 12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.08)' }}>
+            <div className="w-full rounded-sm bg-[#faf8f5] p-1.5 pb-6 shadow-md transition-shadow duration-300 group-hover:shadow-xl md:w-[130px] md:p-2.5 md:pb-10" style={{ boxShadow: '2px 3px 12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.08)' }}>
               {person.profile_path ? (
                 <div className="relative">
                   <img
