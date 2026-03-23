@@ -1,0 +1,32 @@
+import type { Metadata } from "next";
+import { getUpcomingJP, getNowPlayingJP } from "@/lib/tmdb";
+import ScheduleTabs from "@/components/ScheduleTabs";
+
+export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  title: "日本公開スケジュール",
+  description: "日本で現在上映中・公開予定の映画一覧。話題の最新作をチェック。",
+};
+
+export default async function SchedulePage() {
+  const [nowPlaying, upcoming] = await Promise.all([
+    getNowPlayingJP(),
+    getUpcomingJP(),
+  ]);
+
+  return (
+    <main className="min-h-screen bg-white pt-24 pb-28">
+      <div className="mx-auto max-w-5xl px-5 md:px-8">
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl">
+          日本公開スケジュール
+        </h1>
+        <p className="mt-1 text-sm text-gray-400">
+          日本で上映中・近日公開予定の映画
+        </p>
+
+        <ScheduleTabs nowPlaying={nowPlaying} upcoming={upcoming} />
+      </div>
+    </main>
+  );
+}

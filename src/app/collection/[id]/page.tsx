@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const collection = await getCollectionDetail(Number(id));
   const title = collection.name || "コレクション";
   return {
-    title: `${title} | CINEMA`,
+    title: title,
     description: collection.overview || `${title}のシリーズ作品一覧`,
   };
 }

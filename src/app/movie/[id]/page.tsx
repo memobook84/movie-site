@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getMovieDetail, getTvDetail, getMovieImages, getRecommendations, getWatchProviders, getReleaseDates, getExternalIds, IMAGE_BASE_URL } from "@/lib/tmdb";
+import { getMovieDetail, getTvDetail, getMovieImages, getRecommendations, getWatchProviders, getReleaseDates, getJPReleaseDate, getExternalIds, IMAGE_BASE_URL } from "@/lib/tmdb";
 import Link from "next/link";
 import FollowButton from "@/components/FollowButton";
 import GalleryModal from "@/components/GalleryModal";
@@ -77,17 +77,17 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
       : undefined;
 
   return {
-    title: `${title} | CINEMA`,
+    title: `${title} `,
     description,
     openGraph: {
-      title: `${title} | CINEMA`,
+      title: `${title} `,
       description,
       ...(image && { images: [{ url: image, width: 1280, height: 720 }] }),
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} | CINEMA`,
+      title: `${title} `,
       description,
       ...(image && { images: [image] }),
     },
@@ -130,9 +130,11 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
   const recommendations = await getRecommendations(Number(id), type || "movie");
   const watchProviders = await getWatchProviders(Number(id), type || "movie");
   const releaseCountries = type !== "tv" ? await getReleaseDates(Number(id)) : [];
+  const jpReleaseDate = type !== "tv" ? await getJPReleaseDate(Number(id)) : null;
   const externalIds = await getExternalIds(Number(id), type || "movie");
   const year = movie.release_date?.slice(0, 4);
   const directors = movie.credits?.crew?.filter((c) => c.job === "Director") || [];
+  const screenwriters = movie.credits?.crew?.filter((c) => c.job === "Screenplay" || c.job === "Writer") || [];
   const composers = movie.credits?.crew?.filter((c) => c.job === "Original Music Composer") || [];
 
   // 人物相関図データ
@@ -220,7 +222,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
             {movie.belongs_to_collection && (
               <Link
                 href={`/collection/${movie.belongs_to_collection.id}`}
-                className="flex items-center gap-3 rounded-2xl bg-gray-50 px-4 py-3 transition-all hover:bg-gray-100 hover:shadow-md group"
+                className="flex max-w-2xl items-center gap-3 rounded-2xl bg-gray-50 px-4 py-3 transition-all hover:bg-gray-100 hover:shadow-md group"
               >
                 {movie.belongs_to_collection.poster_path && (
                   <img
@@ -262,7 +264,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                   cast={allCast}
                 />
               )}
-              <ShareButton title={`${title} | CINEMA`} />
+              <ShareButton title={`${title} `} />
             </div>
           </div>
         </div>
@@ -805,7 +807,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* 作品情報 */}
-        {(directors.length > 0 || composers.length > 0 || movie.runtime > 0 || movie.budget > 0 || movie.revenue > 0 || movie.production_companies.length > 0) && (
+        {(directors.length > 0 || screenwriters.length > 0 || composers.length > 0 || movie.runtime > 0 || movie.budget > 0 || movie.revenue > 0 || movie.production_companies.length > 0) && (
           <div className="mt-16 space-y-5">
             <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
               作品情報
@@ -821,6 +823,14 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                         <Link href={`/person/${d.id}`} className="text-blue-600 hover:underline">{d.name}</Link>
                       </span>
                     ))}
+                  </p>
+                </div>
+              )}
+              {screenwriters.length > 0 && (
+                <div>
+                  <p className="text-xs text-gray-400">脚本</p>
+                  <p className="text-gray-700">
+                    {screenwriters.map((w) => w.name).join(", ")}
                   </p>
                 </div>
               )}
@@ -848,6 +858,12 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                 <div>
                   <p className="text-xs text-gray-400">公開日</p>
                   <p className="text-gray-700">{movie.release_date}</p>
+                </div>
+              )}
+              {jpReleaseDate && (
+                <div>
+                  <p className="text-xs text-gray-400">日本公開日</p>
+                  <p className="text-gray-700">{jpReleaseDate}</p>
                 </div>
               )}
               {movie.budget > 0 && (

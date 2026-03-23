@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import { getTrending, getPopular, getTopRated, IMAGE_BASE_URL, Movie } from "@/lib/tmdb";
+
+export const metadata: Metadata = {
+  title: "映画ランキング",
+  description: "今話題のトレンド映画、人気映画、高評価映画のランキングをチェック。",
+};
 import Link from "next/link";
 
 function RankBadge({ rank }: { rank: number }) {
@@ -43,7 +49,6 @@ function RankingSection({
         {movies.slice(0, 20).map((movie, i) => {
           const title = movie.title || movie.name || "";
           const year = (movie.release_date || movie.first_air_date)?.slice(0, 4);
-          const score = movie.vote_average;
 
           return (
             <Link
@@ -81,23 +86,6 @@ function RankingSection({
                   )}
                 </div>
               </div>
-              {/* スコア */}
-              <div className="flex flex-shrink-0 flex-col items-end">
-                <span
-                  className="text-lg font-bold md:text-xl"
-                  style={{
-                    color:
-                      score >= 7
-                        ? "#22c55e"
-                        : score >= 5
-                        ? "#eab308"
-                        : "#ef4444",
-                  }}
-                >
-                  {score.toFixed(1)}
-                </span>
-                <span className="text-[10px] text-gray-300">/ 10</span>
-              </div>
             </Link>
           );
         })}
@@ -115,7 +103,7 @@ export default async function RankingPage() {
 
   return (
     <main className="min-h-screen bg-[#f5f5f7] pt-24 pb-28">
-      <div className="mx-auto max-w-3xl px-5 md:px-8">
+      <div className="mx-auto max-w-5xl px-5 md:px-8">
         <div className="space-y-14">
           <RankingSection
             title="トレンド"

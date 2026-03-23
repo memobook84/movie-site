@@ -15,7 +15,7 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
     : await getMovieDetail(Number(id));
   const title = movie.title || movie.name || "";
   return {
-    title: `${title} - 出演者一覧 | CINEMA`,
+    title: `${title} - 出演者一覧`,
   };
 }
 

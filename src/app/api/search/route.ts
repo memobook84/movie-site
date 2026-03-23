@@ -12,9 +12,9 @@ export async function GET(request: NextRequest) {
   );
   const data = await res.json();
 
-  // 映画とTV（アニメ含む）のみ返す、人物などは除外
+  // 映画・TV・人物を返す
   const filtered = (data.results || []).filter(
-    (item: { media_type: string }) => item.media_type === "movie" || item.media_type === "tv"
+    (item: { media_type: string }) => item.media_type === "movie" || item.media_type === "tv" || item.media_type === "person"
   );
 
   return NextResponse.json({ results: filtered });

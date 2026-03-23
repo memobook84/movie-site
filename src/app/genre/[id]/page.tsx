@@ -1,9 +1,19 @@
+import type { Metadata } from "next";
 import { getMoviesByGenrePage, IMAGE_BASE_URL } from "@/lib/tmdb";
 import Link from "next/link";
 
 interface PageProps {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ name?: string; page?: string }>;
+}
+
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
+  const { name } = await searchParams;
+  const genreName = name || "ジャンル";
+  return {
+    title: `${genreName}の映画一覧`,
+    description: `${genreName}ジャンルの人気映画・新作映画を一覧で紹介。`,
+  };
 }
 
 export default async function GenrePage({ params, searchParams }: PageProps) {

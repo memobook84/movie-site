@@ -15,6 +15,7 @@ export interface Movie {
   release_date?: string;
   first_air_date?: string;
   genre_ids: number[];
+  original_language?: string;
   media_type?: string;
 }
 
@@ -120,6 +121,32 @@ export async function getPopularByDecade(startYear: number, endYear: number): Pr
 export async function getUpcoming(): Promise<Movie[]> {
   const data = await fetchTMDb<TMDbResponse>("/movie/upcoming", emptyResponse);
   return data.results;
+}
+
+export async function getNowPlayingJP(pages = 3): Promise<Movie[]> {
+  const requests = Array.from({ length: pages }, (_, i) =>
+    fetchTMDb<TMDbResponse>(`/movie/now_playing?region=JP&page=${i + 1}`, emptyResponse)
+  );
+  const results = await Promise.all(requests);
+  const seen = new Set<number>();
+  return results.flatMap((r) => r.results).filter((m) => {
+    if (seen.has(m.id)) return false;
+    seen.add(m.id);
+    return true;
+  });
+}
+
+export async function getUpcomingJP(pages = 3): Promise<Movie[]> {
+  const requests = Array.from({ length: pages }, (_, i) =>
+    fetchTMDb<TMDbResponse>(`/movie/upcoming?region=JP&page=${i + 1}`, emptyResponse)
+  );
+  const results = await Promise.all(requests);
+  const seen = new Set<number>();
+  return results.flatMap((r) => r.results).filter((m) => {
+    if (seen.has(m.id)) return false;
+    seen.add(m.id);
+    return true;
+  });
 }
 
 export async function getMoviesByGenre(genreId: number, pages = 1, language?: string): Promise<Movie[]> {
@@ -268,9 +295,14 @@ export async function getWatchProviders(id: number, mediaType: string = "movie")
   return data.results?.JP || null;
 }
 
-// 公開国情報
+// 上映国情報
+interface ReleaseDateEntry {
+  iso_3166_1: string;
+  release_dates: { release_date: string; type: number }[];
+}
+
 interface ReleaseDatesResponse {
-  results: { iso_3166_1: string }[];
+  results: ReleaseDateEntry[];
 }
 
 export async function getReleaseDates(id: number): Promise<string[]> {
@@ -279,6 +311,19 @@ export async function getReleaseDates(id: number): Promise<string[]> {
     { results: [] }
   );
   return data.results.map((r) => r.iso_3166_1);
+}
+
+export async function getJPReleaseDate(id: number): Promise<string | null> {
+  const data = await fetchTMDb<ReleaseDatesResponse>(
+    `/movie/${id}/release_dates`,
+    { results: [] }
+  );
+  const jp = data.results.find((r) => r.iso_3166_1 === "JP");
+  if (!jp || jp.release_dates.length === 0) return null;
+  // type 3 = Theatrical が優先、なければ最初のエントリ
+  const theatrical = jp.release_dates.find((d) => d.type === 3);
+  const date = theatrical || jp.release_dates[0];
+  return date.release_date?.slice(0, 10) || null;
 }
 
 // 外部ID（SNS）
@@ -294,7 +339,11 @@ const emptyExternalIds: ExternalIds = {
 };
 
 export async function getExternalIds(id: number, mediaType: string = "movie"): Promise<ExternalIds> {
-  const endpoint = mediaType === "tv" ? `/tv/${id}/external_ids` : `/movie/${id}/external_ids`;
+  const endpointMap: Record<string, string> = {
+    tv: `/tv/${id}/external_ids`,
+    person: `/person/${id}/external_ids`,
+  };
+  const endpoint = endpointMap[mediaType] || `/movie/${id}/external_ids`;
   return fetchTMDb<ExternalIds>(endpoint, emptyExternalIds);
 }
 

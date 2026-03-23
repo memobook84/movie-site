@@ -12,7 +12,7 @@ export default function FollowsPage() {
   }, []);
 
   return (
-    <main className="min-h-screen pt-24 pb-24 px-6 md:px-16">
+    <main className="min-h-screen pt-24 pb-24 px-5 md:px-8 max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold text-[#1d1d1f]">ウォッチリスト</h1>
       {items.length === 0 ? (
         <p className="mt-8 text-center text-gray-400">

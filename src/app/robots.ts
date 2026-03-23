@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: "/api/",
     },
-    sitemap: "https://movie-site-delta-lilac.vercel.app/sitemap.xml",
+    sitemap: "https://ardcinema.com/sitemap.xml",
   };
 }

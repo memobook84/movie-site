@@ -54,7 +54,7 @@ function ReleaseCountryMap({ releaseCountries, productionCountries }: Props) {
   return (
     <div className="mt-16 space-y-5">
       <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
-        製作国・公開国
+        製作国・上映国
       </h2>
       <div className="w-full max-w-4xl">
         <ComposableMap
@@ -62,7 +62,7 @@ function ReleaseCountryMap({ releaseCountries, productionCountries }: Props) {
           projectionConfig={{ scale: 155, center: [0, 20] }}
           width={800}
           height={400}
-          style={{ width: "100%", height: "auto" }}
+          style={{ width: "100%", height: "auto", background: "#FAFBFF", borderRadius: "12px" }}
         >
           <Geographies geography={GEO_URL}>
             {({ geographies }) =>
@@ -70,15 +70,15 @@ function ReleaseCountryMap({ releaseCountries, productionCountries }: Props) {
                 const isProduction = productionCodes.has(geo.id);
                 const isRelease = releaseCodes.has(geo.id);
                 const fill = isProduction
-                  ? "#dc2626"
+                  ? "#EF4444"
                   : isRelease
-                    ? "#1f2937"
-                    : "#e5e7eb";
+                    ? "#374151"
+                    : "#D1D5DB";
                 const hoverFill = isProduction
-                  ? "#b91c1c"
+                  ? "#DC2626"
                   : isRelease
-                    ? "#111827"
-                    : "#d1d5db";
+                    ? "#1F2937"
+                    : "#B0B5BD";
                 return (
                   <Geography
                     key={geo.rsmKey}
@@ -100,12 +100,12 @@ function ReleaseCountryMap({ releaseCountries, productionCountries }: Props) {
       </div>
       <div className="flex items-center gap-6 text-sm text-gray-500">
         <span className="flex items-center gap-1.5">
-          <span className="inline-block h-3 w-3 rounded-sm bg-red-600" />
+          <span className="inline-block h-3 w-3 rounded-sm bg-red-500" />
           製作国（{productionCountries.length}）
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="inline-block h-3 w-3 rounded-sm bg-gray-800" />
-          公開国（{releaseCountries.length}）
+          <span className="inline-block h-3 w-3 rounded-sm bg-gray-700" />
+          上映国（{releaseCountries.length}）
         </span>
       </div>
     </div>

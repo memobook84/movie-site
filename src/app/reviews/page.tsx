@@ -3,8 +3,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "レビュー | CINEMA",
-  description: "スペシャルレビュー付きの作品一覧",
+  title: "スペシャルレビュー",
+  description: "厳選された映画・ドラマのスペシャルレビュー付き作品一覧。",
 };
 
 // レビューがある作品のリスト

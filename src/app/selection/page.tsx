@@ -4,8 +4,8 @@ import SelectionClient from "./SelectionClient";
 export const revalidate = 3600;
 
 export const metadata = {
-  title: "おすすめセレクション | CINEMA",
-  description: "管理者が厳選した名作映画をジャンル別に一言レビュー付きで紹介",
+  title: "おすすめセレクション",
+  description: "厳選した名作映画をジャンル別に一言レビュー付きで紹介。アクション、SF、ドラマ、アニメなど。",
 };
 
 interface Pick {

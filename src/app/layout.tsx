@@ -12,28 +12,35 @@ const inter = Inter({ subsets: ["latin"] });
 const notoSansJP = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--font-noto-sans-jp" });
 
 export const metadata: Metadata = {
-  title: "CINEMA — 映画・ドラマ情報",
-  description: "映画・ドラマ閲覧サイト。TMDb APIで最新の映画情報を表示。",
+  title: {
+    default: "ARD CINEMA — 映画・ドラマの最新情報・ランキング・レビュー",
+    template: "%s | ARD CINEMA",
+  },
+  description: "話題の映画やドラマの最新情報、ランキング、おすすめセレクション、ジャンル別検索が無料で楽しめる映画情報サイト。",
+  verification: {
+    google: "fbXdvFUaeGgZ9QkL_gSdnmSXmXx6KK-xAFPzf78xT9s",
+  },
+  metadataBase: new URL("https://ardcinema.com"),
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "CINEMA",
+    title: "ARD CINEMA",
   },
   icons: {
     icon: "/logo.png",
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
-    title: "CINEMA — 映画・ドラマ情報",
-    description: "映画・ドラマ閲覧サイト。TMDb APIで最新の映画情報を表示。",
-    siteName: "CINEMA",
+    title: "ARD CINEMA — 映画・ドラマの最新情報・ランキング・レビュー",
+    description: "話題の映画やドラマの最新情報、ランキング、おすすめセレクション、ジャンル別検索が無料で楽しめる映画情報サイト。",
+    siteName: "ARD CINEMA",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "CINEMA — 映画・ドラマ情報",
-    description: "映画・ドラマ閲覧サイト。TMDb APIで最新の映画情報を表示。",
+    title: "ARD CINEMA — 映画・ドラマの最新情報・ランキング・レビュー",
+    description: "話題の映画やドラマの最新情報、ランキング、おすすめセレクション、ジャンル別検索が無料で楽しめる映画情報サイト。",
   },
 };
 

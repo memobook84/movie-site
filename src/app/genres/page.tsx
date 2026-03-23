@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "ジャンル一覧",
+  description: "アクション、SF、ホラー、ロマンスなど全19ジャンルから映画を探そう。",
+};
 import {
   Zap, Compass, Sparkles, Laugh, SearchCheck,
   Film, Drama, Home, Wand2, Landmark,
@@ -37,16 +43,18 @@ const GENRE_LIST: Genre[] = [
 
 export default function GenresPage() {
   return (
-    <main className="min-h-screen pt-24 pb-28 px-6 md:px-16">
+    <main className="min-h-screen pt-24 pb-28">
+      <div className="mx-auto max-w-5xl px-5 md:px-8">
       <h1 className="text-2xl font-bold text-[#1d1d1f]">ジャンル</h1>
-      <div className="mt-8 grid grid-cols-3 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      <div className="mt-8 grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 max-w-4xl mx-auto">
         {GENRE_LIST.map((genre) => {
           const Icon = genre.icon;
           return (
             <Link
               key={genre.id}
               href={`/genre/${genre.id}?name=${encodeURIComponent(genre.name)}`}
-              className="group relative flex flex-col items-center justify-center gap-2 rounded-2xl bg-white px-2 py-6 shadow-sm ring-1 ring-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:ring-[#3d1018]/20 md:gap-3 md:px-4 md:py-8"
+              className="group relative flex aspect-[3/4] flex-col items-center justify-center gap-2 rounded-[17px] border border-white px-2 text-center font-extrabold text-black select-none cursor-pointer transition-all duration-500 hover:border-black hover:scale-105 active:scale-95 active:rotate-[1.7deg] md:gap-3 md:px-4"
+              style={{ background: 'rgba(217, 217, 217, 0.58)', boxShadow: '12px 17px 51px rgba(0, 0, 0, 0.22)', backdropFilter: 'blur(6px)' }}
             >
               <Icon className="h-7 w-7 text-[#3d1018]/70 transition-all duration-300 group-hover:text-[#3d1018] group-hover:scale-110 md:h-8 md:w-8" />
               <span className="text-[11px] font-semibold text-[#1d1d1f] md:text-sm">
@@ -55,6 +63,7 @@ export default function GenresPage() {
             </Link>
           );
         })}
+      </div>
       </div>
     </main>
   );

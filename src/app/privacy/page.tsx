@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "プライバシーポリシー",
+  description: "ARD CINEMAのプライバシーポリシー。取得する情報、外部サービスとの連携について。",
+};
+
 export default function PrivacyPage() {
   return (
     <main className="min-h-screen pt-24 pb-28 px-6 md:px-16">
@@ -7,7 +14,7 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-base font-semibold text-gray-800">1. 当サイトについて</h2>
           <p className="mt-2">
-            CINEMA（以下「当サイト」）は、映画・ドラマの情報を閲覧できるサービスです。
+            ARD CINEMA（以下「当サイト」）は、映画・ドラマの情報を閲覧できるサービスです。
             当サイトは個人が運営する非営利のサービスです。
           </p>
         </section>
@@ -72,7 +79,17 @@ export default function PrivacyPage() {
           </p>
         </section>
 
-        <p className="text-xs text-gray-400 pt-4">最終更新日: 2026年2月27日</p>
+        <section>
+          <h2 className="text-base font-semibold text-gray-800">8. お問い合わせ</h2>
+          <p className="mt-2">
+            当サイトに関するお問い合わせは、下記メールアドレスまでご連絡ください。
+          </p>
+          <p className="mt-1">
+            <a href="mailto:atlas0075@outlook.com" className="text-blue-600 underline">atlas0075@outlook.com</a>
+          </p>
+        </section>
+
+        <p className="text-xs text-gray-400 pt-4">最終更新日: 2026年3月23日</p>
       </div>
     </main>
   );

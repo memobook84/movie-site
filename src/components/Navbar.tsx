@@ -10,9 +10,11 @@ interface SearchResult {
   name?: string;
   media_type: string;
   poster_path: string | null;
+  profile_path?: string | null;
   release_date?: string;
   first_air_date?: string;
   vote_average: number;
+  known_for_department?: string;
 }
 
 export default function Navbar() {
@@ -102,13 +104,17 @@ export default function Navbar() {
     }, 300);
   }, [query]);
 
-  const handleSelect = (movie: SearchResult) => {
-    const term = movie.title || movie.name || "";
+  const handleSelect = (item: SearchResult) => {
+    const term = item.title || item.name || "";
     if (term) saveHistory(term);
     setShowSearch(false);
     setQuery("");
     setResults([]);
-    router.push(`/movie/${movie.id}?type=${movie.media_type}`);
+    if (item.media_type === "person") {
+      router.push(`/person/${item.id}`);
+    } else {
+      router.push(`/movie/${item.id}?type=${item.media_type}`);
+    }
   };
 
   return (
@@ -131,8 +137,8 @@ export default function Navbar() {
             ARD CINEMA
           </span>
           <div className="flex items-center gap-6 font-[family-name:var(--font-noto-sans-jp)] text-sm font-medium text-white">
-            <Link href="/reviews" className={`hidden xl:inline transition-opacity hover:opacity-60 pb-1 ${pathname === "/reviews" ? "border-b-2 border-white" : ""}`}>
-              レビュー
+            <Link href="/schedule" className={`hidden xl:inline transition-opacity hover:opacity-60 pb-1 ${pathname === "/schedule" ? "border-b-2 border-white" : ""}`}>
+              スケジュール
             </Link>
             <Link href="/genres" className={`hidden xl:inline transition-opacity hover:opacity-60 pb-1 ${pathname.startsWith("/genre") ? "border-b-2 border-white" : ""}`}>
               ジャンル
@@ -171,7 +177,7 @@ export default function Navbar() {
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="映画を検索..."
+                placeholder="映画・人物を検索..."
                 className="w-full bg-transparent text-sm text-gray-800 outline-none placeholder:text-gray-400"
               />
               {query && (
@@ -192,42 +198,53 @@ export default function Navbar() {
                 {loading && results.length === 0 && (
                   <p className="px-5 py-4 text-center text-xs text-gray-400">検索中...</p>
                 )}
-                {results.map((movie) => (
-                  <button
-                    key={movie.id}
-                    onClick={() => handleSelect(movie)}
-                    className="flex w-full items-center gap-4 px-5 py-3 text-left transition-colors hover:bg-gray-50"
-                  >
-                    {movie.poster_path ? (
-                      <img
-                        src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
-                        alt={movie.title}
-                        className="h-14 w-10 flex-shrink-0 rounded object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-14 w-10 flex-shrink-0 items-center justify-center rounded bg-gray-100 text-[10px] text-gray-400">
-                        N/A
+                {results.map((item) => {
+                  const imagePath = item.media_type === "person" ? item.profile_path : item.poster_path;
+                  return (
+                    <button
+                      key={`${item.media_type}-${item.id}`}
+                      onClick={() => handleSelect(item)}
+                      className="flex w-full items-center gap-4 px-5 py-3 text-left transition-colors hover:bg-gray-50"
+                    >
+                      {imagePath ? (
+                        <img
+                          src={`https://image.tmdb.org/t/p/w92${imagePath}`}
+                          alt={item.title || item.name}
+                          className={`h-14 flex-shrink-0 object-cover ${item.media_type === "person" ? "w-10 rounded-full" : "w-10 rounded"}`}
+                        />
+                      ) : (
+                        <div className={`flex h-14 w-10 flex-shrink-0 items-center justify-center bg-gray-100 text-[10px] text-gray-400 ${item.media_type === "person" ? "rounded-full" : "rounded"}`}>
+                          N/A
+                        </div>
+                      )}
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium text-gray-800">
+                          {item.title || item.name}
+                        </p>
+                        <div className="flex items-center gap-2 text-xs text-gray-400">
+                          {item.media_type === "person" ? (
+                            <span className="rounded bg-purple-50 px-1.5 py-0.5 text-[10px] text-purple-600">
+                              {item.known_for_department === "Acting" ? "俳優" : item.known_for_department === "Directing" ? "監督" : item.known_for_department || "人物"}
+                            </span>
+                          ) : (
+                            <>
+                              <span>{(item.release_date || item.first_air_date)?.slice(0, 4) || "—"}</span>
+                              <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px]">
+                                {item.media_type === "tv" ? "TV" : "映画"}
+                              </span>
+                            </>
+                          )}
+                        </div>
                       </div>
-                    )}
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium text-gray-800">
-                        {movie.title || movie.name}
-                      </p>
-                      <div className="flex items-center gap-2 text-xs text-gray-400">
-                        <span>{(movie.release_date || movie.first_air_date)?.slice(0, 4) || "—"}</span>
-                        <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px]">
-                          {movie.media_type === "tv" ? "TV" : "映画"}
-                        </span>
-                      </div>
-                    </div>
-                  </button>
-                ))}
+                    </button>
+                  );
+                })}
               </div>
             )}
 
             {query && !loading && results.length === 0 && (
               <div className="border-t border-gray-100 px-5 py-4 text-center text-xs text-gray-400">
-                該当する作品が見つかりません
+                該当する結果が見つかりません
               </div>
             )}
 

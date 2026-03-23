@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const BASE_URL = "https://movie-site-delta-lilac.vercel.app";
+const BASE_URL = "https://ardcinema.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages = [
@@ -8,6 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/genres`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.8 },
     { url: `${BASE_URL}/ranking`, lastModified: new Date(), changeFrequency: "daily" as const, priority: 0.8 },
     { url: `${BASE_URL}/selection`, lastModified: new Date(), changeFrequency: "daily" as const, priority: 0.8 },
+    { url: `${BASE_URL}/schedule`, lastModified: new Date(), changeFrequency: "daily" as const, priority: 0.8 },
     { url: `${BASE_URL}/follows`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.5 },
     { url: `${BASE_URL}/privacy`, lastModified: new Date(), changeFrequency: "yearly" as const, priority: 0.3 },
   ];
