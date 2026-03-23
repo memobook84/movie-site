@@ -253,7 +253,7 @@ export default function SplashScreen() {
           left: "50%",
           transform: `translate(-50%, -50%) scale(${showTitle ? 1 : 0.92})`,
           fontFamily: "system-ui, -apple-system, sans-serif",
-          fontSize: "20px",
+          fontSize: "clamp(28px, 5vw, 48px)",
           fontWeight: 600,
           letterSpacing: "0.25em",
           color: "#fff",

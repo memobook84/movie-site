@@ -33,6 +33,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function PersonPage({ params }: PageProps) {
   const { id } = await params;
+  const departmentMap: Record<string, string> = {
+    Acting: "俳優",
+    Directing: "監督",
+    Writing: "脚本",
+    Production: "プロデューサー",
+    Camera: "撮影",
+    Editing: "編集",
+    Sound: "音響",
+    Art: "美術",
+    "Visual Effects": "VFX",
+    Crew: "スタッフ",
+    Costume: "衣装",
+    "Costume & Make-Up": "衣装・メイク",
+    Lighting: "照明",
+  };
+
   const [person, externalIds] = await Promise.all([
     getPersonDetail(Number(id)),
     getExternalIds(Number(id), "person"),
@@ -86,7 +102,7 @@ export default async function PersonPage({ params }: PageProps) {
           <h1 className="text-2xl font-bold text-[#1d1d1f] md:text-3xl">{person.name}</h1>
           <div className="flex flex-wrap gap-2 text-xs text-gray-400">
             {person.known_for_department && (
-              <span className="rounded-md bg-gray-100 px-2.5 py-1">{person.known_for_department}</span>
+              <span className="rounded-md bg-gray-100 px-2.5 py-1">{departmentMap[person.known_for_department] || person.known_for_department}</span>
             )}
             {person.birthday && (
               <span className="rounded-md bg-gray-100 px-2.5 py-1">{person.birthday}</span>

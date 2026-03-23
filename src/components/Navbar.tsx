@@ -136,17 +136,17 @@ export default function Navbar() {
           <span className="absolute left-1/2 -translate-x-1/2 font-[family-name:var(--font-noto-sans-jp)] text-sm font-bold tracking-widest text-white xl:hidden">
             ARD CINEMA
           </span>
-          <div className="flex items-center gap-6 font-[family-name:var(--font-noto-sans-jp)] text-sm font-medium text-white">
-            <Link href="/schedule" className={`hidden xl:inline transition-opacity hover:opacity-60 pb-1 ${pathname === "/schedule" ? "border-b-2 border-white" : ""}`}>
+          <div className="flex items-center gap-4 font-[family-name:var(--font-noto-sans-jp)] text-sm font-medium text-white">
+            <Link href="/schedule" className={`hidden xl:inline relative z-0 px-3 py-1.5 after:absolute after:inset-0 after:-z-10 after:rounded after:bg-white ${pathname === "/schedule" ? "text-black after:opacity-100" : "text-white after:opacity-0 hover:text-black hover:after:opacity-100"}`}>
               スケジュール
             </Link>
-            <Link href="/genres" className={`hidden xl:inline transition-opacity hover:opacity-60 pb-1 ${pathname.startsWith("/genre") ? "border-b-2 border-white" : ""}`}>
+            <Link href="/genres" className={`hidden xl:inline relative z-0 px-3 py-1.5 after:absolute after:inset-0 after:-z-10 after:rounded after:bg-white ${pathname.startsWith("/genre") ? "text-black after:opacity-100" : "text-white after:opacity-0 hover:text-black hover:after:opacity-100"}`}>
               ジャンル
             </Link>
-            <Link href="/selection" className={`hidden xl:inline transition-opacity hover:opacity-60 pb-1 ${pathname === "/selection" ? "border-b-2 border-white" : ""}`}>
+            <Link href="/selection" className={`hidden xl:inline relative z-0 px-3 py-1.5 after:absolute after:inset-0 after:-z-10 after:rounded after:bg-white ${pathname === "/selection" ? "text-black after:opacity-100" : "text-white after:opacity-0 hover:text-black hover:after:opacity-100"}`}>
               セレクション
             </Link>
-            <Link href="/follows" className={`hidden xl:inline transition-opacity hover:opacity-60 pb-1 ${pathname === "/follows" ? "border-b-2 border-white" : ""}`}>
+            <Link href="/follows" className={`hidden xl:inline relative z-0 px-3 py-1.5 after:absolute after:inset-0 after:-z-10 after:rounded after:bg-white ${pathname === "/follows" ? "text-black after:opacity-100" : "text-white after:opacity-0 hover:text-black hover:after:opacity-100"}`}>
               ウォッチリスト
             </Link>
             <button
