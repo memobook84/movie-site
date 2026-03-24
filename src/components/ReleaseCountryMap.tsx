@@ -1,15 +1,12 @@
 "use client";
 
-import { memo } from "react";
-import {
-  ComposableMap,
-  Geographies,
-  Geography,
-} from "react-simple-maps";
+import { memo, useEffect, useRef, useState } from "react";
+import { geoNaturalEarth1, geoPath, geoGraticule } from "d3-geo";
+import { feature } from "topojson-client";
+import type { Topology, GeometryCollection } from "topojson-specification";
 
 const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
-// ISO 3166-1 alpha-2 → ISO 3166-1 numeric mapping (used by TopoJSON)
 const COUNTRY_CODE_MAP: Record<string, string> = {
   AF:"004",AL:"008",DZ:"012",AS:"016",AD:"020",AO:"024",AG:"028",AR:"032",
   AM:"051",AU:"036",AT:"040",AZ:"031",BS:"044",BH:"048",BD:"050",BB:"052",
@@ -43,7 +40,17 @@ interface Props {
   productionCountries: string[];
 }
 
+interface CountryFeature {
+  type: "Feature";
+  id: string;
+  geometry: GeoJSON.Geometry;
+  properties: Record<string, unknown>;
+}
+
 function ReleaseCountryMap({ releaseCountries, productionCountries }: Props) {
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [countries, setCountries] = useState<CountryFeature[]>([]);
+
   const releaseCodes = new Set(
     releaseCountries.map((code) => COUNTRY_CODE_MAP[code]).filter(Boolean)
   );
@@ -51,60 +58,79 @@ function ReleaseCountryMap({ releaseCountries, productionCountries }: Props) {
     productionCountries.map((code) => COUNTRY_CODE_MAP[code]).filter(Boolean)
   );
 
+  useEffect(() => {
+    fetch(GEO_URL)
+      .then((res) => res.json())
+      .then((topo: Topology) => {
+        const geo = feature(topo, topo.objects.countries as GeometryCollection);
+        setCountries(geo.features as CountryFeature[]);
+      });
+  }, []);
+
+  const width = 800;
+  const height = 400;
+  const projection = geoNaturalEarth1()
+    .scale(155)
+    .center([0, 20])
+    .translate([width / 2, height / 2]);
+  const path = geoPath(projection);
+  const graticule = geoGraticule().step([15, 15]);
+
   return (
     <div className="mt-16 space-y-5">
       <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
         製作国・上映国
       </h2>
       <div className="w-full max-w-4xl">
-        <ComposableMap
-          projection="geoNaturalEarth1"
-          projectionConfig={{ scale: 155, center: [0, 20] }}
-          width={800}
-          height={400}
-          style={{ width: "100%", height: "auto", background: "#FAFBFF", borderRadius: "12px" }}
+        <svg
+          ref={svgRef}
+          viewBox={`0 0 ${width} ${height}`}
+          style={{ width: "100%", height: "auto", background: "#FFFFFF", borderRadius: "12px" }}
         >
-          <Geographies geography={GEO_URL}>
-            {({ geographies }) =>
-              geographies.map((geo) => {
-                const isProduction = productionCodes.has(geo.id);
-                const isRelease = releaseCodes.has(geo.id);
-                const fill = isProduction
-                  ? "#EF4444"
-                  : isRelease
-                    ? "#374151"
-                    : "#D1D5DB";
-                const hoverFill = isProduction
-                  ? "#DC2626"
-                  : isRelease
-                    ? "#1F2937"
-                    : "#B0B5BD";
-                return (
-                  <Geography
-                    key={geo.rsmKey}
-                    geography={geo}
-                    fill={fill}
-                    stroke="#fff"
-                    strokeWidth={0.5}
-                    style={{
-                      default: { outline: "none" },
-                      hover: { outline: "none", fill: hoverFill },
-                      pressed: { outline: "none" },
-                    }}
-                  />
-                );
-              })
-            }
-          </Geographies>
-        </ComposableMap>
+          {/* グリッド線 */}
+          <path
+            d={path(graticule()) || ""}
+            fill="none"
+            stroke="#B0BEC5"
+            strokeWidth={0.4}
+            opacity={0.7}
+          />
+          {/* 外枠 */}
+          <path
+            d={path(graticule.outline()) || ""}
+            fill="none"
+            stroke="#CBD5E1"
+            strokeWidth={0.5}
+          />
+          {/* 国 */}
+          {countries.map((geo) => {
+            const isProduction = productionCodes.has(geo.id);
+            const isRelease = releaseCodes.has(geo.id);
+            const fill = isProduction
+              ? "#F97316"
+              : isRelease
+                ? "#38BDF8"
+                : "#E2E8F0";
+            return (
+              <path
+                key={geo.id}
+                d={path(geo) || ""}
+                fill={fill}
+                stroke="#fff"
+                strokeWidth={0.5}
+                className="transition-colors duration-200 hover:brightness-90"
+              />
+            );
+          })}
+        </svg>
       </div>
       <div className="flex items-center gap-6 text-sm text-gray-500">
         <span className="flex items-center gap-1.5">
-          <span className="inline-block h-3 w-3 rounded-sm bg-red-500" />
+          <span className="inline-block h-3 w-3 rounded-sm bg-orange-500" />
           製作国（{productionCountries.length}）
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="inline-block h-3 w-3 rounded-sm bg-gray-700" />
+          <span className="inline-block h-3 w-3 rounded-sm bg-sky-400" />
           上映国（{releaseCountries.length}）
         </span>
       </div>

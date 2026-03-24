@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description: "話題の映画やドラマの最新情報、トレンド、人気作品、おすすめセレクションをチェック。ジャンル別検索やランキングも充実。",
 };
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 import MovieRow from "@/components/MovieRow";
 import { getTrending, getPopular, getTopRated, getUpcoming, getMoviesByGenre, GENRES, Movie } from "@/lib/tmdb";

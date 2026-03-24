@@ -76,7 +76,7 @@ async function fetchTMDb<T>(endpoint: string, fallback: T): Promise<T> {
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const res = await fetch(`${BASE_URL}${endpoint}${endpoint.includes("?") ? "&" : "?"}api_key=${API_KEY}&language=ja-JP`, {
-        next: { revalidate: 3600 },
+        next: { revalidate: 86400 },
       });
       if (res.status === 429) {
         await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
@@ -192,7 +192,7 @@ async function fetchTMDbEn<T>(endpoint: string, fallback: T): Promise<T> {
   if (!API_KEY || API_KEY === "YOUR_API_KEY_HERE") return fallback;
   try {
     const res = await fetch(`${BASE_URL}${endpoint}${endpoint.includes("?") ? "&" : "?"}api_key=${API_KEY}&language=en-US`, {
-      next: { revalidate: 3600 },
+      next: { revalidate: 86400 },
     });
     if (!res.ok) throw new Error(`TMDb API error: ${res.status}`);
     return res.json();

@@ -31,7 +31,7 @@ async function fetchTMDb<T>(endpoint: string): Promise<T | null> {
   try {
     const res = await fetch(
       `${BASE_URL}${endpoint}${endpoint.includes("?") ? "&" : "?"}api_key=${API_KEY}&language=ja-JP`,
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: 86400 } }
     );
     if (!res.ok) return null;
     return res.json();

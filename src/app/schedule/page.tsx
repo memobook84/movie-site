@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getUpcomingJP, getNowPlayingJP } from "@/lib/tmdb";
 import ScheduleTabs from "@/components/ScheduleTabs";
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 export const metadata: Metadata = {
   title: "日本公開スケジュール",

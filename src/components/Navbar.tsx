@@ -137,17 +137,17 @@ export default function Navbar() {
             ARD CINEMA
           </span>
           <div className="flex items-center gap-4 font-[family-name:var(--font-noto-sans-jp)] text-sm font-medium text-white">
-            <Link href="/schedule" className={`hidden xl:inline relative z-0 px-3 py-1.5 after:absolute after:inset-0 after:-z-10 after:rounded after:bg-white ${pathname === "/schedule" ? "text-black after:opacity-100" : "text-white after:opacity-0 hover:text-black hover:after:opacity-100"}`}>
-              スケジュール
+            <Link href="/schedule" className={`hidden xl:inline relative px-3 py-1.5 text-white after:absolute after:bottom-0 after:left-3 after:right-3 after:h-px after:bg-white after:transition-all after:duration-500 after:ease-in-out ${pathname === "/schedule" ? "after:scale-x-100 after:opacity-100" : "after:scale-x-0 after:opacity-0 hover:after:scale-x-100 hover:after:opacity-100"}`}>
+              Schedule
             </Link>
-            <Link href="/genres" className={`hidden xl:inline relative z-0 px-3 py-1.5 after:absolute after:inset-0 after:-z-10 after:rounded after:bg-white ${pathname.startsWith("/genre") ? "text-black after:opacity-100" : "text-white after:opacity-0 hover:text-black hover:after:opacity-100"}`}>
-              ジャンル
+            <Link href="/genres" className={`hidden xl:inline relative px-3 py-1.5 text-white after:absolute after:bottom-0 after:left-3 after:right-3 after:h-px after:bg-white after:transition-all after:duration-500 after:ease-in-out ${pathname.startsWith("/genre") ? "after:scale-x-100 after:opacity-100" : "after:scale-x-0 after:opacity-0 hover:after:scale-x-100 hover:after:opacity-100"}`}>
+              Genre
             </Link>
-            <Link href="/selection" className={`hidden xl:inline relative z-0 px-3 py-1.5 after:absolute after:inset-0 after:-z-10 after:rounded after:bg-white ${pathname === "/selection" ? "text-black after:opacity-100" : "text-white after:opacity-0 hover:text-black hover:after:opacity-100"}`}>
-              セレクション
+            <Link href="/selection" className={`hidden xl:inline relative px-3 py-1.5 text-white after:absolute after:bottom-0 after:left-3 after:right-3 after:h-px after:bg-white after:transition-all after:duration-500 after:ease-in-out ${pathname === "/selection" ? "after:scale-x-100 after:opacity-100" : "after:scale-x-0 after:opacity-0 hover:after:scale-x-100 hover:after:opacity-100"}`}>
+              Selection
             </Link>
-            <Link href="/follows" className={`hidden xl:inline relative z-0 px-3 py-1.5 after:absolute after:inset-0 after:-z-10 after:rounded after:bg-white ${pathname === "/follows" ? "text-black after:opacity-100" : "text-white after:opacity-0 hover:text-black hover:after:opacity-100"}`}>
-              ウォッチリスト
+            <Link href="/follows" className={`hidden xl:inline relative px-3 py-1.5 text-white after:absolute after:bottom-0 after:left-3 after:right-3 after:h-px after:bg-white after:transition-all after:duration-500 after:ease-in-out ${pathname === "/follows" ? "after:scale-x-100 after:opacity-100" : "after:scale-x-0 after:opacity-0 hover:after:scale-x-100 hover:after:opacity-100"}`}>
+              Watchlist
             </Link>
             <button
               onClick={() => setShowSearch(!showSearch)}

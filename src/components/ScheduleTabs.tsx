@@ -66,7 +66,7 @@ function MovieGrid({ movies, showReleaseBadge }: { movies: Movie[]; showReleaseB
               </div>
             )}
             {showReleaseBadge && movie.release_date && (
-              <span className="absolute bottom-2 right-2 rounded-md bg-black/60 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
+              <span className="absolute bottom-2 right-2 rounded-md bg-red-600 px-2 py-0.5 text-[10px] font-medium text-white">
                 {formatShortDate(movie.release_date)}〜
               </span>
             )}

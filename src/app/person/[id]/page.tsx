@@ -87,41 +87,44 @@ export default async function PersonPage({ params }: PageProps) {
     <main className="min-h-screen pt-24 pb-28 px-6 md:px-16 max-w-7xl mx-auto">
       {/* プロフィール */}
       <div className="flex flex-col items-start gap-6 sm:flex-row">
-        {person.profile_path ? (
-          <img
-            src={`${IMAGE_BASE_URL}/w342${person.profile_path}`}
-            alt={person.name}
-            className="w-32 rounded-xl shadow-lg sm:w-40"
-          />
-        ) : (
-          <div className="flex h-48 w-32 items-center justify-center rounded-xl bg-gray-200 text-2xl text-gray-400 sm:w-40">
-            ?
-          </div>
-        )}
-        <div className="space-y-3">
+        <div className="w-[45%] max-w-[200px] flex-shrink-0 rounded-sm bg-[#111] p-3 pb-12 sm:w-52 sm:max-w-none sm:p-3.5 sm:pb-14" style={{ boxShadow: '0 0 8px rgba(0,200,255,0.6), 0 0 20px rgba(0,200,255,0.3), inset 0 0 8px rgba(0,200,255,0.1)' }}>
+          {person.profile_path ? (
+            <div className="relative">
+              <img
+                src={`${IMAGE_BASE_URL}/w342${person.profile_path}`}
+                alt={person.name}
+                className="aspect-[3/4] w-full object-cover"
+              />
+              <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_8px_rgba(0,0,0,0.3)]" />
+            </div>
+          ) : (
+            <div className="relative">
+              <div className="flex aspect-[3/4] w-full items-center justify-center bg-gray-100 text-3xl text-gray-300">
+                ?
+              </div>
+              <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_8px_rgba(0,0,0,0.3)]" />
+            </div>
+          )}
+        </div>
+        <div className="space-y-4">
           <h1 className="text-2xl font-bold text-[#1d1d1f] md:text-3xl">{person.name}</h1>
-          <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500">
+          <div className="flex flex-wrap items-center gap-2">
             {person.known_for_department && (
-              <span className="rounded-md bg-gray-100 px-2.5 py-1">
+              <span className="inline-flex items-center rounded-md bg-[#f3f4f6] px-2.5 py-1 text-xs text-[#6b7280]">
                 {departmentMap[person.known_for_department] || person.known_for_department}
               </span>
             )}
             {person.birthday && (
-              <span className="rounded-md bg-gray-100 px-2.5 py-1">
+              <span className="inline-flex items-center rounded-md bg-[#f3f4f6] px-2.5 py-1 text-xs text-[#6b7280]">
                 {person.birthday}
               </span>
             )}
             {person.place_of_birth && (
-              <span className="rounded-md bg-gray-100 px-2.5 py-1">
+              <span className="inline-flex items-center rounded-md bg-[#f3f4f6] px-2.5 py-1 text-xs text-[#6b7280]">
                 {person.place_of_birth}
               </span>
             )}
           </div>
-          {person.biography && (
-            <p className="max-w-2xl text-sm leading-7 text-gray-500 line-clamp-6">
-              {person.biography}
-            </p>
-          )}
           {snsLinks.length > 0 && (
             <div className="flex flex-wrap gap-3 pt-1">
               {snsLinks.map((sns) => (

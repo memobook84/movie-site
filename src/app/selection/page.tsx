@@ -1,7 +1,7 @@
 import { getMovieDetail } from "@/lib/tmdb";
 import SelectionClient from "./SelectionClient";
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 export const metadata = {
   title: "おすすめセレクション",

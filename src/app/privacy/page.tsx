@@ -15,7 +15,6 @@ export default function PrivacyPage() {
           <h2 className="text-base font-semibold text-gray-800">1. 当サイトについて</h2>
           <p className="mt-2">
             ARD CINEMA（以下「当サイト」）は、映画・ドラマの情報を閲覧できるサービスです。
-            当サイトは個人が運営する非営利のサービスです。
           </p>
         </section>
 
@@ -40,10 +39,6 @@ export default function PrivacyPage() {
               <a href="https://www.themoviedb.org/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline"> TMDb Privacy Policy</a>
               をご確認ください。
             </li>
-            <li>
-              <strong>Vercel</strong> — 当サイトのホスティングに使用しています。
-              アクセス時にIPアドレス等の通信情報がVercelのサーバーを経由します。
-            </li>
           </ul>
         </section>
 
@@ -51,7 +46,6 @@ export default function PrivacyPage() {
           <h2 className="text-base font-semibold text-gray-800">4. Cookieについて</h2>
           <p className="mt-2">
             当サイトでは、Cookieを積極的に使用していません。
-            ただし、ホスティングサービス（Vercel）が技術的な目的でCookieを使用する場合があります。
           </p>
         </section>
 
