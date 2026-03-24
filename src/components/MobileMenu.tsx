@@ -15,32 +15,35 @@ const menuItems = [
 
 export default function MobileMenu({ onClose }: { onClose: () => void }) {
   return (
-    <div className="fixed inset-0 z-[100] bg-white overflow-y-auto" onClick={onClose}>
-      {/* ヘッダー */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
-        <span className="text-lg font-bold text-gray-900">メニュー</span>
-        <button
-          onClick={onClose}
-          className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition-colors"
-        >
-          <X className="h-6 w-6" />
-        </button>
-      </div>
-
-      {/* メニューカード */}
-      <div className="grid grid-cols-2 gap-3 p-4" onClick={(e) => e.stopPropagation()}>
-        {menuItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={onClose}>
+      {/* ポップアップ */}
+      <div className="mx-4 w-full max-w-sm rounded-2xl bg-white p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        {/* ヘッダー */}
+        <div className="flex items-center justify-between mb-4">
+          <span className="text-lg font-bold text-gray-900">メニュー</span>
+          <button
             onClick={onClose}
-            className="flex flex-col items-center gap-2 rounded-xl bg-gray-100 p-4 text-center transition-colors hover:bg-gray-200 active:bg-gray-300"
+            className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition-colors"
           >
-            <item.icon className="h-8 w-8 text-gray-600" />
-            <span className="text-sm font-medium text-gray-900">{item.label}</span>
-            <span className="text-[11px] text-gray-500">{item.description}</span>
-          </Link>
-        ))}
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* メニューカード */}
+        <div className="grid grid-cols-3 gap-3">
+          {menuItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={onClose}
+              className="flex flex-col items-center gap-2 rounded-[5px] border-2 border-[#323232] bg-white p-3 text-center transition-all duration-300 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none active:scale-95"
+              style={{ boxShadow: '4px 4px #323232' }}
+            >
+              <item.icon className="h-7 w-7 text-[#323232]" />
+              <span className="text-[11px] font-medium text-[#323232]">{item.label}</span>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );

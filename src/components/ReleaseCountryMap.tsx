@@ -103,7 +103,7 @@ function ReleaseCountryMap({ releaseCountries, productionCountries }: Props) {
             strokeWidth={0.5}
           />
           {/* 国 */}
-          {countries.map((geo) => {
+          {countries.map((geo, i) => {
             const isProduction = productionCodes.has(geo.id);
             const isRelease = releaseCodes.has(geo.id);
             const fill = isProduction
@@ -113,7 +113,7 @@ function ReleaseCountryMap({ releaseCountries, productionCountries }: Props) {
                 : "#E2E8F0";
             return (
               <path
-                key={geo.id}
+                key={geo.id ?? `geo-${i}`}
                 d={path(geo) || ""}
                 fill={fill}
                 stroke="#fff"

@@ -155,15 +155,11 @@ export default async function PersonPage({ params }: PageProps) {
         </div>
       </div>
 
-      {/* 監督作品 */}
-      {directorCredits.length > 0 && (
-        <PersonCreditsGrid label="監督作品" credits={directorCredits} />
-      )}
-
-      {/* 出演作品 */}
-      {castCredits.length > 0 && (
-        <PersonCreditsGrid label="出演作品" credits={castCredits} />
-      )}
+      {/* 出演作品・監督作品（タブ切り替え） */}
+      <PersonCreditsGrid
+        castCredits={castCredits}
+        directorCredits={directorCredits}
+      />
     </main>
   );
 }

@@ -18,12 +18,20 @@ interface Credit {
 }
 
 interface Props {
-  label: string;
-  credits: Credit[];
+  castCredits: Credit[];
+  directorCredits: Credit[];
 }
 
-export default function PersonCreditsGrid({ label, credits }: Props) {
+type Tab = "cast" | "director";
+
+export default function PersonCreditsGrid({ castCredits, directorCredits }: Props) {
+  const hasCast = castCredits.length > 0;
+  const hasDirector = directorCredits.length > 0;
+
+  const [activeTab, setActiveTab] = useState<Tab>(hasCast ? "cast" : "director");
   const [sort, setSort] = useState<SortMode>("rating");
+
+  const credits = activeTab === "cast" ? castCredits : directorCredits;
 
   const sorted = [...credits].sort((a, b) => {
     if (sort === "rating") return b.vote_average - a.vote_average;
@@ -43,12 +51,39 @@ export default function PersonCreditsGrid({ label, credits }: Props) {
 
   const sortOptions: SortMode[] = ["rating", "newest", "oldest"];
 
+  if (!hasCast && !hasDirector) return null;
+
+  const tabs: { key: Tab; label: string; count: number }[] = [];
+  if (hasCast) tabs.push({ key: "cast", label: "出演作品", count: castCredits.length });
+  if (hasDirector) tabs.push({ key: "director", label: "監督作品", count: directorCredits.length });
+
   return (
     <div className="mt-12">
-      <div className="flex items-center justify-between">
+      {/* タブ */}
+      {tabs.length > 1 ? (
+        <div className="flex gap-0 border-b border-gray-200">
+          {tabs.map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => { setActiveTab(tab.key); setSort("rating"); }}
+              className={`px-4 py-2.5 text-sm font-medium transition-colors ${
+                activeTab === tab.key
+                  ? "border-b-2 border-[#1d1d1f] text-[#1d1d1f]"
+                  : "text-gray-400 hover:text-gray-600"
+              }`}
+            >
+              {tab.label}（{tab.count}）
+            </button>
+          ))}
+        </div>
+      ) : (
         <h2 className="text-lg font-semibold text-[#1d1d1f]">
-          {label}（{credits.length}）
+          {tabs[0].label}（{tabs[0].count}）
         </h2>
+      )}
+
+      {/* ソート */}
+      <div className="mt-4 flex justify-end">
         <div className="flex gap-1 rounded-lg bg-gray-100 p-1">
           {sortOptions.map((mode) => (
             <button
@@ -66,6 +101,7 @@ export default function PersonCreditsGrid({ label, credits }: Props) {
         </div>
       </div>
 
+      {/* グリッド */}
       <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
         {sorted.map((movie) => {
           const title = movie.title || movie.name || "";
