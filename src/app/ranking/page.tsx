@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTrending, getPopular, getTopRated, IMAGE_BASE_URL, Movie } from "@/lib/tmdb";
+import { getTrending, getPopular, getPopularJP, getTopRated, IMAGE_BASE_URL, Movie } from "@/lib/tmdb";
 
 export const metadata: Metadata = {
   title: "映画ランキング",
@@ -95,7 +95,8 @@ function RankingSection({
 }
 
 export default async function RankingPage() {
-  const [trending, popular, topRated] = await Promise.all([
+  const [popularJP, trending, popular, topRated] = await Promise.all([
+    getPopularJP(),
     getTrending(),
     getPopular(),
     getTopRated(),
@@ -105,6 +106,11 @@ export default async function RankingPage() {
     <main className="min-h-screen bg-[#f5f5f7] pt-24 pb-28">
       <div className="mx-auto max-w-5xl px-5 md:px-8">
         <div className="space-y-14">
+          <RankingSection
+            title="日本で人気"
+            subtitle="日本で今人気の作品"
+            movies={popularJP}
+          />
           <RankingSection
             title="トレンド"
             subtitle="今週最も注目されている作品"

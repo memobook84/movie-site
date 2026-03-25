@@ -52,6 +52,7 @@ export interface MovieDetail extends Movie {
   status: string;
   budget: number;
   revenue: number;
+  homepage?: string;
   belongs_to_collection?: CollectionInfo | null;
   production_companies: { id: number; name: string; logo_path: string | null }[];
   production_countries?: { iso_3166_1: string; name: string }[];
@@ -102,6 +103,11 @@ export async function getTrending(): Promise<Movie[]> {
 
 export async function getPopular(): Promise<Movie[]> {
   const data = await fetchTMDb<TMDbResponse>("/movie/popular", emptyResponse);
+  return data.results;
+}
+
+export async function getPopularJP(): Promise<Movie[]> {
+  const data = await fetchTMDb<TMDbResponse>("/movie/popular?region=JP", emptyResponse);
   return data.results;
 }
 
@@ -298,7 +304,7 @@ export async function getWatchProviders(id: number, mediaType: string = "movie")
 // 上映国情報
 interface ReleaseDateEntry {
   iso_3166_1: string;
-  release_dates: { release_date: string; type: number }[];
+  release_dates: { release_date: string; type: number; certification?: string }[];
 }
 
 interface ReleaseDatesResponse {
@@ -324,6 +330,20 @@ export async function getJPReleaseDate(id: number): Promise<string | null> {
   const theatrical = jp.release_dates.find((d) => d.type === 3);
   const date = theatrical || jp.release_dates[0];
   return date.release_date?.slice(0, 10) || null;
+}
+
+export async function getCertification(id: number): Promise<string | null> {
+  const data = await fetchTMDb<ReleaseDatesResponse>(
+    `/movie/${id}/release_dates`,
+    { results: [] }
+  );
+  // 日本の年齢制限を優先、なければアメリカ
+  const jp = data.results.find((r) => r.iso_3166_1 === "JP");
+  const jpCert = jp?.release_dates.find((d) => d.certification)?.certification;
+  if (jpCert) return jpCert;
+  const us = data.results.find((r) => r.iso_3166_1 === "US");
+  const usCert = us?.release_dates.find((d) => d.certification)?.certification;
+  return usCert || null;
 }
 
 // 外部ID（SNS）

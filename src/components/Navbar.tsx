@@ -137,17 +137,21 @@ export default function Navbar() {
             ARD CINEMA
           </span>
           <div className="flex items-center gap-4 font-[family-name:var(--font-noto-sans-jp)] text-sm font-medium text-white">
-            <Link href="/schedule" className={`hidden xl:inline relative px-3 py-1.5 text-white after:absolute after:bottom-0 after:left-3 after:right-3 after:h-px after:bg-white after:transition-all after:duration-500 after:ease-in-out ${pathname === "/schedule" ? "after:scale-x-100 after:opacity-100" : "after:scale-x-0 after:opacity-0 hover:after:scale-x-100 hover:after:opacity-100"}`}>
+            <Link href="/schedule" className={`hidden xl:inline-flex flex-col items-center gap-1 px-3 py-1.5 text-white/70 transition-all duration-300 hover:text-white ${pathname === "/schedule" ? "text-white" : ""}`}>
               Schedule
+              <span className={`h-1 w-1 rounded-full bg-white transition-all duration-300 ${pathname === "/schedule" ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
             </Link>
-            <Link href="/genres" className={`hidden xl:inline relative px-3 py-1.5 text-white after:absolute after:bottom-0 after:left-3 after:right-3 after:h-px after:bg-white after:transition-all after:duration-500 after:ease-in-out ${pathname.startsWith("/genre") ? "after:scale-x-100 after:opacity-100" : "after:scale-x-0 after:opacity-0 hover:after:scale-x-100 hover:after:opacity-100"}`}>
+            <Link href="/genres" className={`hidden xl:inline-flex flex-col items-center gap-1 px-3 py-1.5 text-white/70 transition-all duration-300 hover:text-white ${pathname.startsWith("/genre") ? "text-white" : ""}`}>
               Genre
+              <span className={`h-1 w-1 rounded-full bg-white transition-all duration-300 ${pathname.startsWith("/genre") ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
             </Link>
-            <Link href="/selection" className={`hidden xl:inline relative px-3 py-1.5 text-white after:absolute after:bottom-0 after:left-3 after:right-3 after:h-px after:bg-white after:transition-all after:duration-500 after:ease-in-out ${pathname === "/selection" ? "after:scale-x-100 after:opacity-100" : "after:scale-x-0 after:opacity-0 hover:after:scale-x-100 hover:after:opacity-100"}`}>
+            <Link href="/selection" className={`hidden xl:inline-flex flex-col items-center gap-1 px-3 py-1.5 text-white/70 transition-all duration-300 hover:text-white ${pathname === "/selection" ? "text-white" : ""}`}>
               Selection
+              <span className={`h-1 w-1 rounded-full bg-white transition-all duration-300 ${pathname === "/selection" ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
             </Link>
-            <Link href="/follows" className={`hidden xl:inline relative px-3 py-1.5 text-white after:absolute after:bottom-0 after:left-3 after:right-3 after:h-px after:bg-white after:transition-all after:duration-500 after:ease-in-out ${pathname === "/follows" ? "after:scale-x-100 after:opacity-100" : "after:scale-x-0 after:opacity-0 hover:after:scale-x-100 hover:after:opacity-100"}`}>
+            <Link href="/follows" className={`hidden xl:inline-flex flex-col items-center gap-1 px-3 py-1.5 text-white/70 transition-all duration-300 hover:text-white ${pathname === "/follows" ? "text-white" : ""}`}>
               Watchlist
+              <span className={`h-1 w-1 rounded-full bg-white transition-all duration-300 ${pathname === "/follows" ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
             </Link>
             <button
               onClick={() => setShowSearch(!showSearch)}

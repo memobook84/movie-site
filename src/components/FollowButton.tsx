@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Glasses } from "lucide-react";
+import { TiStopwatch } from "react-icons/ti";
 
 interface FollowButtonProps {
   movieId: number;
@@ -61,7 +61,7 @@ export default function FollowButton({ movieId, title, posterPath, mediaType = "
       aria-label={followed ? "ウォッチリストに追加済み" : "ウォッチリストに追加"}
     >
       <span className={`absolute left-0 top-0 h-full rounded-[30em] bg-gradient-to-r from-[#7b2ff7] to-[#ff2d87] z-0 transition-all duration-500 ease-in-out group-hover/btn:w-full ${followed ? "w-full" : "w-0"}`} />
-      <Glasses className={`relative z-10 h-3.5 w-3.5 ${followed ? "text-white" : ""}`} strokeWidth={2} />
+      <TiStopwatch className={`relative z-10 h-3.5 w-3.5 ${followed ? "text-white" : ""}`} />
       <span className={`relative z-10 hidden xl:inline text-[13px] font-extrabold ${followed ? "text-white" : ""}`}>ウォッチリスト</span>
     </button>
   );

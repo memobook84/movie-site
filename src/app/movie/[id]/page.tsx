@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getMovieDetail, getTvDetail, getMovieImages, getRecommendations, getWatchProviders, getReleaseDates, getJPReleaseDate, getExternalIds, IMAGE_BASE_URL } from "@/lib/tmdb";
+import { getMovieDetail, getTvDetail, getMovieImages, getRecommendations, getWatchProviders, getReleaseDates, getJPReleaseDate, getCertification, getExternalIds, IMAGE_BASE_URL } from "@/lib/tmdb";
 import Link from "next/link";
 import FollowButton from "@/components/FollowButton";
 import GalleryModal from "@/components/GalleryModal";
@@ -25,7 +25,7 @@ const GENRE_ICONS: Record<number, ComponentType<{ className?: string }>> = {
 };
 
 const COUNTRY_NAMES: Record<string, string> = {
-  US: "アメリカ", GB: "イギリス", JP: "日本", FR: "フランス", DE: "ドイツ",
+  US: "アメリカ合衆国", GB: "イギリス", JP: "日本", FR: "フランス", DE: "ドイツ",
   IT: "イタリア", ES: "スペイン", CA: "カナダ", AU: "オーストラリア", KR: "韓国",
   CN: "中国", IN: "インド", BR: "ブラジル", MX: "メキシコ", RU: "ロシア",
   NZ: "ニュージーランド", SE: "スウェーデン", NO: "ノルウェー", DK: "デンマーク",
@@ -49,6 +49,18 @@ const COUNTRY_NAMES: Record<string, string> = {
 function getCountryName(code: string, fallback: string): string {
   return COUNTRY_NAMES[code] || fallback;
 }
+
+const LANGUAGE_NAMES: Record<string, string> = {
+  en: "英語", ja: "日本語", ko: "韓国語", zh: "中国語", fr: "フランス語",
+  de: "ドイツ語", es: "スペイン語", it: "イタリア語", pt: "ポルトガル語",
+  ru: "ロシア語", hi: "ヒンディー語", ar: "アラビア語", th: "タイ語",
+  sv: "スウェーデン語", da: "デンマーク語", no: "ノルウェー語", fi: "フィンランド語",
+  nl: "オランダ語", pl: "ポーランド語", tr: "トルコ語", id: "インドネシア語",
+  vi: "ベトナム語", ms: "マレー語", tl: "タガログ語", uk: "ウクライナ語",
+  cs: "チェコ語", hu: "ハンガリー語", ro: "ルーマニア語", el: "ギリシャ語",
+  he: "ヘブライ語", fa: "ペルシア語", bn: "ベンガル語", ta: "タミル語",
+  te: "テルグ語", cn: "広東語",
+};
 
 function formatUSD(amount: number): string {
   if (amount >= 1_000_000_000) return `$${(amount / 1_000_000_000).toFixed(1)}B`;
@@ -131,6 +143,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
   const watchProviders = await getWatchProviders(Number(id), type || "movie");
   const releaseCountries = type !== "tv" ? await getReleaseDates(Number(id)) : [];
   const jpReleaseDate = type !== "tv" ? await getJPReleaseDate(Number(id)) : null;
+  const certification = type !== "tv" ? await getCertification(Number(id)) : null;
   const externalIds = await getExternalIds(Number(id), type || "movie");
   const year = movie.release_date?.slice(0, 4);
   const directors = movie.credits?.crew?.filter((c) => c.job === "Director") || [];
@@ -659,7 +672,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               {movie.status && (
                 <div>
                   <p className="text-xs text-gray-400">ステータス</p>
-                  <p className="text-gray-700">{movie.status}</p>
+                  <p className="text-gray-700">{{ Released: "公開済み", "Post Production": "ポストプロダクション", "In Production": "製作中", Planned: "企画段階", Rumored: "噂", Canceled: "中止" }[movie.status] || movie.status}</p>
                 </div>
               )}
               {movie.release_date && (
@@ -694,11 +707,36 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                   </p>
                 </div>
               )}
+              {movie.original_language && (
+                <div>
+                  <p className="text-xs text-gray-400">原語</p>
+                  <p className="text-gray-700">{LANGUAGE_NAMES[movie.original_language] || movie.original_language}</p>
+                </div>
+              )}
+              {certification && (
+                <div>
+                  <p className="text-xs text-gray-400">年齢制限</p>
+                  <p className="text-gray-700">{certification}</p>
+                </div>
+              )}
               {movie.production_companies.length > 0 && (
                 <div className="col-span-2">
                   <p className="text-xs text-gray-400">制作会社</p>
                   <p className="text-gray-700">
                     {movie.production_companies.map((c) => c.name).join(", ")}
+                  </p>
+                </div>
+              )}
+              {movie.homepage && (
+                <div className="col-span-2">
+                  <p className="text-xs text-gray-400">公式サイト</p>
+                  <p className="flex items-center gap-2 text-sm text-gray-700">
+                    <span className="break-all">{movie.homepage}</span>
+                    <a href={movie.homepage} target="_blank" rel="noopener noreferrer" className="flex-shrink-0 text-blue-500 hover:text-blue-600 transition-colors" aria-label="公式サイトを開く">
+                      <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                      </svg>
+                    </a>
                   </p>
                 </div>
               )}
