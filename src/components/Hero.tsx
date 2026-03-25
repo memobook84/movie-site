@@ -25,6 +25,12 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
   const [textVisible, setTextVisible] = useState(true);
   const [displayCurrent, setDisplayCurrent] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
+
+  // スワイプ用
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+  const isSwiping = useRef(false);
 
   const closeTrailer = useCallback(() => setTrailerOpen(false), []);
 
@@ -87,6 +93,35 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
     ? `${IMAGE_BASE_URL}/w1280${movie.backdrop_path}`
     : null;
 
+  // スワイプハンドラ
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    isSwiping.current = false;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+    const diff = Math.abs(touchStartX.current - touchEndX.current);
+    if (diff > 10) isSwiping.current = true;
+  };
+
+  const handleTouchEnd = () => {
+    if (!isSwiping.current) return;
+    const diff = touchStartX.current - touchEndX.current;
+    const threshold = 50;
+    if (diff > threshold) {
+      next();
+    } else if (diff < -threshold) {
+      prev();
+    }
+  };
+
+  const handleClick = () => {
+    if (!isSwiping.current) {
+      router.push(`/movie/${movie.id}`);
+    }
+  };
+
   return (
     <>
       <div className="relative pt-20 md:pt-24 bg-black overflow-hidden">
@@ -94,16 +129,20 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
         {/* メインビジュアル */}
         <div className="relative">
           <div
+            ref={mainRef}
             className="relative w-full cursor-pointer"
             style={{ aspectRatio: "16/9", maxWidth: "900px", margin: "0 auto" }}
-            onClick={() => router.push(`/movie/${movie.id}`)}
+            onClick={handleClick}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           >
             {backdrop ? (
               <img
                 key={movie.id}
                 src={backdrop}
                 alt={title}
-                className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-700"
+                className="absolute inset-0 w-full h-full object-cover object-center animate-[fadeIn_0.5s_ease-in-out]"
               />
             ) : (
               <div className="absolute inset-0 bg-gray-800 flex items-center justify-center text-gray-500">
@@ -156,17 +195,17 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
               </button>
             )}
 
-            {/* 左右矢印 */}
+            {/* 左右矢印（PC時のみ） */}
             <button
               onClick={(e) => { e.stopPropagation(); prev(); }}
-              className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 md:h-12 md:w-12 items-center justify-center border border-white/30 bg-black/50 text-white/80 hover:bg-black/70 hover:text-white transition-all text-xl"
+              className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 h-12 w-12 items-center justify-center border border-white/30 bg-black/50 text-white/80 hover:bg-black/70 hover:text-white transition-all text-xl"
               aria-label="前へ"
             >
               ‹
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); next(); }}
-              className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 md:h-12 md:w-12 items-center justify-center border border-white/30 bg-black/50 text-white/80 hover:bg-black/70 hover:text-white transition-all text-xl"
+              className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 h-12 w-12 items-center justify-center border border-white/30 bg-black/50 text-white/80 hover:bg-black/70 hover:text-white transition-all text-xl"
               aria-label="次へ"
             >
               ›
@@ -209,7 +248,6 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
                   ? `${IMAGE_BASE_URL}/w300${m.backdrop_path}`
                   : null;
                 const mTitle = m.title || m.name || "";
-                const isNowPlaying = item.badge === "上映中";
                 const isActive = m.id === movie.id;
                 return (
                   <button

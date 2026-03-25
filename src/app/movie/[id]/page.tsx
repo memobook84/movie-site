@@ -210,7 +210,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
 
             {/* あらすじ */}
             <div className="space-y-2">
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
                 ストーリー
               </h2>
               <p className="max-w-2xl text-sm leading-7 text-gray-600">
@@ -243,29 +243,6 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               </Link>
             )}
 
-            {/* ボタン */}
-            <div className="flex gap-3 pt-2">
-              {trailer && (
-                <TrailerModal videoKey={trailer.key} />
-              )}
-              <FollowButton
-                movieId={movie.id}
-                title={title}
-                posterPath={movie.poster_path}
-                mediaType={type || "movie"}
-              />
-              <GalleryModal images={images} imageBase={IMAGE_BASE_URL} />
-              {relationData && (
-                <RelationButton
-                  title={title}
-                  characters={relationData.characters}
-                  relationships={relationData.relationships}
-                  imageBase={IMAGE_BASE_URL}
-                  cast={allCast}
-                />
-              )}
-              <ShareButton title={`${title} `} />
-            </div>
           </div>
         </div>
       </div>
@@ -637,179 +614,10 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
           </div>
         )}
 
-        {/* 配信先情報 */}
-        {watchProviders && (watchProviders.flatrate || watchProviders.rent || watchProviders.buy) && (
-          <div className="mt-16 space-y-5">
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
-              配信情報
-            </h2>
-            <div className="space-y-4">
-              {watchProviders.flatrate && watchProviders.flatrate.length > 0 && (
-                <div>
-                  <p className="text-xs text-gray-500 mb-2">定額配信</p>
-                  <div className="flex flex-wrap gap-2">
-                    {watchProviders.flatrate.map((p) => (
-                      <div key={p.provider_id} className="flex items-center gap-1.5">
-                        <img
-                          src={`${IMAGE_BASE_URL}/w92${p.logo_path}`}
-                          alt={p.provider_name}
-                          className="h-8 w-8 rounded-full"
-                          loading="lazy"
-                        />
-                        <span className="text-xs text-gray-700">{p.provider_name}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {watchProviders.rent && watchProviders.rent.length > 0 && (
-                <div>
-                  <p className="text-xs text-gray-500 mb-2">レンタル</p>
-                  <div className="flex flex-wrap gap-2">
-                    {watchProviders.rent.map((p) => (
-                      <div key={p.provider_id} className="flex items-center gap-1.5">
-                        <img
-                          src={`${IMAGE_BASE_URL}/w92${p.logo_path}`}
-                          alt={p.provider_name}
-                          className="h-8 w-8 rounded-full"
-                          loading="lazy"
-                        />
-                        <span className="text-xs text-gray-700">{p.provider_name}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {watchProviders.buy && watchProviders.buy.length > 0 && (
-                <div>
-                  <p className="text-xs text-gray-500 mb-2">購入</p>
-                  <div className="flex flex-wrap gap-2">
-                    {watchProviders.buy.map((p) => (
-                      <div key={p.provider_id} className="flex items-center gap-1.5">
-                        <img
-                          src={`${IMAGE_BASE_URL}/w92${p.logo_path}`}
-                          alt={p.provider_name}
-                          className="h-8 w-8 rounded-full"
-                          loading="lazy"
-                        />
-                        <span className="text-xs text-gray-700">{p.provider_name}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* キャスト（ポラロイド風） */}
-        {cast.length > 0 && (
-          <div className="mt-16 space-y-5">
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
-                キャスト
-              </h2>
-              <Link
-                href={`/movie/${id}/cast?type=${type || "movie"}`}
-                className="flex items-center gap-1 text-xs text-gray-400 transition-colors hover:text-gray-700"
-              >
-                出演者一覧
-                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            </div>
-            <div className="flex gap-2 overflow-x-auto pb-8 scrollbar-hide md:gap-4">
-              {cast.map((person, i) => {
-                const rotations = [-3, 2, -1.5, 3, -2, 1.5, -2.5, 2.5, -1, 3.5];
-                const rot = rotations[i % rotations.length];
-                return (
-                  <Link
-                    key={person.id}
-                    href={`/person/${person.id}`}
-                    className="flex-shrink-0 group transition-all duration-300 hover:scale-110 hover:z-10"
-                  >
-                    <div className="w-[110px] rounded-sm bg-[#faf8f5] p-2 pb-8 shadow-md transition-shadow duration-300 group-hover:shadow-xl md:w-[130px] md:p-2.5 md:pb-10" style={{ boxShadow: '2px 3px 12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.08)' }}>
-                      {person.profile_path ? (
-                        <div className="relative">
-                          <img
-                            src={`${IMAGE_BASE_URL}/w185${person.profile_path}`}
-                            alt={person.name}
-                            className="aspect-[3/4] w-full object-cover grayscale contrast-[1.2] transition-all duration-500 group-hover:grayscale-0 group-hover:contrast-100"
-                            loading="lazy"
-                          />
-                          <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_8px_rgba(0,0,0,0.3)]" />
-                        </div>
-                      ) : (
-                        <div className="relative">
-                          <div className="flex aspect-[3/4] w-full items-center justify-center bg-gray-100 text-3xl text-gray-300">
-                            ?
-                          </div>
-                          <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_8px_rgba(0,0,0,0.3)]" />
-                        </div>
-                      )}
-                      <div className="mt-2 text-center">
-                        <p className="truncate text-[11px] font-semibold text-gray-800">
-                          {person.name}
-                        </p>
-                        <p className="mt-0.5 truncate text-[10px] text-gray-400">
-                          {person.character}
-                          </p>
-                        </div>
-                      </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* シーズン情報（TV番組のみ） */}
-        {type === "tv" && movie.seasons && movie.seasons.length > 0 && (
-          <div className="mt-16 space-y-5">
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
-              シーズン（{movie.number_of_seasons}シーズン・{movie.number_of_episodes}エピソード）
-            </h2>
-            <div className="space-y-3">
-              {movie.seasons
-                .filter((s) => s.season_number > 0)
-                .map((season) => (
-                <div
-                  key={season.id}
-                  className="flex gap-4 rounded-2xl bg-gray-50 p-4 transition-all hover:bg-gray-100"
-                >
-                  {season.poster_path ? (
-                    <img
-                      src={`${IMAGE_BASE_URL}/w185${season.poster_path}`}
-                      alt={season.name}
-                      className="h-[90px] w-[60px] flex-shrink-0 rounded-lg object-cover"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="flex h-[90px] w-[60px] flex-shrink-0 items-center justify-center rounded-lg bg-gray-200 text-xs text-gray-400">
-                      N/A
-                    </div>
-                  )}
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-semibold text-gray-900">{season.name}</p>
-                    <div className="mt-1 flex flex-wrap gap-2 text-xs text-gray-500">
-                      <span>{season.episode_count}エピソード</span>
-                      {season.air_date && <span>{season.air_date.slice(0, 4)}年</span>}
-                    </div>
-                    {season.overview && (
-                      <p className="mt-1.5 text-xs leading-5 text-gray-500 line-clamp-2">{season.overview}</p>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* 作品情報 */}
         {(directors.length > 0 || screenwriters.length > 0 || composers.length > 0 || movie.runtime > 0 || movie.budget > 0 || movie.revenue > 0 || movie.production_companies.length > 0) && (
           <div className="mt-16 space-y-5">
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
+            <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
               作品情報
             </h2>
             <div className="grid max-w-2xl grid-cols-2 gap-4 text-sm">
@@ -895,12 +703,206 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                 </div>
               )}
             </div>
+
+            {/* ボタン */}
+            <div className="flex gap-3 pt-4">
+              {trailer && (
+                <TrailerModal videoKey={trailer.key} />
+              )}
+              <FollowButton
+                movieId={movie.id}
+                title={title}
+                posterPath={movie.poster_path}
+                mediaType={type || "movie"}
+              />
+              <GalleryModal images={images} imageBase={IMAGE_BASE_URL} />
+              {relationData && (
+                <RelationButton
+                  title={title}
+                  characters={relationData.characters}
+                  relationships={relationData.relationships}
+                  imageBase={IMAGE_BASE_URL}
+                  cast={allCast}
+                />
+              )}
+              <ShareButton title={`${title} `} />
+            </div>
           </div>
         )}
+
+        {/* キャスト（ポラロイド風） */}
+        {cast.length > 0 && (
+          <div className="mt-16 space-y-5">
+            <div className="flex items-center justify-between border-b border-gray-300 pb-2">
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
+                キャスト
+              </h2>
+              <Link
+                href={`/movie/${id}/cast?type=${type || "movie"}`}
+                className="flex items-center gap-1 text-xs text-gray-400 transition-colors hover:text-gray-700"
+              >
+                出演者一覧
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
+            <div className="flex gap-2 overflow-x-auto pb-8 scrollbar-hide md:gap-4">
+              {cast.map((person, i) => {
+                const rotations = [-3, 2, -1.5, 3, -2, 1.5, -2.5, 2.5, -1, 3.5];
+                const rot = rotations[i % rotations.length];
+                return (
+                  <Link
+                    key={person.id}
+                    href={`/person/${person.id}`}
+                    className="flex-shrink-0 group transition-all duration-300 hover:scale-110 hover:z-10"
+                  >
+                    <div className="w-[110px] rounded-sm bg-[#faf8f5] p-2 pb-8 shadow-md transition-shadow duration-300 group-hover:shadow-xl md:w-[130px] md:p-2.5 md:pb-10" style={{ boxShadow: '2px 3px 12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.08)' }}>
+                      {person.profile_path ? (
+                        <div className="relative">
+                          <img
+                            src={`${IMAGE_BASE_URL}/w185${person.profile_path}`}
+                            alt={person.name}
+                            className="aspect-[3/4] w-full object-cover grayscale contrast-[1.2] transition-all duration-500 group-hover:grayscale-0 group-hover:contrast-100"
+                            loading="lazy"
+                          />
+                          <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_8px_rgba(0,0,0,0.3)]" />
+                        </div>
+                      ) : (
+                        <div className="relative">
+                          <div className="flex aspect-[3/4] w-full items-center justify-center bg-gray-100 text-3xl text-gray-300">
+                            ?
+                          </div>
+                          <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_8px_rgba(0,0,0,0.3)]" />
+                        </div>
+                      )}
+                      <div className="mt-2 text-center">
+                        <p className="truncate text-[11px] font-semibold text-gray-800">
+                          {person.name}
+                        </p>
+                        <p className="mt-0.5 truncate text-[10px] text-gray-400">
+                          {person.character}
+                          </p>
+                        </div>
+                      </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* シーズン情報（TV番組のみ） */}
+        {type === "tv" && movie.seasons && movie.seasons.length > 0 && (
+          <div className="mt-16 space-y-5">
+            <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
+              シーズン（{movie.number_of_seasons}シーズン・{movie.number_of_episodes}エピソード）
+            </h2>
+            <div className="space-y-3">
+              {movie.seasons
+                .filter((s) => s.season_number > 0)
+                .map((season) => (
+                <div
+                  key={season.id}
+                  className="flex gap-4 rounded-2xl bg-gray-50 p-4 transition-all hover:bg-gray-100"
+                >
+                  {season.poster_path ? (
+                    <img
+                      src={`${IMAGE_BASE_URL}/w185${season.poster_path}`}
+                      alt={season.name}
+                      className="h-[90px] w-[60px] flex-shrink-0 rounded-lg object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="flex h-[90px] w-[60px] flex-shrink-0 items-center justify-center rounded-lg bg-gray-200 text-xs text-gray-400">
+                      N/A
+                    </div>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold text-gray-900">{season.name}</p>
+                    <div className="mt-1 flex flex-wrap gap-2 text-xs text-gray-500">
+                      <span>{season.episode_count}エピソード</span>
+                      {season.air_date && <span>{season.air_date.slice(0, 4)}年</span>}
+                    </div>
+                    {season.overview && (
+                      <p className="mt-1.5 text-xs leading-5 text-gray-500 line-clamp-2">{season.overview}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 配信情報 */}
+        {watchProviders && (watchProviders.flatrate || watchProviders.rent || watchProviders.buy) && (
+          <div className="mt-16 space-y-5">
+            <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
+              配信情報
+            </h2>
+            <div className="space-y-4">
+              {watchProviders.flatrate && watchProviders.flatrate.length > 0 && (
+                <div>
+                  <p className="text-xs text-gray-500 mb-2">定額配信</p>
+                  <div className="flex flex-wrap gap-2">
+                    {watchProviders.flatrate.map((p) => (
+                      <div key={p.provider_id} className="flex items-center gap-1.5">
+                        <img
+                          src={`${IMAGE_BASE_URL}/w92${p.logo_path}`}
+                          alt={p.provider_name}
+                          className="h-8 w-8 rounded-full"
+                          loading="lazy"
+                        />
+                        <span className="text-xs text-gray-700">{p.provider_name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {watchProviders.rent && watchProviders.rent.length > 0 && (
+                <div>
+                  <p className="text-xs text-gray-500 mb-2">レンタル</p>
+                  <div className="flex flex-wrap gap-2">
+                    {watchProviders.rent.map((p) => (
+                      <div key={p.provider_id} className="flex items-center gap-1.5">
+                        <img
+                          src={`${IMAGE_BASE_URL}/w92${p.logo_path}`}
+                          alt={p.provider_name}
+                          className="h-8 w-8 rounded-full"
+                          loading="lazy"
+                        />
+                        <span className="text-xs text-gray-700">{p.provider_name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {watchProviders.buy && watchProviders.buy.length > 0 && (
+                <div>
+                  <p className="text-xs text-gray-500 mb-2">購入</p>
+                  <div className="flex flex-wrap gap-2">
+                    {watchProviders.buy.map((p) => (
+                      <div key={p.provider_id} className="flex items-center gap-1.5">
+                        <img
+                          src={`${IMAGE_BASE_URL}/w92${p.logo_path}`}
+                          alt={p.provider_name}
+                          className="h-8 w-8 rounded-full"
+                          loading="lazy"
+                        />
+                        <span className="text-xs text-gray-700">{p.provider_name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* 公式SNS */}
         {(externalIds.instagram_id || externalIds.twitter_id || externalIds.facebook_id || externalIds.tiktok_id) && (
           <div className="mt-16 space-y-5">
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
+            <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
               公式SNS
             </h2>
             <div className="flex gap-4">
@@ -944,7 +946,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* 関連作品 */}
         {recommendations.length > 0 && (
           <div className="mt-16 space-y-5">
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
+            <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
               関連作品
             </h2>
             <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">

@@ -77,9 +77,11 @@ export default function PersonCreditsGrid({ castCredits, directorCredits }: Prop
           ))}
         </div>
       ) : (
-        <h2 className="text-lg font-semibold text-[#1d1d1f]">
-          {tabs[0].label}（{tabs[0].count}）
-        </h2>
+        <div className="border-b border-gray-200">
+          <span className="inline-block px-4 py-2.5 text-sm font-medium border-b-2 border-[#1d1d1f] text-[#1d1d1f]">
+            {tabs[0].label}（{tabs[0].count}）
+          </span>
+        </div>
       )}
 
       {/* ソート */}

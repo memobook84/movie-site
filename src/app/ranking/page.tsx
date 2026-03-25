@@ -54,7 +54,7 @@ function RankingSection({
             <Link
               key={movie.id}
               href={`/movie/${movie.id}`}
-              className="group flex items-center gap-4 rounded-2xl bg-white p-3 transition-all hover:bg-gray-50 hover:shadow-md md:p-4"
+              className="group flex items-center gap-4 bg-white p-3 transition-all hover:bg-gray-50 hover:shadow-md md:p-4"
             >
               <RankBadge rank={i + 1} />
               {/* ポスター */}

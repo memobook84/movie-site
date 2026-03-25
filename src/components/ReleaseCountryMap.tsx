@@ -78,7 +78,7 @@ function ReleaseCountryMap({ releaseCountries, productionCountries }: Props) {
 
   return (
     <div className="mt-16 space-y-5">
-      <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
+      <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
         製作国・上映国
       </h2>
       <div className="w-full max-w-4xl">
