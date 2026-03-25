@@ -3,8 +3,8 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { IMAGE_BASE_URL, Movie } from "@/lib/tmdb";
 import { useRouter } from "next/navigation";
-import { AiFillThunderbolt } from "react-icons/ai";
-import { PiPlayCircle } from "react-icons/pi";
+import { MdElectricBolt } from "react-icons/md";
+import { IoPlayCircle } from "react-icons/io5";
 
 interface CarouselItem {
   movie: Movie;
@@ -112,7 +112,7 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
             )}
 
             {/* 左上 雷アイコン */}
-            <AiFillThunderbolt className="absolute top-3 left-3 md:top-4 md:left-4 w-7 h-7 md:w-9 md:h-9 text-red-500 drop-shadow-lg z-10" />
+            <MdElectricBolt className="absolute top-3 left-3 md:top-4 md:left-4 w-7 h-7 md:w-9 md:h-9 text-red-500 drop-shadow-lg z-10" />
 
             {/* 下部グラデーション */}
             <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
@@ -152,7 +152,7 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
                 className="absolute bottom-3 right-3 md:bottom-6 md:right-8 z-10 hover:scale-110 transition-transform"
                 aria-label="トレーラー再生"
               >
-                <PiPlayCircle className="w-10 h-10 md:w-12 md:h-12 text-white/50 drop-shadow-lg" />
+                <IoPlayCircle className="w-7 h-7 md:w-9 md:h-9 text-white/50 drop-shadow-lg" />
               </button>
             )}
 
@@ -179,7 +179,7 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
           <div className="relative py-3">
             <div className="flex items-center justify-between px-2 mb-2">
               <span className="flex items-center gap-1 text-red-500 font-bold text-xs tracking-wide">
-                <AiFillThunderbolt className="w-4 h-4" />
+                <MdElectricBolt className="w-4 h-4" />
                 上映中
               </span>
               <div className="flex gap-1">
@@ -237,7 +237,7 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
                         No Image
                       </div>
                     )}
-                    <AiFillThunderbolt className="absolute top-1 left-1 w-4 h-4 text-red-500 drop-shadow-md" />
+                    <MdElectricBolt className="absolute top-1 left-1 w-4 h-4 text-red-500 drop-shadow-md" />
                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-1 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                       <p className="text-white text-[10px] leading-tight line-clamp-1">{mTitle}</p>
                     </div>

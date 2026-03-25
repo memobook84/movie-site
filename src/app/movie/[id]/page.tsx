@@ -174,11 +174,11 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
           {/* 詳細情報 */}
           <div className="flex-1 space-y-5 md:pt-32">
             <div>
-              <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-4xl">
+              <h1 className="text-2xl font-normal tracking-tight text-gray-900 md:text-4xl">
                 {title}
               </h1>
               {movie.tagline && (
-                <p className="mt-2 text-sm font-light text-gray-500">
+                <p className="mt-2 text-sm leading-7 text-gray-600">
                   &ldquo;{movie.tagline}&rdquo;
                 </p>
               )}
@@ -869,13 +869,13 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               {movie.budget > 0 && (
                 <div>
                   <p className="text-xs text-gray-400">予算</p>
-                  <p className="text-gray-700">約{(movie.budget * 150 / 100000000).toFixed(1)}億円（{formatUSD(movie.budget)}）</p>
+                  <p className="text-gray-700">約{(movie.budget * 150 / 100000000).toFixed(1)}億円</p>
                 </div>
               )}
               {movie.revenue > 0 && (
                 <div>
                   <p className="text-xs text-gray-400">興行収入</p>
-                  <p className="text-gray-700">約{(movie.revenue * 150 / 100000000).toFixed(1)}億円（{formatUSD(movie.revenue)}）</p>
+                  <p className="text-gray-700">約{(movie.revenue * 150 / 100000000).toFixed(1)}億円</p>
                 </div>
               )}
               {movie.production_countries && movie.production_countries.length > 0 && (

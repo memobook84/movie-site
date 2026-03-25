@@ -4,14 +4,15 @@ import Link from "next/link";
 import { X, Home, CalendarDays, Tent, Film, Trophy, Glasses, ShieldCheck } from "lucide-react";
 
 const menuItems = [
-  { href: "/", label: "ホーム", icon: Home, description: "トップページ" },
-  { href: "/schedule", label: "スケジュール", icon: CalendarDays, description: "公開予定の映画" },
-  { href: "/genres", label: "ジャンル", icon: Tent, description: "ジャンルから探す" },
-  { href: "/selection", label: "セレクション", icon: Film, description: "おすすめコレクション" },
-  { href: "/ranking", label: "ランキング", icon: Trophy, description: "人気ランキング" },
-  { href: "/follows", label: "ウォッチリスト", icon: Glasses, description: "お気に入りリスト" },
-  { href: "/privacy", label: "プライバシーポリシー", icon: ShieldCheck, description: "個人情報の取り扱い" },
+  { href: "/", label: "ホーム", icon: Home },
+  { href: "/schedule", label: "スケジュール", icon: CalendarDays },
+  { href: "/genres", label: "ジャンル", icon: Tent },
+  { href: "/selection", label: "セレクション", icon: Film },
+  { href: "/ranking", label: "ランキング", icon: Trophy },
+  { href: "/follows", label: "ウォッチリスト", icon: Glasses },
+  { href: "/privacy", label: "プライバシー", icon: ShieldCheck },
 ];
+
 
 export default function MobileMenu({ onClose }: { onClose: () => void }) {
   return (
@@ -36,11 +37,16 @@ export default function MobileMenu({ onClose }: { onClose: () => void }) {
               key={item.href}
               href={item.href}
               onClick={onClose}
-              className="flex flex-col items-center gap-2 rounded-[5px] border-2 border-[#323232] bg-white p-3 text-center transition-all duration-300 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none active:scale-95"
-              style={{ boxShadow: '4px 4px #323232' }}
+              className="menu-card flex flex-col items-center gap-2 p-2.5 text-center w-full"
             >
-              <item.icon className="h-7 w-7 text-[#323232]" />
-              <span className="text-[11px] font-medium text-[#323232]">{item.label}</span>
+              <div className="menu-card__shine" />
+              <div className="menu-card__glow" />
+              <div className="relative z-[2] flex flex-col items-center gap-2 w-full">
+                <div className="w-full h-12 rounded-lg bg-[#424242] flex items-center justify-center">
+                  <item.icon className="h-6 w-6 text-white" />
+                </div>
+                <span className="text-[11px] font-medium text-gray-800">{item.label}</span>
+              </div>
             </Link>
           ))}
         </div>
