@@ -7,8 +7,9 @@ export const metadata: Metadata = {
 
 export const revalidate = 86400;
 
+import Hero from "@/components/Hero";
 import MovieRow from "@/components/MovieRow";
-import { getTrending, getPopular, getTopRated, getUpcoming, getMoviesByGenre, GENRES, Movie } from "@/lib/tmdb";
+import { getTrending, getPopular, getTopRated, getUpcoming, getMoviesByGenre, getMovieDetail, getNowPlayingJP, getUpcomingJP, GENRES, Movie } from "@/lib/tmdb";
 
 function shuffle(arr: Movie[]): Movie[] {
   const a = [...arr];
@@ -70,11 +71,12 @@ export default async function Home() {
   }
   const shuffledOther = shuffle(otherList);
 
-  // 50:50 で混合（アニメとその他を交互に配置）
+  // 20:80 で混合（アニメ20%、その他80%）
   const totalCount = Math.min(shuffledAnime.length + shuffledOther.length, 400);
-  const halfCount = Math.floor(totalCount / 2);
-  const animePool = shuffledAnime.slice(0, halfCount);
-  const otherPool = shuffledOther.slice(0, halfCount);
+  const animeCount = Math.floor(totalCount * 0.2);
+  const otherCount = totalCount - animeCount;
+  const animePool = shuffledAnime.slice(0, animeCount);
+  const otherPool = shuffledOther.slice(0, otherCount);
 
   // 交互にミックスしてからシャッフル
   const mixed: Movie[] = [];
@@ -94,12 +96,40 @@ export default async function Home() {
     if (chunk.length > 0) rows.push(chunk);
   }
 
+  // ヒーロー用：上映中 + 近日公開（日本）
+  const [nowPlaying, upcomingJP] = await Promise.all([
+    getNowPlayingJP(1),
+    getUpcomingJP(1),
+  ]);
+  const heroMovies = nowPlaying.filter((m: Movie) => m.backdrop_path);
+  const nowPlayingIds = new Set(nowPlaying.map((m: Movie) => m.id));
+  // 近日公開（上映中と重複しないもの、backdrop有り）
+  const upcomingMovies = upcomingJP.filter(
+    (m: Movie) => m.backdrop_path && !nowPlayingIds.has(m.id)
+  );
+
+  // ヒーロー作品のトレーラーキーを取得
+  const heroDetails = await Promise.all(heroMovies.map((m: Movie) => getMovieDetail(m.id)));
+  const heroTrailerKeys: Record<number, string> = {};
+  const heroCasts: Record<number, string[]> = {};
+  for (const detail of heroDetails) {
+    const trailer = detail.videos?.results?.find(
+      (v: { type: string; site: string }) => v.type === "Trailer" && v.site === "YouTube"
+    );
+    if (trailer) heroTrailerKeys[detail.id] = trailer.key;
+    if (detail.credits?.cast) {
+      heroCasts[detail.id] = detail.credits.cast.slice(0, 3).map((c: { name: string }) => c.name);
+    }
+  }
+
   return (
-    <main className="space-y-6 pb-12">
-      <div className="h-16 md:h-24" />
-      {rows.map((movies, i) => (
-        <MovieRow key={i} title="" movies={movies} />
-      ))}
-    </main>
+    <>
+      <Hero movies={heroMovies} upcomingMovies={upcomingMovies} trailerKeys={heroTrailerKeys} casts={heroCasts} />
+      <main className="space-y-6 pb-12">
+        {rows.map((movies, i) => (
+          <MovieRow key={i} title="" movies={movies} />
+        ))}
+      </main>
+    </>
   );
 }

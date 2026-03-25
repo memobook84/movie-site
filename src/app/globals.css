@@ -25,6 +25,7 @@ body {
   scrollbar-width: none;
 }
 
+
 /* スプラッシュ演出 */
 @keyframes fadeIn {
   0% { opacity: 0; }
