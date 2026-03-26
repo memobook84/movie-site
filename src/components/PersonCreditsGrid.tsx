@@ -116,7 +116,7 @@ export default function PersonCreditsGrid({ castCredits, directorCredits }: Prop
               href={`/movie/${movie.id}?type=${type}`}
               className="group"
             >
-              <div className="relative overflow-hidden rounded-lg transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:shadow-black/10">
+              <div className="relative overflow-hidden rounded-[4px] transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:shadow-black/10">
                 <img
                   src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}
                   alt={title}

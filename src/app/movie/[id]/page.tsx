@@ -840,11 +840,11 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                     <img
                       src={`${IMAGE_BASE_URL}/w185${season.poster_path}`}
                       alt={season.name}
-                      className="h-[90px] w-[60px] flex-shrink-0 rounded-lg object-cover"
+                      className="h-[90px] w-[60px] flex-shrink-0 rounded-[4px] object-cover"
                       loading="lazy"
                     />
                   ) : (
-                    <div className="flex h-[90px] w-[60px] flex-shrink-0 items-center justify-center rounded-lg bg-gray-200 text-xs text-gray-400">
+                    <div className="flex h-[90px] w-[60px] flex-shrink-0 items-center justify-center rounded-[4px] bg-gray-200 text-xs text-gray-400">
                       N/A
                     </div>
                   )}
@@ -990,11 +990,11 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                     <img
                       src={`${IMAGE_BASE_URL}/w185${rec.poster_path}`}
                       alt={rec.title || rec.name || ""}
-                      className="w-full rounded-lg shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:scale-105"
+                      className="w-full rounded-[4px] shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:scale-105"
                       loading="lazy"
                     />
                   ) : (
-                    <div className="w-full aspect-[2/3] rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
+                    <div className="w-full aspect-[2/3] rounded-[4px] bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
                       No Image
                     </div>
                   )}

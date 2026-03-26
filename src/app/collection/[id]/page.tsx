@@ -109,11 +109,11 @@ export default async function CollectionPage({ params }: PageProps) {
                         <img
                           src={`${IMAGE_BASE_URL}/w342${part.poster_path}`}
                           alt={part.title || part.name || ""}
-                          className="h-[150px] w-[100px] flex-shrink-0 rounded-lg object-cover md:h-[180px] md:w-[120px]"
+                          className="h-[150px] w-[100px] flex-shrink-0 rounded-[4px] object-cover md:h-[180px] md:w-[120px]"
                           loading="lazy"
                         />
                       ) : (
-                        <div className="flex h-[150px] w-[100px] flex-shrink-0 items-center justify-center rounded-lg bg-gray-200 text-xs text-gray-400 md:h-[180px] md:w-[120px]">
+                        <div className="flex h-[150px] w-[100px] flex-shrink-0 items-center justify-center rounded-[4px] bg-gray-200 text-xs text-gray-400 md:h-[180px] md:w-[120px]">
                           N/A
                         </div>
                       )}

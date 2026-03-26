@@ -75,7 +75,7 @@ export default function FollowsPage() {
                 href={`/movie/${item.id}?type=${item.mediaType}`}
                 className="group"
               >
-                <div className="relative overflow-hidden rounded-lg">
+                <div className="relative overflow-hidden rounded-[4px]">
                   {item.posterPath ? (
                     <img
                       src={`https://image.tmdb.org/t/p/w342${item.posterPath}`}

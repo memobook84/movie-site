@@ -59,7 +59,7 @@ export default async function GenrePage({ params, searchParams }: PageProps) {
               href={`/movie/${movie.id}`}
               className="group"
             >
-              <div className="overflow-hidden rounded-lg transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:shadow-black/10">
+              <div className="overflow-hidden rounded-[4px] transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:shadow-black/10">
                 {movie.poster_path ? (
                   <img
                     src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}

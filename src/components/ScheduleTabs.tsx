@@ -52,7 +52,7 @@ function MovieGrid({ movies, showReleaseBadge }: { movies: Movie[]; showReleaseB
     <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
       {movies.map((movie) => (
         <Link key={movie.id} href={`/movie/${movie.id}`} className="group">
-          <div className="relative overflow-hidden rounded-lg bg-gray-100 transition-all duration-300 group-hover:shadow-lg group-hover:scale-[1.03]">
+          <div className="relative overflow-hidden rounded-[4px] bg-gray-100 transition-all duration-300 group-hover:shadow-lg group-hover:scale-[1.03]">
             {movie.poster_path ? (
               <img
                 src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}

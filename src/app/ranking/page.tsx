@@ -58,7 +58,7 @@ function RankingSection({
             >
               <RankBadge rank={i + 1} />
               {/* ポスター */}
-              <div className="h-16 w-11 flex-shrink-0 overflow-hidden rounded-lg md:h-20 md:w-14">
+              <div className="h-16 w-11 flex-shrink-0 overflow-hidden rounded-[4px] md:h-20 md:w-14">
                 {movie.poster_path ? (
                   <img
                     src={`${IMAGE_BASE_URL}/w185${movie.poster_path}`}
