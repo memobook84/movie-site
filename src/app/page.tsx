@@ -9,7 +9,8 @@ export const revalidate = 86400;
 
 import Hero from "@/components/Hero";
 import MovieRow from "@/components/MovieRow";
-import { getTrending, getPopular, getTopRated, getUpcoming, getMoviesByGenre, getMovieDetail, getNowPlayingJP, getUpcomingJP, GENRES, Movie } from "@/lib/tmdb";
+import PeopleRow from "@/components/PeopleRow";
+import { getTrending, getPopular, getTopRated, getUpcoming, getMoviesByGenre, getMovieDetail, getNowPlayingJP, getUpcomingJP, getTrendingPeople, GENRES, Movie } from "@/lib/tmdb";
 
 function shuffle(arr: Movie[]): Movie[] {
   const a = [...arr];
@@ -21,7 +22,7 @@ function shuffle(arr: Movie[]): Movie[] {
 }
 
 export default async function Home() {
-  const [otherResults, animeMovies] = await Promise.all([
+  const [otherResults, animeMovies, trendingPeople, topRatedRaw] = await Promise.all([
     Promise.all([
       getTrending(),
       getPopular(),
@@ -45,6 +46,8 @@ export default async function Home() {
     ]),
     // 日本のアニメを複数ページ取得して多めに確保
     getMoviesByGenre(GENRES.ANIMATION, 3, "ja"),
+    getTrendingPeople(),
+    getTopRated(),
   ]);
 
   // アニメ作品を重複除去・シャッフル
@@ -96,6 +99,9 @@ export default async function Home() {
     if (chunk.length > 0) rows.push(chunk);
   }
 
+  // 高評価の名作（専用行用にシャッフル）
+  const topRatedMovies = shuffle(topRatedRaw);
+
   // ヒーロー用：上映中 + 近日公開（日本）
   const [nowPlaying, upcomingJP] = await Promise.all([
     getNowPlayingJP(1),
@@ -127,7 +133,24 @@ export default async function Home() {
       <Hero movies={heroMovies} upcomingMovies={upcomingMovies} trailerKeys={heroTrailerKeys} casts={heroCasts} />
       <main className="space-y-6 pb-12">
         {rows.map((movies, i) => (
-          <MovieRow key={i} title="" movies={movies} />
+          <div key={i}>
+            <MovieRow title="" movies={movies} />
+            {i === 4 && trendingPeople.length > 0 && (
+              <div className="mt-6 border-y border-gray-200 bg-gray-50 py-6">
+                <PeopleRow title="注目の人物" subtitle="Trending People" people={trendingPeople} />
+              </div>
+            )}
+            {i === 9 && topRatedMovies.length > 0 && (
+              <div className="mt-6 mb-10 border-y border-gray-200 bg-gray-50 pt-6 pb-10">
+                <MovieRow
+                  title="不朽の名作"
+                  subtitle="Timeless Classics"
+                  movies={topRatedMovies}
+                  cardVariant="oscar"
+                />
+              </div>
+            )}
+          </div>
         ))}
       </main>
     </>

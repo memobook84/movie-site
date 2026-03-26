@@ -156,8 +156,10 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
 
   return (
     <main className="min-h-screen bg-white">
+      {/* ナビバーとの隙間を埋める */}
+      <div className="h-16 bg-[#424242]" />
       {/* ヒーロー画像 + ポスター */}
-      <div className="relative mt-16 h-[56vw] max-h-[520px] w-full md:h-[25vw] md:max-h-[400px]">
+      <div className="relative h-[56vw] max-h-[520px] w-full md:h-[25vw] md:max-h-[400px]">
         {movie.backdrop_path && (
           <div
             className="absolute inset-0 bg-cover bg-top"
@@ -655,24 +657,10 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                   </p>
                 </div>
               )}
-              {composers.length > 0 && (
-                <div>
-                  <p className="text-xs text-gray-400">音楽</p>
-                  <p className="text-gray-700">
-                    {composers.map((c) => c.name).join(", ")}
-                  </p>
-                </div>
-              )}
               {movie.runtime > 0 && (
                 <div>
                   <p className="text-xs text-gray-400">上映時間</p>
                   <p className="text-gray-700">{Math.floor(movie.runtime / 60)}時間{movie.runtime % 60}分</p>
-                </div>
-              )}
-              {movie.status && (
-                <div>
-                  <p className="text-xs text-gray-400">ステータス</p>
-                  <p className="text-gray-700">{{ Released: "公開済み", "Post Production": "ポストプロダクション", "In Production": "製作中", Planned: "企画段階", Rumored: "噂", Canceled: "中止" }[movie.status] || movie.status}</p>
                 </div>
               )}
               {movie.release_date && (
@@ -717,6 +705,12 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                 <div>
                   <p className="text-xs text-gray-400">年齢制限</p>
                   <p className="text-gray-700">{certification}</p>
+                </div>
+              )}
+              {movie.status && (
+                <div>
+                  <p className="text-xs text-gray-400">ステータス</p>
+                  <p className="text-gray-700">{{ Released: "公開済み", "Post Production": "ポストプロダクション", "In Production": "製作中", Planned: "企画段階", Rumored: "噂", Canceled: "中止" }[movie.status] || movie.status}</p>
                 </div>
               )}
               {movie.production_companies.length > 0 && (

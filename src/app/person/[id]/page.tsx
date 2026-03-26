@@ -87,7 +87,7 @@ export default async function PersonPage({ params }: PageProps) {
     <main className="min-h-screen pt-24 pb-28 px-6 md:px-16 max-w-7xl mx-auto">
       {/* プロフィール */}
       <div className="flex flex-col items-start gap-6 sm:flex-row">
-        <div className="w-[45%] max-w-[200px] flex-shrink-0 rounded-sm bg-[#111] p-3 pb-12 sm:w-52 sm:max-w-none sm:p-3.5 sm:pb-14" style={{ boxShadow: '0 0 8px rgba(0,200,255,0.6), 0 0 20px rgba(0,200,255,0.3), inset 0 0 8px rgba(0,200,255,0.1)' }}>
+        <div className="w-[45%] max-w-[200px] flex-shrink-0 rounded-sm bg-[#faf8f5] p-3 pb-12 sm:w-52 sm:max-w-none sm:p-3.5 sm:pb-14" style={{ boxShadow: '2px 3px 12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.08)' }}>
           {person.profile_path ? (
             <div className="relative">
               <img

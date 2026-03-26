@@ -1,19 +1,16 @@
 "use client";
 
 import { useRef } from "react";
-import { Movie } from "@/lib/tmdb";
-import MovieCard from "./MovieCard";
+import { Person } from "@/lib/tmdb";
+import PersonCard from "./PersonCard";
 
-interface MovieRowProps {
+interface PeopleRowProps {
   title: string;
-  movies: Movie[];
-  titleClassName?: string;
   subtitle?: string;
-  cardVariant?: "default" | "oscar";
-  showUnderline?: boolean;
+  people: Person[];
 }
 
-export default function MovieRow({ title, movies, titleClassName, subtitle, cardVariant = "default", showUnderline = false }: MovieRowProps) {
+export default function PeopleRow({ title, subtitle, people }: PeopleRowProps) {
   const rowRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -27,13 +24,12 @@ export default function MovieRow({ title, movies, titleClassName, subtitle, card
     <div className="space-y-3 px-6 md:px-16">
       {title && (
         <div>
-          <h2 className={titleClassName || "text-lg font-semibold tracking-wide text-[#1d1d1f] md:text-xl"}>
+          <h2 className="text-lg font-semibold tracking-wide text-[#1d1d1f] md:text-xl">
             {title}
           </h2>
           {subtitle && (
             <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-gray-400 md:text-xs">{subtitle}</p>
           )}
-          {showUnderline && <hr className="mt-2 border-t border-gray-300" />}
         </div>
       )}
       <div className="group/row relative">
@@ -49,8 +45,8 @@ export default function MovieRow({ title, movies, titleClassName, subtitle, card
           className="flex gap-3 overflow-x-auto scroll-smooth scrollbar-hide md:gap-6"
           style={{ scrollbarWidth: "none" }}
         >
-          {movies.map((movie) => (
-            <MovieCard key={movie.id} movie={movie} variant={cardVariant} />
+          {people.map((person) => (
+            <PersonCard key={person.id} person={person} />
           ))}
         </div>
         <button

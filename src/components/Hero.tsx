@@ -27,10 +27,14 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
   const scrollRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
 
-  // スワイプ用
-  const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
-  const isSwiping = useRef(false);
+  // スムーズスワイプ用
+  const dragStartX = useRef(0);
+  const dragOffset = useRef(0);
+  const isDraggingRef = useRef(false);
+  const didSwipe = useRef(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const lastMoveTime = useRef(0);
+  const velocity = useRef(0);
 
   const closeTrailer = useCallback(() => setTrailerOpen(false), []);
 
@@ -89,38 +93,101 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
   const prev = () => setCurrent((c) => (c === 0 ? movies.length - 1 : c - 1));
   const next = () => setCurrent((c) => (c === movies.length - 1 ? 0 : c + 1));
 
-  const backdrop = movie.backdrop_path
-    ? `${IMAGE_BASE_URL}/w1280${movie.backdrop_path}`
-    : null;
+  // --- スムーズスワイプハンドラ (メインビジュアル) ---
+  const animatingRef = useRef(false);
 
-  // スワイプハンドラ
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    isSwiping.current = false;
+  const setTrackTransform = (px: number, animate: boolean) => {
+    if (!trackRef.current) return;
+    if (animate) {
+      trackRef.current.style.transition = "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)";
+    } else {
+      trackRef.current.style.transition = "none";
+    }
+    trackRef.current.style.transform = `translateX(${px}px)`;
   };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    touchEndX.current = e.touches[0].clientX;
-    const diff = Math.abs(touchStartX.current - touchEndX.current);
-    if (diff > 10) isSwiping.current = true;
+  const startDrag = (clientX: number) => {
+    if (animatingRef.current) return;
+    dragStartX.current = clientX;
+    dragOffset.current = 0;
+    didSwipe.current = false;
+    isDraggingRef.current = true;
+    velocity.current = 0;
+    lastMoveTime.current = Date.now();
+    setTrackTransform(0, false);
   };
 
-  const handleTouchEnd = () => {
-    if (!isSwiping.current) return;
-    const diff = touchStartX.current - touchEndX.current;
-    const threshold = 50;
-    if (diff > threshold) {
-      next();
-    } else if (diff < -threshold) {
-      prev();
+  const moveDrag = (clientX: number) => {
+    if (!isDraggingRef.current) return;
+    const now = Date.now();
+    const dx = clientX - dragStartX.current;
+    const dt = now - lastMoveTime.current;
+    if (dt > 0) velocity.current = (dx - dragOffset.current) / dt;
+    lastMoveTime.current = now;
+    dragOffset.current = dx;
+    if (Math.abs(dx) > 5) didSwipe.current = true;
+    setTrackTransform(dx, false);
+  };
+
+  const endDrag = () => {
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
+    const containerW = mainRef.current?.offsetWidth ?? 400;
+    const ratio = dragOffset.current / containerW;
+    const v = velocity.current; // px/ms
+
+    const onTransitionDone = (dir: "next" | "prev") => {
+      animatingRef.current = true;
+      const target = dir === "next" ? -containerW : containerW;
+      setTrackTransform(target, true);
+
+      const handler = () => {
+        trackRef.current?.removeEventListener("transitionend", handler);
+        if (dir === "next") next(); else prev();
+        // requestAnimationFrameで状態更新後にリセット
+        requestAnimationFrame(() => {
+          setTrackTransform(0, false);
+          animatingRef.current = false;
+        });
+      };
+      trackRef.current?.addEventListener("transitionend", handler);
+    };
+
+    // 速度 or 距離で判定（軽いフリックでもスライド）
+    if (ratio < -0.1 || v < -0.3) {
+      onTransitionDone("next");
+    } else if (ratio > 0.1 || v > 0.3) {
+      onTransitionDone("prev");
+    } else {
+      setTrackTransform(0, true);
     }
   };
 
+  // タッチイベント
+  const handleTouchStart = (e: React.TouchEvent) => startDrag(e.touches[0].clientX);
+  const handleTouchMove = (e: React.TouchEvent) => moveDrag(e.touches[0].clientX);
+  const handleTouchEnd = () => endDrag();
+
+  // マウスイベント（F12デバッグ用にも対応）
+  const handleMouseDown = (e: React.MouseEvent) => { e.preventDefault(); startDrag(e.clientX); };
+  const handleMouseMove = (e: React.MouseEvent) => moveDrag(e.clientX);
+  const handleMouseUp = () => endDrag();
+  const handleMouseLeave = () => { if (isDraggingRef.current) endDrag(); };
+
   const handleClick = () => {
-    if (!isSwiping.current) {
+    if (!didSwipe.current) {
       router.push(`/movie/${movie.id}`);
     }
   };
+
+  // 前・現在・次の画像を計算
+  const prevIdx = (current - 1 + movies.length) % movies.length;
+  const nextIdx = (current + 1) % movies.length;
+  const slides = [
+    { idx: prevIdx, movie: movies[prevIdx], pos: -1 },
+    { idx: current, movie: movies[current], pos: 0 },
+    { idx: nextIdx, movie: movies[nextIdx], pos: 1 },
+  ];
 
   return (
     <>
@@ -130,31 +197,55 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
         <div className="relative">
           <div
             ref={mainRef}
-            className="relative w-full cursor-pointer"
+            className="relative w-full cursor-pointer overflow-hidden"
             style={{ aspectRatio: "16/9", maxWidth: "900px", margin: "0 auto" }}
-            onClick={handleClick}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseLeave}
+            onClick={handleClick}
           >
-            {backdrop ? (
-              <img
-                key={movie.id}
-                src={backdrop}
-                alt={title}
-                className="absolute inset-0 w-full h-full object-cover object-center animate-[fadeIn_0.5s_ease-in-out]"
-              />
-            ) : (
-              <div className="absolute inset-0 bg-gray-800 flex items-center justify-center text-gray-500">
-                No Image
-              </div>
-            )}
+            {/* 3枚スライドトラック（DOM直接操作で60fps） */}
+            <div
+              ref={trackRef}
+              className="absolute inset-0 w-full h-full"
+              style={{ willChange: "transform" }}
+            >
+              {slides.map((slide) => {
+                const bg = slide.movie.backdrop_path
+                  ? `${IMAGE_BASE_URL}/w1280${slide.movie.backdrop_path}`
+                  : null;
+                return (
+                  <div
+                    key={slide.movie.id + "-" + slide.pos}
+                    className="absolute inset-0 w-full h-full"
+                    style={{ transform: `translateX(${slide.pos * 100}%)` }}
+                  >
+                    {bg ? (
+                      <img
+                        src={bg}
+                        alt={slide.movie.title || slide.movie.name || ""}
+                        className="w-full h-full object-cover object-center"
+                        draggable={false}
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gray-800 flex items-center justify-center text-gray-500">
+                        No Image
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
 
             {/* 左上 雷アイコン */}
             <MdElectricBolt className="absolute top-3 left-3 md:top-4 md:left-4 w-7 h-7 md:w-9 md:h-9 text-red-500 drop-shadow-lg z-10" />
 
             {/* 下部グラデーション */}
-            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-[5]" />
 
             {/* タイトル + Trailer（アニメーション付き） */}
             <div className="absolute bottom-3 left-3 md:bottom-6 md:left-8 z-10 max-w-[80%]">
@@ -169,7 +260,7 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
                   {title}
                 </h2>
                 {displayMovie.overview && (
-                  <p className="text-white/80 text-xs md:text-sm leading-relaxed line-clamp-3 max-w-lg drop-shadow">
+                  <p className="hidden md:line-clamp-2 text-white/80 text-xs md:text-sm leading-relaxed max-w-lg drop-shadow">
                     {displayMovie.overview}
                   </p>
                 )}
@@ -240,7 +331,7 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
             </div>
             <div
               ref={scrollRef}
-              className="flex gap-3 overflow-hidden px-2"
+              className="flex gap-3 overflow-hidden px-2 scrollbar-hide"
             >
               {allItems.map((item) => {
                 const m = item.movie;

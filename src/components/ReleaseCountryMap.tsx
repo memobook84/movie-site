@@ -68,10 +68,10 @@ function ReleaseCountryMap({ releaseCountries, productionCountries }: Props) {
   }, []);
 
   const width = 800;
-  const height = 400;
+  const height = 440;
   const projection = geoNaturalEarth1()
-    .scale(155)
-    .center([0, 20])
+    .scale(140)
+    .center([0, 5])
     .translate([width / 2, height / 2]);
   const path = geoPath(projection);
   const graticule = geoGraticule().step([15, 15]);
@@ -84,17 +84,10 @@ function ReleaseCountryMap({ releaseCountries, productionCountries }: Props) {
       <div className="w-full max-w-4xl">
         <svg
           ref={svgRef}
-          viewBox={`0 0 ${width} ${height}`}
+          viewBox={`-4 -4 ${width + 8} ${height + 8}`}
           style={{ width: "100%", height: "auto", background: "#FFFFFF", borderRadius: "12px" }}
         >
-          {/* グリッド線 */}
-          <path
-            d={path(graticule()) || ""}
-            fill="none"
-            stroke="#B0BEC5"
-            strokeWidth={0.4}
-            opacity={0.7}
-          />
+          {/* グリッド線（非表示） */}
           {/* 外枠 */}
           <path
             d={path(graticule.outline()) || ""}

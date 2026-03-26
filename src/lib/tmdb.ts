@@ -96,6 +96,24 @@ async function fetchTMDb<T>(endpoint: string, fallback: T): Promise<T> {
 
 const emptyResponse: TMDbResponse = { results: [] };
 
+export interface Person {
+  id: number;
+  name: string;
+  profile_path: string | null;
+  known_for_department: string;
+}
+
+interface PersonResponse {
+  results: Person[];
+}
+
+const emptyPersonResponse: PersonResponse = { results: [] };
+
+export async function getTrendingPeople(): Promise<Person[]> {
+  const data = await fetchTMDb<PersonResponse>("/person/popular", emptyPersonResponse);
+  return data.results;
+}
+
 export async function getTrending(): Promise<Movie[]> {
   const data = await fetchTMDb<TMDbResponse>("/trending/movie/week", emptyResponse);
   return data.results;
