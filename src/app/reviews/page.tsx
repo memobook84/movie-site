@@ -58,7 +58,7 @@ export default async function ReviewsPage() {
               href={`/movie/${movie.id}?type=${item.type}`}
               className="group"
             >
-              <div className="relative overflow-hidden rounded-xl transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-black/15">
+              <div className="relative overflow-hidden rounded-lg transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-black/15">
                 {movie.poster_path ? (
                   <img
                     src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}

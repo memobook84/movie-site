@@ -8,7 +8,7 @@ export default function Loading() {
       <div className="-mt-36 relative z-10 px-6 md:px-16">
         <div className="flex flex-col gap-10 md:flex-row">
           {/* ポスター */}
-          <div className="w-48 md:w-64 aspect-[2/3] animate-pulse rounded-2xl bg-gray-200" />
+          <div className="w-48 md:w-64 aspect-[2/3] animate-pulse rounded-lg bg-gray-200" />
 
           {/* 詳細情報 */}
           <div className="flex-1 space-y-6">

@@ -156,19 +156,17 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
 
   return (
     <main className="min-h-screen bg-white">
-      {/* ナビバーとの隙間を埋める */}
-      <div className="h-16 bg-[#424242]" />
       {/* ヒーロー画像 + ポスター */}
-      <div className="relative h-[56vw] max-h-[520px] w-full md:h-[25vw] md:max-h-[400px]">
+      <div className="relative pt-16 h-[calc(56vw+64px)] max-h-[calc(520px+64px)] w-full bg-white md:bg-[#424242] md:h-[calc(25vw+64px)] md:max-h-[calc(400px+64px)]">
         {movie.backdrop_path && (
           <div
-            className="absolute inset-0 bg-cover bg-top"
+            className="absolute inset-0 top-16 bg-cover bg-top"
             style={{
               backgroundImage: `url(${IMAGE_BASE_URL}/original${movie.backdrop_path})`,
             }}
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
+        <div className="absolute inset-0 top-16 bg-gradient-to-t from-white via-transparent to-transparent" />
       </div>
 
       {/* ポスター（ヒーロー画像に重なる） + テキスト情報 */}
@@ -632,9 +630,33 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* 作品情報 */}
         {(directors.length > 0 || screenwriters.length > 0 || composers.length > 0 || movie.runtime > 0 || movie.budget > 0 || movie.revenue > 0 || movie.production_companies.length > 0) && (
           <div className="mt-16 space-y-5">
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
-              作品情報
-            </h2>
+            <div className="flex items-center justify-between border-b border-gray-300 pb-2">
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
+                作品情報
+              </h2>
+              <div className="flex gap-3">
+                {trailer && (
+                  <TrailerModal videoKey={trailer.key} />
+                )}
+                <FollowButton
+                  movieId={movie.id}
+                  title={title}
+                  posterPath={movie.poster_path}
+                  mediaType={type || "movie"}
+                />
+                <GalleryModal images={images} imageBase={IMAGE_BASE_URL} />
+                {relationData && (
+                  <RelationButton
+                    title={title}
+                    characters={relationData.characters}
+                    relationships={relationData.relationships}
+                    imageBase={IMAGE_BASE_URL}
+                    cast={allCast}
+                  />
+                )}
+                <ShareButton title={`${title} `} />
+              </div>
+            </div>
             <div className="grid max-w-2xl grid-cols-2 gap-4 text-sm">
               {directors.length > 0 && (
                 <div>
@@ -734,30 +756,6 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                   </p>
                 </div>
               )}
-            </div>
-
-            {/* ボタン */}
-            <div className="flex gap-3 pt-4">
-              {trailer && (
-                <TrailerModal videoKey={trailer.key} />
-              )}
-              <FollowButton
-                movieId={movie.id}
-                title={title}
-                posterPath={movie.poster_path}
-                mediaType={type || "movie"}
-              />
-              <GalleryModal images={images} imageBase={IMAGE_BASE_URL} />
-              {relationData && (
-                <RelationButton
-                  title={title}
-                  characters={relationData.characters}
-                  relationships={relationData.relationships}
-                  imageBase={IMAGE_BASE_URL}
-                  cast={allCast}
-                />
-              )}
-              <ShareButton title={`${title} `} />
             </div>
           </div>
         )}
@@ -992,11 +990,11 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                     <img
                       src={`${IMAGE_BASE_URL}/w185${rec.poster_path}`}
                       alt={rec.title || rec.name || ""}
-                      className="w-full rounded-xl shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:scale-105"
+                      className="w-full rounded-lg shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:scale-105"
                       loading="lazy"
                     />
                   ) : (
-                    <div className="w-full aspect-[2/3] rounded-xl bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
+                    <div className="w-full aspect-[2/3] rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
                       No Image
                     </div>
                   )}

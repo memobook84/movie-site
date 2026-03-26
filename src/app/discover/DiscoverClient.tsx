@@ -281,7 +281,7 @@ export default function DiscoverClient() {
                     style={{ width: cardWidth || "100%" }}
                     onClick={() => handleCardClick(m.id)}
                   >
-                    <div className="overflow-hidden rounded-2xl bg-white shadow-xl cursor-pointer">
+                    <div className="overflow-hidden rounded-lg bg-white shadow-xl cursor-pointer">
                       {m.poster_path ? (
                         <img
                           src={`${IMAGE_BASE_URL}/w342${m.poster_path}`}

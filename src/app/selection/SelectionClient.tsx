@@ -77,7 +77,7 @@ export default function SelectionClient({ genres }: { genres: GenreData[] }) {
               href={`/movie/${detail.id}`}
               className="group"
             >
-              <div className="relative overflow-hidden rounded-xl">
+              <div className="relative overflow-hidden rounded-lg">
                 {detail.poster_path ? (
                   <img
                     src={`${IMAGE_BASE_URL}/w342${detail.poster_path}`}
