@@ -191,21 +191,26 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
 
       {/* ポスター + テキスト情報（白背景） */}
       <div className="relative z-10 -mt-8 px-6 md:-mt-12 md:px-16">
-        <div className="flex flex-col gap-5 md:flex-row md:gap-10">
-          {/* ポスター */}
+        <div className="flex flex-col gap-5 md:flex-row md:gap-0">
+          {/* ポスター + スマホ版ウォッチリストボタン */}
           {movie.poster_path && (
-            <div className="flex-shrink-0 self-start" style={{ boxShadow: "0 20px 40px rgba(0,0,0,0.15)" }}>
-              <PosterTappable
-                posterPath={movie.poster_path}
-                title={title}
-                imageBase={IMAGE_BASE_URL}
-                images={images}
-              />
+            <div className="flex-shrink-0 self-start flex items-end gap-2">
+              <div style={{ boxShadow: "0 20px 40px rgba(0,0,0,0.15)" }}>
+                <PosterTappable
+                  posterPath={movie.poster_path}
+                  title={title}
+                  imageBase={IMAGE_BASE_URL}
+                  images={images}
+                />
+              </div>
+              <div className="md:hidden">
+                <FollowButton movieId={movie.id} title={title} posterPath={movie.poster_path} mediaType={type || "movie"} />
+              </div>
             </div>
           )}
 
           {/* テキスト情報 */}
-          <div className="flex-1 flex flex-col gap-5 pt-0">
+          <div className="flex-1 flex flex-col gap-5 pt-0 md:pl-4">
             <div>
               <h1 className="text-2xl font-normal tracking-tight text-gray-900 md:text-4xl">
                 {title}
@@ -243,7 +248,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
 
             {/* あらすじ */}
             <div className="space-y-2">
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
+              <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
                 ストーリー
               </h2>
               <p className="text-sm leading-7 text-gray-600">
@@ -251,6 +256,10 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               </p>
             </div>
 
+            {/* ウォッチリストボタン（PC版：ポスター下端に揃える） */}
+            <div className="mt-auto hidden md:block">
+              <FollowButton movieId={movie.id} title={title} posterPath={movie.poster_path} mediaType={type || "movie"} />
+            </div>
 
           </div>
         </div>
@@ -259,8 +268,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
       {/* コンテンツ */}
       <div className="px-6 md:px-16">
 
-        {/* レビュー: ターミネーター2 */}
-        {movie.id === 280 && (
+        {/* レビュー（一時非表示） */}
+        {false && movie.id === 280 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -278,7 +287,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* レビュー: ブレイキング・バッド */}
-        {movie.id === 1396 && (
+        {false && movie.id === 1396 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -295,7 +304,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* レビュー: トップガン マーヴェリック */}
-        {movie.id === 361743 && (
+        {false && movie.id === 361743 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -315,7 +324,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* レビュー: 千と千尋の神隠し */}
-        {movie.id === 129 && (
+        {false && movie.id === 129 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -331,7 +340,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* レビュー: ジュラシック・ワールド／炎の王国 */}
-        {movie.id === 351286 && (
+        {false && movie.id === 351286 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -348,7 +357,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* レビュー: となりのトトロ */}
-        {movie.id === 8392 && (
+        {false && movie.id === 8392 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -365,7 +374,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* レビュー: グリーンマイル */}
-        {movie.id === 497 && (
+        {false && movie.id === 497 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -382,7 +391,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* レビュー: アバター */}
-        {movie.id === 19995 && (
+        {false && movie.id === 19995 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -399,7 +408,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* レビュー: ユージュアル・サスペクツ */}
-        {movie.id === 629 && (
+        {false && movie.id === 629 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -416,7 +425,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* レビュー: ノマドランド */}
-        {movie.id === 581734 && (
+        {false && movie.id === 581734 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -433,7 +442,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* レビュー: ジョーカー */}
-        {movie.id === 475557 && (
+        {false && movie.id === 475557 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -450,7 +459,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* レビュー: ハリー・ポッターと賢者の石 */}
-        {movie.id === 671 && (
+        {false && movie.id === 671 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -467,7 +476,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* レビュー: 劇場版 鬼滅の刃 無限列車編 */}
-        {movie.id === 635302 && (
+        {false && movie.id === 635302 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -485,7 +494,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* レビュー: 名探偵コナン ゼロの執行人 */}
-        {movie.id === 493006 && (
+        {false && movie.id === 493006 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -502,7 +511,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* レビュー: 名探偵コナン 純黒の悪夢 */}
-        {movie.id === 374856 && (
+        {false && movie.id === 374856 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -519,7 +528,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* レビュー: ファンタスティック・ビーストと魔法使いの旅 */}
-        {movie.id === 259316 && (
+        {false && movie.id === 259316 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -536,7 +545,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* レビュー: グレイテスト・ショーマン */}
-        {movie.id === 316029 && (
+        {false && movie.id === 316029 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -553,7 +562,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* レビュー: アベンジャーズ／インフィニティ・ウォー */}
-        {movie.id === 299536 && (
+        {false && movie.id === 299536 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -571,7 +580,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* レビュー: ミッション：インポッシブル／フォールアウト */}
-        {movie.id === 353081 && (
+        {false && movie.id === 353081 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -588,7 +597,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* レビュー: レディ・プレイヤー1 */}
-        {movie.id === 333339 && (
+        {false && movie.id === 333339 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -605,7 +614,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
 
         {/* レビュー: スター・ウォーズ／最後のジェダイ */}
-        {movie.id === 181808 && (
+        {false && movie.id === 181808 && (
           <div className="mt-16 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-1.5">
               <span className="text-xs font-bold tracking-widest text-gray-900">SPECIAL REVIEW</span>
@@ -627,16 +636,10 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {(directors.length > 0 || screenwriters.length > 0 || composers.length > 0 || movie.runtime > 0 || movie.budget > 0 || movie.revenue > 0 || movie.production_companies.length > 0) && (
           <div className="mt-16 space-y-5">
             <div className="flex items-center justify-between border-b border-gray-300 pb-2">
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
+              <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400">
                 作品情報
               </h2>
               <div className="flex flex-wrap gap-[10px]">
-                <FollowButton
-                  movieId={movie.id}
-                  title={title}
-                  posterPath={movie.poster_path}
-                  mediaType={type || "movie"}
-                />
                 <GalleryModal images={images} imageBase={IMAGE_BASE_URL} />
                 {relationData && (
                   <RelationButton
@@ -650,10 +653,11 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                 <ShareButton title={`${title} `} />
               </div>
             </div>
-            <div className="grid max-w-2xl grid-cols-2 gap-4 text-sm">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+              {/* スタッフ行: 監督・脚本・音楽 */}
               {directors.length > 0 && (
                 <div>
-                  <p className="text-xs text-gray-400">監督</p>
+                  <p className="text-xs md:text-sm text-gray-400">監督</p>
                   <p className="text-gray-700">
                     {directors.map((d, i) => (
                       <span key={d.id}>
@@ -666,79 +670,88 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               )}
               {screenwriters.length > 0 && (
                 <div>
-                  <p className="text-xs text-gray-400">脚本</p>
+                  <p className="text-xs md:text-sm text-gray-400">脚本</p>
                   <p className="text-gray-700">
                     {screenwriters.map((w) => w.name).join(", ")}
                   </p>
                 </div>
               )}
+              {composers.length > 0 && (
+                <div>
+                  <p className="text-xs md:text-sm text-gray-400">音楽</p>
+                  <p className="text-gray-700">
+                    {composers.map((c) => c.name).join(", ")}
+                  </p>
+                </div>
+              )}
+              {/* 作品データ行 */}
               {movie.runtime > 0 && (
                 <div>
-                  <p className="text-xs text-gray-400">上映時間</p>
+                  <p className="text-xs md:text-sm text-gray-400">上映時間</p>
                   <p className="text-gray-700">{Math.floor(movie.runtime / 60)}時間{movie.runtime % 60}分</p>
                 </div>
               )}
               {movie.production_countries && movie.production_countries.length > 0 && (
                 <div>
-                  <p className="text-xs text-gray-400">製作国</p>
+                  <p className="text-xs md:text-sm text-gray-400">製作国</p>
                   <p className="text-gray-700">
                     {movie.production_countries.map((c) => getCountryName(c.iso_3166_1, c.name)).join(", ")}
                   </p>
                 </div>
               )}
+              {movie.original_language && (
+                <div>
+                  <p className="text-xs md:text-sm text-gray-400">原語</p>
+                  <p className="text-gray-700">{LANGUAGE_NAMES[movie.original_language] || movie.original_language}</p>
+                </div>
+              )}
               {movie.release_date && (
                 <div>
-                  <p className="text-xs text-gray-400">公開日</p>
+                  <p className="text-xs md:text-sm text-gray-400">公開日</p>
                   <p className="text-gray-700">{movie.release_date}</p>
                 </div>
               )}
               {jpReleaseDate && (
                 <div>
-                  <p className="text-xs text-gray-400">日本公開日</p>
+                  <p className="text-xs md:text-sm text-gray-400">日本公開日</p>
                   <p className="text-gray-700">{jpReleaseDate}</p>
                 </div>
               )}
               {movie.budget > 0 && (
                 <div>
-                  <p className="text-xs text-gray-400">予算</p>
+                  <p className="text-xs md:text-sm text-gray-400">予算</p>
                   <p className="text-gray-700">約{(movie.budget * 150 / 100000000).toFixed(1)}億円</p>
                 </div>
               )}
               {movie.revenue > 0 && (
                 <div>
-                  <p className="text-xs text-gray-400">興行収入</p>
+                  <p className="text-xs md:text-sm text-gray-400">興行収入</p>
                   <p className="text-gray-700">約{(movie.revenue * 150 / 100000000).toFixed(1)}億円</p>
-                </div>
-              )}
-              {movie.original_language && (
-                <div>
-                  <p className="text-xs text-gray-400">原語</p>
-                  <p className="text-gray-700">{LANGUAGE_NAMES[movie.original_language] || movie.original_language}</p>
                 </div>
               )}
               {certification && (
                 <div>
-                  <p className="text-xs text-gray-400">年齢制限</p>
+                  <p className="text-xs md:text-sm text-gray-400">年齢制限</p>
                   <p className="text-gray-700">{certification}</p>
                 </div>
               )}
               {movie.status && (
                 <div>
-                  <p className="text-xs text-gray-400">ステータス</p>
+                  <p className="text-xs md:text-sm text-gray-400">ステータス</p>
                   <p className="text-gray-700">{{ Released: "公開済み", "Post Production": "ポストプロダクション", "In Production": "製作中", Planned: "企画段階", Rumored: "噂", Canceled: "中止" }[movie.status] || movie.status}</p>
                 </div>
               )}
               {movie.production_companies.length > 0 && (
-                <div className="col-span-2">
-                  <p className="text-xs text-gray-400">制作会社</p>
+                <div className="col-span-2 md:col-span-3">
+                  <p className="text-xs md:text-sm text-gray-400">制作会社</p>
                   <p className="text-gray-700">
                     {movie.production_companies.map((c) => c.name).join(", ")}
                   </p>
                 </div>
               )}
               {movie.homepage && (
-                <div className="col-span-2">
-                  <p className="text-xs text-gray-400">公式サイト</p>
+                <div className="col-span-2 md:col-span-3">
+                  <p className="text-xs md:text-sm text-gray-400">公式サイト</p>
                   <p className="flex items-center gap-2 text-sm text-gray-700">
                     <span className="break-all">{movie.homepage}</span>
                     <a href={movie.homepage} target="_blank" rel="noopener noreferrer" className="flex-shrink-0 text-blue-500 hover:text-blue-600 transition-colors" aria-label="公式サイトを開く">
@@ -757,7 +770,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {allVideos.length > 0 && (
           <div className="mt-16 space-y-5">
             <div className="flex items-center justify-between border-b border-gray-300 pb-2">
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
+              <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400">
                 ビデオ
               </h2>
               <Link
@@ -782,7 +795,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {collection && collection.parts.length > 1 && (
           <div className="mt-16 space-y-5">
             <div className="flex items-center justify-between border-b border-gray-300 pb-2">
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
+              <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400">
                 シリーズ
               </h2>
               <Link
@@ -842,7 +855,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {cast.length > 0 && (
           <div className="mt-16 space-y-5">
             <div className="flex items-center justify-between border-b border-gray-300 pb-2">
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
+              <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400">
                 キャスト
               </h2>
               <Link
@@ -903,7 +916,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* シーズン情報（TV番組のみ） */}
         {type === "tv" && movie.seasons && movie.seasons.length > 0 && (
           <div className="mt-16 space-y-5">
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
+            <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
               シーズン（{movie.number_of_seasons}シーズン・{movie.number_of_episodes}エピソード）
             </h2>
             <div className="space-y-3">
@@ -945,7 +958,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* 配信情報 */}
         {watchProviders && (watchProviders.flatrate || watchProviders.rent || watchProviders.buy) && (
           <div className="mt-16 space-y-5">
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
+            <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
               配信情報
             </h2>
             <div className="space-y-4">
@@ -1010,36 +1023,32 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* 公式SNS */}
         {(externalIds.instagram_id || externalIds.twitter_id || externalIds.facebook_id || externalIds.tiktok_id) && (
           <div className="mt-16 space-y-5">
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
+            <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
               公式SNS
             </h2>
-            <div className="flex gap-4">
+            <div className="flex gap-3">
               {externalIds.instagram_id && (
                 <a href={`https://www.instagram.com/${externalIds.instagram_id}`} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-2 rounded-xl bg-gray-50 px-4 py-3 text-sm text-gray-700 transition-all hover:bg-gray-100 hover:shadow-md">
-                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-                  Instagram
+                  className="flex items-center justify-center h-10 w-10 rounded bg-gray-50 transition-all hover:bg-gray-100" aria-label="Instagram">
+                  <svg className="h-5 w-5 text-gray-700" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
                 </a>
               )}
               {externalIds.twitter_id && (
                 <a href={`https://x.com/${externalIds.twitter_id}`} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-2 rounded-xl bg-gray-50 px-4 py-3 text-sm text-gray-700 transition-all hover:bg-gray-100 hover:shadow-md">
-                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                  X
+                  className="flex items-center justify-center h-10 w-10 rounded bg-gray-50 transition-all hover:bg-gray-100" aria-label="X">
+                  <svg className="h-5 w-5 text-gray-700" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                 </a>
               )}
               {externalIds.facebook_id && (
                 <a href={`https://www.facebook.com/${externalIds.facebook_id}`} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-2 rounded-xl bg-gray-50 px-4 py-3 text-sm text-gray-700 transition-all hover:bg-gray-100 hover:shadow-md">
-                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                  Facebook
+                  className="flex items-center justify-center h-10 w-10 rounded bg-gray-50 transition-all hover:bg-gray-100" aria-label="Facebook">
+                  <svg className="h-5 w-5 text-gray-700" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                 </a>
               )}
               {externalIds.tiktok_id && (
                 <a href={`https://www.tiktok.com/@${externalIds.tiktok_id}`} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-2 rounded-xl bg-gray-50 px-4 py-3 text-sm text-gray-700 transition-all hover:bg-gray-100 hover:shadow-md">
-                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-                  TikTok
+                  className="flex items-center justify-center h-10 w-10 rounded bg-gray-50 transition-all hover:bg-gray-100" aria-label="TikTok">
+                  <svg className="h-5 w-5 text-gray-700" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
                 </a>
               )}
             </div>
@@ -1054,7 +1063,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* 関連作品 */}
         {recommendations.length > 0 && (
           <div className="mt-16 space-y-5">
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
+            <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
               関連作品
             </h2>
             <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">

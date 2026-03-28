@@ -26,10 +26,10 @@ export default function RelationButton({ title, characters, relationships, image
     <>
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center justify-center h-[50px] w-[50px] rounded-[2px] border-none cursor-pointer transition-colors duration-300 bg-[#313638] hover:bg-[#0274b3]"
+        className="group inline-flex items-center justify-center h-10 w-10 rounded border-none cursor-pointer transition-all bg-gray-50 hover:bg-gray-100"
         aria-label="相関図"
       >
-        <GitFork className="h-[26px] w-[26px] text-white" />
+        <GitFork className="h-5 w-5 text-gray-700" />
       </button>
 
       {open && (

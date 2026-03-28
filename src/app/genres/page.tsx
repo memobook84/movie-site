@@ -53,11 +53,10 @@ export default function GenresPage() {
             <Link
               key={genre.id}
               href={`/genre/${genre.id}?name=${encodeURIComponent(genre.name)}`}
-              className="group relative flex aspect-[3/4] flex-col items-center justify-center gap-2 rounded-[17px] border border-white px-2 text-center font-extrabold text-black select-none cursor-pointer transition-all duration-500 hover:border-black hover:scale-105 active:scale-95 active:rotate-[1.7deg] md:gap-3 md:px-4"
-              style={{ background: 'rgba(217, 217, 217, 0.58)', boxShadow: '12px 17px 51px rgba(0, 0, 0, 0.22)', backdropFilter: 'blur(6px)' }}
+              className="group relative flex aspect-[3/4] flex-col items-center justify-center gap-2 rounded-lg border border-gray-100 px-2 text-center font-extrabold select-none cursor-pointer transition-all duration-500 hover:border-yellow-400 hover:scale-105 active:scale-95 active:rotate-[1.7deg] md:gap-3 md:px-4 bg-white shadow-md hover:shadow-lg"
             >
-              <Icon className="h-7 w-7 text-[#3d1018]/70 transition-all duration-300 group-hover:text-[#3d1018] group-hover:scale-110 md:h-8 md:w-8" />
-              <span className="text-[11px] font-semibold text-[#1d1d1f] md:text-sm">
+              <Icon className="h-7 w-7 text-gray-600 transition-all duration-300 group-hover:text-gray-900 group-hover:scale-110 md:h-8 md:w-8" />
+              <span className="text-[11px] font-semibold text-[#1d1d1f] md:text-xs">
                 {genre.name}
               </span>
             </Link>

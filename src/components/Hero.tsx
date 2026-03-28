@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { IMAGE_BASE_URL, Movie } from "@/lib/tmdb";
 import { useRouter } from "next/navigation";
-import { MdElectricBolt } from "react-icons/md";
+import { PiBuildingsFill } from "react-icons/pi";
 import { IoPlayCircle } from "react-icons/io5";
 
 interface CarouselItem {
@@ -144,10 +144,12 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
       const handler = () => {
         trackRef.current?.removeEventListener("transitionend", handler);
         if (dir === "next") next(); else prev();
-        // requestAnimationFrameで状態更新後にリセット
+        // 2重rAFでReact再描画完了後にリセット
         requestAnimationFrame(() => {
-          setTrackTransform(0, false);
-          animatingRef.current = false;
+          requestAnimationFrame(() => {
+            setTrackTransform(0, false);
+            animatingRef.current = false;
+          });
         });
       };
       trackRef.current?.addEventListener("transitionend", handler);
@@ -242,7 +244,7 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
             </div>
 
             {/* 左上 雷アイコン */}
-            <MdElectricBolt className="absolute top-3 left-3 md:top-4 md:left-4 w-7 h-7 md:w-9 md:h-9 text-red-500 drop-shadow-lg z-10" />
+            <PiBuildingsFill className="absolute top-3 left-3 md:top-4 md:left-4 w-7 h-7 md:w-9 md:h-9 text-red-500 drop-shadow-lg z-10" />
 
             {/* 下部グラデーション */}
             <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-[5]" />
@@ -256,7 +258,7 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
                     : "opacity-0 translate-y-4"
                 }`}
               >
-                <h2 className="text-white text-base md:text-2xl font-normal leading-tight line-clamp-2 drop-shadow-lg">
+                <h2 className="text-white text-sm md:text-2xl font-normal leading-tight line-clamp-2 drop-shadow-lg">
                   {title}
                 </h2>
                 {displayMovie.overview && (
@@ -265,7 +267,7 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
                   </p>
                 )}
                 {casts[displayMovie.id] && (
-                  <p className="text-white/60 text-xs md:text-sm drop-shadow">
+                  <p className="text-white/60 text-[10px] md:text-sm drop-shadow">
                     {casts[displayMovie.id].join(" / ")}
                   </p>
                 )}
@@ -282,7 +284,7 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
                 className="absolute bottom-3 right-3 md:bottom-6 md:right-8 z-10 hover:scale-110 transition-transform"
                 aria-label="トレーラー再生"
               >
-                <IoPlayCircle className="w-7 h-7 md:w-9 md:h-9 text-white/50 drop-shadow-lg" />
+                <IoPlayCircle className="w-7 h-7 md:w-14 md:h-14 text-yellow-400/90 drop-shadow-lg" />
               </button>
             )}
 
@@ -309,7 +311,7 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
           <div className="relative py-3">
             <div className="flex items-center justify-between px-2 mb-2">
               <span className="flex items-center gap-1 text-red-500 font-bold text-xs tracking-wide">
-                <MdElectricBolt className="w-4 h-4" />
+                <PiBuildingsFill className="w-4 h-4" />
                 上映中
               </span>
               <div className="flex gap-1">
@@ -366,7 +368,7 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
                         No Image
                       </div>
                     )}
-                    <MdElectricBolt className="absolute top-1 left-1 w-4 h-4 text-red-500 drop-shadow-md" />
+                    <PiBuildingsFill className="absolute top-1 left-1 w-4 h-4 text-red-500 drop-shadow-md" />
                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-1 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                       <p className="text-white text-[10px] leading-tight line-clamp-1">{mTitle}</p>
                     </div>

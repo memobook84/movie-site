@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { TiStopwatch } from "react-icons/ti";
+import { FiPlus } from "react-icons/fi";
+import { PiEyeglassesFill } from "react-icons/pi";
 
 interface FollowButtonProps {
   movieId: number;
@@ -57,10 +58,14 @@ export default function FollowButton({ movieId, title, posterPath, mediaType = "
   return (
     <button
       onClick={toggle}
-      className={`inline-flex items-center justify-center h-[50px] w-[50px] rounded-[2px] border-none cursor-pointer transition-colors duration-300 ${followed ? "bg-[#2753a7]" : "bg-[#313638] hover:bg-[#2753a7]"}`}
+      className={`inline-flex items-center justify-center h-10 w-10 rounded border-none cursor-pointer transition-all ${followed ? "bg-yellow-400 text-gray-900" : "bg-gray-50 hover:bg-gray-100 text-gray-900"}`}
       aria-label={followed ? "ウォッチリストに追加済み" : "ウォッチリストに追加"}
     >
-      <TiStopwatch className="h-[26px] w-[26px] text-white" />
+      {followed ? (
+        <PiEyeglassesFill className="h-5 w-5 shrink-0" />
+      ) : (
+        <FiPlus className="h-5 w-5 shrink-0" />
+      )}
     </button>
   );
 }
