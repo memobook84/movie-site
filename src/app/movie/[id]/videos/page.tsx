@@ -51,8 +51,8 @@ export default async function VideosPage({ params, searchParams }: PageProps) {
           </svg>
           作品ページに戻る
         </Link>
-        <h1 className="text-2xl font-normal tracking-tight text-gray-900 md:text-3xl">
-          {title}
+        <h1 className="text-lg font-normal tracking-tight text-gray-900 md:text-3xl">
+          {title}（{allVideos.length}）
         </h1>
       </div>
 
@@ -73,6 +73,7 @@ export default async function VideosPage({ params, searchParams }: PageProps) {
                 variant="card"
                 label={v.name || v.type}
                 publishedAt={v.published_at}
+                grid
               />
             ))}
           </div>

@@ -7,9 +7,10 @@ interface TrailerModalProps {
   variant?: "card" | "button";
   label?: string;
   publishedAt?: string;
+  grid?: boolean;
 }
 
-export default function TrailerModal({ videoKey, variant = "button", label = "Trailer", publishedAt }: TrailerModalProps) {
+export default function TrailerModal({ videoKey, variant = "button", label = "Trailer", publishedAt, grid }: TrailerModalProps) {
   const [open, setOpen] = useState(false);
 
   const close = useCallback(() => setOpen(false), []);
@@ -30,17 +31,17 @@ export default function TrailerModal({ videoKey, variant = "button", label = "Tr
       {variant === "card" ? (
         <button
           onClick={() => setOpen(true)}
-          className="group/card w-[calc(50%-6px)] min-w-0 flex-shrink-0 md:w-[300px] cursor-pointer border-0 p-0 text-left"
+          className={`group/card min-w-0 flex-shrink-0 cursor-pointer border-0 p-0 text-left ${grid ? "w-full" : "w-[calc(50%-6px)] md:w-[300px]"}`}
           aria-label="トレーラーを再生"
         >
-          <div className="relative overflow-hidden rounded-[6px]">
+          <div className="relative overflow-hidden rounded-[8px] border-[3px] border-yellow-400 transition-all duration-300 group-hover/card:border-transparent">
             <img
               src={thumbnailUrl}
               alt="Trailer"
               className="w-full aspect-video object-cover transition-transform duration-300 group-hover/card:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-            <div className="absolute bottom-2 left-2 md:bottom-3 md:left-3">
+            <div className="absolute bottom-2 right-2 md:bottom-3 md:right-3">
               <div className="flex h-5 w-5 items-center justify-center rounded-full bg-yellow-400/90 backdrop-blur-sm md:h-6 md:w-6">
                 <svg className="h-2.5 w-2.5 text-black ml-0.5 md:h-3 md:w-3" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M8 5v14l11-7z" />
@@ -48,7 +49,7 @@ export default function TrailerModal({ videoKey, variant = "button", label = "Tr
               </div>
             </div>
           </div>
-          <p className="mt-1.5 text-xs text-gray-500">{label}</p>
+          <p className="mt-1.5 text-xs text-gray-500 line-clamp-1">{label}</p>
           {publishedAt && (
             <p className="text-[10px] text-gray-400">{publishedAt.slice(0, 10)}</p>
           )}
