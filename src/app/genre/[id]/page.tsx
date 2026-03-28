@@ -46,7 +46,7 @@ export default async function GenrePage({ params, searchParams }: PageProps) {
           ジャンル
         </Link>
         <span className="text-gray-300">/</span>
-        <h1 className="text-2xl font-bold text-[#1d1d1f]">{genreName}</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl">{genreName}</h1>
       </div>
       <p className="mt-2 text-sm text-gray-400">ページ {currentPage} / {totalPages}</p>
 
@@ -80,34 +80,56 @@ export default async function GenrePage({ params, searchParams }: PageProps) {
       </div>
 
       {/* ページネーション */}
-      <div className="mt-10 flex items-center justify-center gap-4">
-        {hasPrev ? (
-          <Link
-            href={`/genre/${id}?${baseQuery}&page=${currentPage - 1}`}
-            className="rounded-full border border-gray-300 px-6 py-2.5 text-sm font-medium text-gray-700 transition-all hover:bg-gray-100"
-          >
-            ← 前へ
-          </Link>
-        ) : (
-          <span className="rounded-full border border-gray-100 px-6 py-2.5 text-sm font-medium text-gray-300">
-            ← 前へ
-          </span>
-        )}
+      <div className="mt-10">
+        <div className="flex items-center justify-center gap-2">
+          {hasPrev ? (
+            <Link
+              href={`/genre/${id}?${baseQuery}&page=${currentPage - 1}`}
+              className="px-3 py-1.5 text-sm font-semibold text-gray-500 transition-colors hover:text-gray-900"
+            >
+              &lt; PREV
+            </Link>
+          ) : (
+            <span className="px-3 py-1.5 text-sm font-semibold text-gray-300">
+              &lt; PREV
+            </span>
+          )}
 
-        <span className="text-sm font-semibold text-gray-800">{currentPage}</span>
+          {/* ページ番号（現在ページの前後2ページ） */}
+          {Array.from({ length: 5 }, (_, i) => currentPage - 2 + i)
+            .filter((p) => p >= 1 && p <= totalPages)
+            .map((p) => (
+              p === currentPage ? (
+                <span
+                  key={p}
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-yellow-400 text-sm font-bold text-white"
+                >
+                  {p}
+                </span>
+              ) : (
+                <Link
+                  key={p}
+                  href={`/genre/${id}?${baseQuery}&page=${p}`}
+                  className="flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium text-gray-400 transition-colors hover:text-gray-900"
+                >
+                  {p}
+                </Link>
+              )
+            ))}
 
-        {hasNext ? (
-          <Link
-            href={`/genre/${id}?${baseQuery}&page=${currentPage + 1}`}
-            className="rounded-full border border-gray-300 px-6 py-2.5 text-sm font-medium text-gray-700 transition-all hover:bg-gray-100"
-          >
-            次へ →
-          </Link>
-        ) : (
-          <span className="rounded-full border border-gray-100 px-6 py-2.5 text-sm font-medium text-gray-300">
-            次へ →
-          </span>
-        )}
+          {hasNext ? (
+            <Link
+              href={`/genre/${id}?${baseQuery}&page=${currentPage + 1}`}
+              className="px-3 py-1.5 text-sm font-semibold text-gray-500 transition-colors hover:text-gray-900"
+            >
+              NEXT &gt;
+            </Link>
+          ) : (
+            <span className="px-3 py-1.5 text-sm font-semibold text-gray-300">
+              NEXT &gt;
+            </span>
+          )}
+        </div>
       </div>
     </main>
   );

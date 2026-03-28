@@ -713,7 +713,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               )}
               {jpReleaseDate && (
                 <div>
-                  <p className="text-xs md:text-sm text-gray-400">日本公開日</p>
+                  <p className="text-xs md:text-sm text-gray-400">公開日（日本）</p>
                   <p className="text-gray-700">{jpReleaseDate}</p>
                 </div>
               )}

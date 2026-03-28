@@ -58,7 +58,7 @@ export default async function CollectionPage({ params }: PageProps) {
 
         {/* タイトル */}
         <div className="absolute bottom-0 left-0 right-0 px-6 pb-6 md:px-16 md:pb-10">
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-4xl">
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl">
             {collection.name}
           </h1>
           <p className="mt-1 text-sm text-gray-500">

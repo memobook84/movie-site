@@ -100,9 +100,9 @@ function ReleaseCountryMap({ releaseCountries, productionCountries }: Props) {
             const isProduction = productionCodes.has(geo.id);
             const isRelease = releaseCodes.has(geo.id);
             const fill = isProduction
-              ? "#F97316"
+              ? "#FACC15"
               : isRelease
-                ? "#38BDF8"
+                ? "#7A5C44"
                 : "#E2E8F0";
             return (
               <path
@@ -119,11 +119,11 @@ function ReleaseCountryMap({ releaseCountries, productionCountries }: Props) {
       </div>
       <div className="flex items-center gap-6 text-sm text-gray-500">
         <span className="flex items-center gap-1.5">
-          <span className="inline-block h-3 w-3 rounded-sm bg-orange-500" />
+          <span className="inline-block h-3 w-3 rounded-sm bg-yellow-400" />
           製作国（{productionCountries.length}）
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="inline-block h-3 w-3 rounded-sm bg-sky-400" />
+          <span className="inline-block h-3 w-3 rounded-sm bg-[#7A5C44]" />
           上映国（{releaseCountries.length}）
         </span>
       </div>

@@ -109,7 +109,6 @@ export default function PersonCreditsGrid({ castCredits, directorCredits }: Prop
           const title = movie.title || movie.name || "";
           const type = movie.media_type === "tv" ? "tv" : "movie";
           const year = (movie.release_date || movie.first_air_date || "").slice(2, 4);
-
           return (
             <Link
               key={`${type}-${movie.id}`}
@@ -117,12 +116,18 @@ export default function PersonCreditsGrid({ castCredits, directorCredits }: Prop
               className="group"
             >
               <div className="relative overflow-hidden rounded-[4px] transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:shadow-black/10">
-                <img
-                  src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}
-                  alt={title}
-                  className="aspect-[2/3] w-full object-cover"
-                  loading="lazy"
-                />
+                {movie.poster_path ? (
+                  <img
+                    src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}
+                    alt={title}
+                    className="aspect-[2/3] w-full object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="flex aspect-[2/3] items-center justify-center bg-gray-200 text-xs text-gray-400">
+                    No Image
+                  </div>
+                )}
                 {showYear && year && (
                   <div className="absolute left-1.5 top-1.5 flex h-7 w-7 items-center justify-center rounded-full bg-black/70 backdrop-blur-sm md:h-8 md:w-8">
                     <span className="text-[10px] font-bold text-white md:text-[11px]">

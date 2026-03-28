@@ -2,7 +2,8 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { Home, CalendarDays, LayoutGrid, SquareMenu, ChevronLeft } from "lucide-react";
+import { Home, CalendarDays, SquareMenu, ChevronLeft } from "lucide-react";
+import { LuBlocks } from "react-icons/lu";
 
 export default function BottomNav() {
   const router = useRouter();
@@ -16,7 +17,7 @@ export default function BottomNav() {
   const navItems = [
     { href: "/", icon: Home, active: isHome },
     { href: "/schedule", icon: CalendarDays, active: isSchedule },
-    { href: "/genres", icon: LayoutGrid, active: isGenres },
+    { href: "/genres", icon: LuBlocks, active: isGenres },
     { href: "/menu", icon: SquareMenu, active: isMenu },
   ];
 

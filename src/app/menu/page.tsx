@@ -1,12 +1,13 @@
 import Link from "next/link";
-import { Home, CalendarDays, LayoutGrid, Film, ShieldCheck, Star, Search } from "lucide-react";
+import { Home, CalendarDays, Film, ShieldCheck, Star, Search } from "lucide-react";
+import { LuBlocks } from "react-icons/lu";
 import { GiImperialCrown } from "react-icons/gi";
 import { PiEyeglassesFill } from "react-icons/pi";
 
 const mainItems = [
   { href: "/", label: "ホーム", icon: Home },
   { href: "/schedule", label: "スケジュール", icon: CalendarDays },
-  { href: "/genres", label: "ジャンル", icon: LayoutGrid },
+  { href: "/genres", label: "ジャンル", icon: LuBlocks },
   { href: "/selection", label: "セレクション", icon: Film },
 ];
 
@@ -23,7 +24,7 @@ const otherItems = [
 export default function MenuPage() {
   return (
     <main className="min-h-screen bg-white pt-20 pb-32 px-6">
-      <h1 className="text-xl font-semibold text-gray-900 mb-6">メニュー</h1>
+      <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl mb-6">メニュー</h1>
 
       {/* メイン */}
       <div className="space-y-1">
