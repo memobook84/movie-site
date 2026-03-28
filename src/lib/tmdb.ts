@@ -57,7 +57,7 @@ export interface MovieDetail extends Movie {
   production_companies: { id: number; name: string; logo_path: string | null }[];
   production_countries?: { iso_3166_1: string; name: string }[];
   videos?: {
-    results: { key: string; site: string; type: string }[];
+    results: { key: string; site: string; type: string; name?: string; published_at?: string }[];
   };
   credits?: {
     cast: { id: number; name: string; character: string; profile_path: string | null }[];
@@ -224,6 +224,14 @@ async function fetchTMDbEn<T>(endpoint: string, fallback: T): Promise<T> {
     console.error("TMDb fetch error:", e);
     return fallback;
   }
+}
+
+export async function getVideosEn(id: number, type: string = "movie"): Promise<{ key: string; site: string; type: string; name?: string; published_at?: string }[]> {
+  const data = await fetchTMDbEn<{ results: { key: string; site: string; type: string; name?: string; published_at?: string }[] }>(
+    `/${type}/${id}/videos`,
+    { results: [] }
+  );
+  return data.results;
 }
 
 export async function getTvDetail(id: number): Promise<MovieDetail> {

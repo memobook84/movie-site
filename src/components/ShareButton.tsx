@@ -42,18 +42,16 @@ export default function ShareButton({ title }: ShareButtonProps) {
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="group/btn relative inline-flex items-center justify-center h-9 w-9 rounded-[30em] bg-white border-none overflow-hidden shadow-[6px_6px_12px_#c5c5c5,_-6px_-6px_12px_#ffffff] cursor-pointer xl:h-9 xl:w-auto xl:gap-1.5 xl:px-6"
+        className="inline-flex items-center justify-center h-[50px] w-[50px] rounded-[2px] border-none cursor-pointer transition-colors duration-300 bg-[#313638] hover:bg-[#55acee]"
         aria-label="シェア"
       >
-        <span className="absolute left-0 top-0 h-full w-0 rounded-[30em] bg-gradient-to-r from-[#7b2ff7] to-[#ff2d87] z-0 transition-all duration-500 ease-in-out group-hover/btn:w-full" />
-        <svg className="relative z-10 h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg className="h-[26px] w-[26px] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="18" cy="5" r="3" />
           <circle cx="6" cy="12" r="3" />
           <circle cx="18" cy="19" r="3" />
           <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
           <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
         </svg>
-        <span className="relative z-10 hidden xl:inline text-[13px] font-extrabold">シェア</span>
       </button>
 
       {open && (

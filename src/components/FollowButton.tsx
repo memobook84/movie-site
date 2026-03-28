@@ -57,12 +57,10 @@ export default function FollowButton({ movieId, title, posterPath, mediaType = "
   return (
     <button
       onClick={toggle}
-      className="group/btn relative inline-flex items-center justify-center h-9 w-9 rounded-[30em] bg-white border-none overflow-hidden shadow-[6px_6px_12px_#c5c5c5,_-6px_-6px_12px_#ffffff] cursor-pointer xl:h-9 xl:w-auto xl:gap-1.5 xl:px-6"
+      className={`inline-flex items-center justify-center h-[50px] w-[50px] rounded-[2px] border-none cursor-pointer transition-colors duration-300 ${followed ? "bg-[#2753a7]" : "bg-[#313638] hover:bg-[#2753a7]"}`}
       aria-label={followed ? "ウォッチリストに追加済み" : "ウォッチリストに追加"}
     >
-      <span className={`absolute left-0 top-0 h-full rounded-[30em] bg-gradient-to-r from-[#7b2ff7] to-[#ff2d87] z-0 transition-all duration-500 ease-in-out group-hover/btn:w-full ${followed ? "w-full" : "w-0"}`} />
-      <TiStopwatch className={`relative z-10 h-3.5 w-3.5 ${followed ? "text-white" : ""}`} />
-      <span className={`relative z-10 hidden xl:inline text-[13px] font-extrabold ${followed ? "text-white" : ""}`}>ウォッチリスト</span>
+      <TiStopwatch className="h-[26px] w-[26px] text-white" />
     </button>
   );
 }

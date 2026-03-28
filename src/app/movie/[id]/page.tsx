@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getMovieDetail, getTvDetail, getMovieImages, getRecommendations, getWatchProviders, getReleaseDates, getJPReleaseDate, getCertification, getExternalIds, IMAGE_BASE_URL } from "@/lib/tmdb";
+import { getMovieDetail, getTvDetail, getMovieImages, getRecommendations, getWatchProviders, getReleaseDates, getJPReleaseDate, getCertification, getExternalIds, getCollectionDetail, getVideosEn, IMAGE_BASE_URL } from "@/lib/tmdb";
 import Link from "next/link";
 import FollowButton from "@/components/FollowButton";
 import GalleryModal from "@/components/GalleryModal";
@@ -9,6 +9,7 @@ import PosterTappable from "@/components/PosterTappable";
 import { getRelationData } from "@/lib/relations-data";
 import ReleaseCountryMap from "@/components/ReleaseCountryMap";
 import TrailerModal from "@/components/TrailerModal";
+import ScrollableRow from "@/components/ScrollableRow";
 import {
   Zap, Compass, Sparkles, Laugh, SearchCheck,
   Film, Drama, Home, Wand2, Landmark,
@@ -134,9 +135,22 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
     ? await getTvDetail(Number(id))
     : await getMovieDetail(Number(id));
   const title = movie.title || movie.name || "";
-  const trailer = movie.videos?.results.find(
-    (v) => v.site === "YouTube" && v.type === "Trailer"
-  );
+  const findVideos = (videos: { key: string; site: string; type: string; name?: string; published_at?: string }[]) =>
+    videos.filter((v) => v.site === "YouTube" && (v.type === "Trailer" || v.type === "Teaser"));
+  const findAllVideos = (videos: { key: string; site: string; type: string; name?: string; published_at?: string }[]) =>
+    videos.filter((v) => v.site === "YouTube");
+  let trailers = findVideos(movie.videos?.results || []);
+  const enVideos = await getVideosEn(Number(id), type || "movie");
+  if (trailers.length === 0) {
+    trailers = findVideos(enVideos);
+  }
+  // 全動画: 日本語 + 英語を統合、重複排除（Trailer/Teaserを先頭に）
+  const allJaVideos = findAllVideos(movie.videos?.results || []);
+  const allEnVideos = findAllVideos(enVideos);
+  const seenKeys = new Set(allJaVideos.map((v) => v.key));
+  const typeOrder: Record<string, number> = { Trailer: 0, Teaser: 1, Clip: 2, Featurette: 3, "Behind the Scenes": 4 };
+  const allVideos = [...allJaVideos, ...allEnVideos.filter((v) => !seenKeys.has(v.key))]
+    .sort((a, b) => (typeOrder[a.type] ?? 5) - (typeOrder[b.type] ?? 5));
   const cast = movie.credits?.cast.slice(0, 10) || [];
   const images = await getMovieImages(Number(id), type || "movie");
   const recommendations = await getRecommendations(Number(id), type || "movie");
@@ -150,31 +164,37 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
   const screenwriters = movie.credits?.crew?.filter((c) => c.job === "Screenplay" || c.job === "Writer") || [];
   const composers = movie.credits?.crew?.filter((c) => c.job === "Original Music Composer") || [];
 
+  // コレクション（シリーズ）詳細
+  const collection = movie.belongs_to_collection
+    ? await getCollectionDetail(movie.belongs_to_collection.id)
+    : null;
+
   // 人物相関図データ
   const relationData = getRelationData(movie.id);
   const allCast = movie.credits?.cast || [];
 
   return (
     <main className="min-h-screen bg-white">
-      {/* ヒーロー画像 + ポスター */}
-      <div className="relative pt-16 h-[calc(56vw+64px)] max-h-[calc(520px+64px)] w-full bg-white md:bg-[#424242] md:h-[calc(25vw+64px)] md:max-h-[calc(400px+64px)]">
+      {/* ヒーロー画像 */}
+      <div className="relative w-full overflow-hidden h-[60vw] max-h-[400px] md:h-[30vw] md:max-h-[450px]">
+        <div className="absolute top-0 left-0 right-0 h-11 md:h-16 bg-white md:bg-[#424242] z-10" />
         {movie.backdrop_path && (
-          <div
-            className="absolute inset-0 top-16 bg-cover bg-top"
-            style={{
-              backgroundImage: `url(${IMAGE_BASE_URL}/original${movie.backdrop_path})`,
-            }}
+          <img
+            src={`${IMAGE_BASE_URL}/original${movie.backdrop_path}`}
+            alt={title}
+            className="absolute inset-0 w-full h-full object-cover object-top"
           />
         )}
-        <div className="absolute inset-0 top-16 bg-gradient-to-t from-white via-transparent to-transparent" />
+        {/* 下部を白へフェード */}
+        <div className="absolute bottom-0 left-0 right-0 h-1/2" style={{ background: "linear-gradient(to top, white 0%, rgba(255,255,255,0.7) 40%, transparent 100%)" }} />
       </div>
 
-      {/* ポスター（ヒーロー画像に重なる） + テキスト情報 */}
-      <div className="mt-0 relative z-10 px-6 md:-mt-40 md:px-16">
-        <div className="flex flex-col gap-6 md:flex-row md:gap-10">
+      {/* ポスター + テキスト情報（白背景） */}
+      <div className="relative z-10 -mt-8 px-6 md:-mt-12 md:px-16">
+        <div className="flex flex-col gap-5 md:flex-row md:gap-10">
           {/* ポスター */}
           {movie.poster_path && (
-            <div className="flex-shrink-0 self-start md:mt-32">
+            <div className="flex-shrink-0 self-start" style={{ boxShadow: "0 20px 40px rgba(0,0,0,0.15)" }}>
               <PosterTappable
                 posterPath={movie.poster_path}
                 title={title}
@@ -184,8 +204,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
             </div>
           )}
 
-          {/* 詳細情報 */}
-          <div className="flex-1 space-y-5 md:pt-32">
+          {/* テキスト情報 */}
+          <div className="flex-1 flex flex-col gap-5 pt-0">
             <div>
               <h1 className="text-2xl font-normal tracking-tight text-gray-900 md:text-4xl">
                 {title}
@@ -226,35 +246,11 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
                 ストーリー
               </h2>
-              <p className="max-w-2xl text-sm leading-7 text-gray-600">
+              <p className="text-sm leading-7 text-gray-600">
                 {movie.overview || "この作品の説明はまだ登録されていません。"}
               </p>
             </div>
 
-            {/* コレクション（シリーズ）リンク */}
-            {movie.belongs_to_collection && (
-              <Link
-                href={`/collection/${movie.belongs_to_collection.id}`}
-                className="flex max-w-2xl items-center gap-3 rounded-2xl bg-gray-50 px-4 py-3 transition-all hover:bg-gray-100 hover:shadow-md group"
-              >
-                {movie.belongs_to_collection.poster_path && (
-                  <img
-                    src={`${IMAGE_BASE_URL}/w92${movie.belongs_to_collection.poster_path}`}
-                    alt={movie.belongs_to_collection.name}
-                    className="h-12 w-8 rounded object-cover"
-                  />
-                )}
-                <div className="min-w-0 flex-1">
-                  <p className="text-xs text-gray-400">シリーズ</p>
-                  <p className="text-sm font-semibold text-gray-800 truncate">
-                    {movie.belongs_to_collection.name}
-                  </p>
-                </div>
-                <svg className="h-4 w-4 flex-shrink-0 text-gray-400 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            )}
 
           </div>
         </div>
@@ -634,10 +630,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
                 作品情報
               </h2>
-              <div className="flex gap-3">
-                {trailer && (
-                  <TrailerModal videoKey={trailer.key} />
-                )}
+              <div className="flex flex-wrap gap-[10px]">
                 <FollowButton
                   movieId={movie.id}
                   title={title}
@@ -685,6 +678,14 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                   <p className="text-gray-700">{Math.floor(movie.runtime / 60)}時間{movie.runtime % 60}分</p>
                 </div>
               )}
+              {movie.production_countries && movie.production_countries.length > 0 && (
+                <div>
+                  <p className="text-xs text-gray-400">製作国</p>
+                  <p className="text-gray-700">
+                    {movie.production_countries.map((c) => getCountryName(c.iso_3166_1, c.name)).join(", ")}
+                  </p>
+                </div>
+              )}
               {movie.release_date && (
                 <div>
                   <p className="text-xs text-gray-400">公開日</p>
@@ -707,14 +708,6 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                 <div>
                   <p className="text-xs text-gray-400">興行収入</p>
                   <p className="text-gray-700">約{(movie.revenue * 150 / 100000000).toFixed(1)}億円</p>
-                </div>
-              )}
-              {movie.production_countries && movie.production_countries.length > 0 && (
-                <div>
-                  <p className="text-xs text-gray-400">製作国</p>
-                  <p className="text-gray-700">
-                    {movie.production_countries.map((c) => getCountryName(c.iso_3166_1, c.name)).join(", ")}
-                  </p>
                 </div>
               )}
               {movie.original_language && (
@@ -756,6 +749,91 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                   </p>
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* ビデオ */}
+        {allVideos.length > 0 && (
+          <div className="mt-16 space-y-5">
+            <div className="flex items-center justify-between border-b border-gray-300 pb-2">
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
+                ビデオ
+              </h2>
+              <Link
+                href={`/movie/${id}/videos?type=${type || "movie"}`}
+                className="flex items-center gap-1 text-xs text-gray-400 transition-colors hover:text-gray-700"
+              >
+                すべて見る
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
+            <ScrollableRow>
+              {allVideos.map((v) => (
+                <TrailerModal key={v.key} videoKey={v.key} variant="card" label={v.name || v.type} publishedAt={v.published_at} />
+              ))}
+            </ScrollableRow>
+          </div>
+        )}
+
+        {/* シリーズ */}
+        {collection && collection.parts.length > 1 && (
+          <div className="mt-16 space-y-5">
+            <div className="flex items-center justify-between border-b border-gray-300 pb-2">
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">
+                シリーズ
+              </h2>
+              <Link
+                href={`/collection/${collection.id}`}
+                className="flex items-center gap-1 text-xs text-gray-400 transition-colors hover:text-gray-700"
+              >
+                すべて見る
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
+            <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+              {[...collection.parts].sort((a, b) => (b.release_date || b.first_air_date || "").localeCompare(a.release_date || a.first_air_date || "")).map((part) => {
+                const isCurrent = part.id === movie.id;
+                return (
+                  <Link
+                    key={part.id}
+                    href={`/movie/${part.id}`}
+                    className={`flex-shrink-0 w-[150px] group ${isCurrent ? "pointer-events-none" : ""}`}
+                  >
+                    <div className={`relative rounded-[6px] overflow-hidden ${isCurrent ? "ring-2 ring-black" : ""}`}>
+                      {part.poster_path ? (
+                        <img
+                          src={`${IMAGE_BASE_URL}/w342${part.poster_path}`}
+                          alt={part.title || part.name || ""}
+                          className={`w-[150px] h-[225px] object-cover transition-opacity ${isCurrent ? "" : "group-hover:opacity-80"}`}
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="flex w-[150px] h-[225px] items-center justify-center bg-gray-200 text-xs text-gray-400">
+                          N/A
+                        </div>
+                      )}
+                      {isCurrent && (
+                        <div className="absolute bottom-0 left-0 right-0 bg-black/70 py-1 text-center">
+                          <span className="text-[10px] font-bold text-white tracking-wider">NOW</span>
+                        </div>
+                      )}
+                    </div>
+                    <p className={`mt-2 text-xs leading-4 line-clamp-2 ${isCurrent ? "font-semibold text-gray-900" : "text-gray-600 group-hover:text-gray-900"}`}>
+                      {part.title || part.name || ""}
+                    </p>
+                    {(part.release_date || part.first_air_date) && (
+                      <p className="mt-0.5 text-[10px] text-gray-400">
+                        {(part.release_date || part.first_air_date || "").slice(0, 4)}
+                      </p>
+                    )}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         )}
