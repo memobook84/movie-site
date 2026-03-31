@@ -55,8 +55,8 @@ export default function GenresPage() {
               href={`/genre/${genre.id}?name=${encodeURIComponent(genre.name)}`}
               className="group relative flex aspect-[3/4] flex-col items-center justify-center gap-2 rounded-lg border-[3px] border-gray-100 px-2 text-center font-extrabold select-none cursor-pointer transition-all duration-500 hover:border-yellow-400 hover:scale-105 active:scale-95 active:rotate-[1.7deg] md:gap-3 md:px-4 bg-white shadow-md hover:shadow-lg"
             >
-              <Icon className="h-7 w-7 text-gray-600 transition-all duration-300 group-hover:text-gray-900 group-hover:scale-110 md:h-8 md:w-8" />
-              <span className="text-[11px] font-semibold text-[#1d1d1f] md:text-xs">
+              <Icon className="h-7 w-7 text-gray-600 transition-all duration-300 group-hover:text-yellow-500 group-hover:scale-110 md:h-8 md:w-8" />
+              <span className="text-[11px] font-semibold text-[#1d1d1f] transition-colors duration-300 group-hover:text-yellow-500 md:text-xs">
                 {genre.name}
               </span>
             </Link>

@@ -222,29 +222,26 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               )}
             </div>
 
-            {/* メタ情報バッジ */}
-            <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500">
-              {year && (
-                <span className="rounded-md bg-gray-100 px-2.5 py-1">{year}</span>
-              )}
-              {movie.runtime > 0 && (
-                <span className="rounded-md bg-gray-100 px-2.5 py-1">
-                  {Math.floor(movie.runtime / 60)}時間{movie.runtime % 60}分
-                </span>
-              )}
-              {movie.genres.map((genre) => {
-                const Icon = GENRE_ICONS[genre.id];
-                return (
-                  <span
-                    key={genre.id}
-                    className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-2.5 py-1"
-                  >
-                    {genre.name}
-                    {Icon && <Icon className="h-3.5 w-3.5" />}
-                  </span>
-                );
-              })}
-            </div>
+            {/* 年代 + ジャンルタグ */}
+            {(year || movie.genres.length > 0) && (
+              <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500">
+                {year && (
+                  <span className="rounded-md bg-gray-100 px-2.5 py-1">{year}</span>
+                )}
+                {movie.genres.map((genre) => {
+                  const Icon = GENRE_ICONS[genre.id];
+                  return (
+                    <span
+                      key={genre.id}
+                      className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-2.5 py-1"
+                    >
+                      {genre.name}
+                      {Icon && <Icon className="h-3.5 w-3.5" />}
+                    </span>
+                  );
+                })}
+              </div>
+            )}
 
             {/* あらすじ */}
             <div className="space-y-2">

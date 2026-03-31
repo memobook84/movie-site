@@ -120,7 +120,7 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`fixed top-0 z-50 w-full px-6 py-4 transition-all duration-500 md:px-16 bg-white md:bg-[#424242] ${
+        className={`fixed top-0 z-50 w-full px-6 py-2 transition-all duration-500 md:px-16 md:py-4 bg-white md:bg-[#424242] ${
           scrolled ? "shadow-sm" : ""
         } ${hidden ? "-translate-y-full" : "translate-y-0"}`}
       >
@@ -129,7 +129,7 @@ export default function Navbar() {
             href="/"
             className="flex items-center gap-3 text-xl font-semibold tracking-[0.2em] text-[#1d1d1f] md:text-white md:text-2xl"
           >
-            <img src="/icon-192.png" alt="Logo" className="h-10 w-10 object-contain md:hidden" />
+            <img src="/icon-192.png" alt="Logo" className="h-7 w-7 object-contain md:hidden" />
             <img src="/logo.png?v=2" alt="Logo" className="hidden h-11 w-11 object-contain md:block" />
             <span className="hidden xl:inline">ARD CINEMA</span>
           </Link>

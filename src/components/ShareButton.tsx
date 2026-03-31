@@ -42,10 +42,10 @@ export default function ShareButton({ title }: ShareButtonProps) {
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="inline-flex items-center justify-center h-[50px] w-[50px] rounded-[2px] border-none cursor-pointer transition-colors duration-300 bg-[#313638] hover:bg-[#55acee]"
+        className="group inline-flex items-center justify-center h-10 w-10 rounded border-none cursor-pointer transition-all bg-gray-50 hover:bg-gray-100"
         aria-label="シェア"
       >
-        <svg className="h-[26px] w-[26px] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg className="h-5 w-5 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="18" cy="5" r="3" />
           <circle cx="6" cy="12" r="3" />
           <circle cx="18" cy="19" r="3" />
@@ -57,7 +57,7 @@ export default function ShareButton({ title }: ShareButtonProps) {
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute bottom-full left-0 z-50 mb-2 w-44 overflow-hidden rounded-xl bg-white shadow-xl ring-1 ring-gray-200">
+          <div className="absolute bottom-full right-0 z-50 mb-2 w-44 overflow-hidden rounded-xl bg-white shadow-xl ring-1 ring-gray-200">
             <button
               onClick={shareX}
               className="flex w-full items-center gap-3 px-4 py-3 text-sm text-gray-700 transition-colors hover:bg-gray-50"

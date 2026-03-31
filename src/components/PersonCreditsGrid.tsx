@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { IMAGE_BASE_URL } from "@/lib/tmdb";
 
-type SortMode = "rating" | "newest" | "oldest";
+type SortMode = "popular" | "newest" | "oldest";
 
 interface Credit {
   id: number;
@@ -12,6 +12,7 @@ interface Credit {
   name?: string;
   poster_path: string | null;
   vote_average: number;
+  vote_count: number;
   media_type?: string;
   release_date?: string;
   first_air_date?: string;
@@ -29,12 +30,16 @@ export default function PersonCreditsGrid({ castCredits, directorCredits }: Prop
   const hasDirector = directorCredits.length > 0;
 
   const [activeTab, setActiveTab] = useState<Tab>(hasCast ? "cast" : "director");
-  const [sort, setSort] = useState<SortMode>("rating");
+  const [sort, setSort] = useState<SortMode>("popular");
 
   const credits = activeTab === "cast" ? castCredits : directorCredits;
 
   const sorted = [...credits].sort((a, b) => {
-    if (sort === "rating") return b.vote_average - a.vote_average;
+    if (sort === "popular") {
+      const scoreA = a.vote_average * a.vote_count;
+      const scoreB = b.vote_average * b.vote_count;
+      return scoreB - scoreA;
+    }
     const dateA = a.release_date || a.first_air_date || "";
     const dateB = b.release_date || b.first_air_date || "";
     if (sort === "newest") return dateB.localeCompare(dateA);
@@ -44,12 +49,12 @@ export default function PersonCreditsGrid({ castCredits, directorCredits }: Prop
   const showYear = sort === "newest" || sort === "oldest";
 
   const sortLabels: Record<SortMode, string> = {
-    rating: "評価順",
+    popular: "人気順",
     newest: "新しい順",
     oldest: "古い順",
   };
 
-  const sortOptions: SortMode[] = ["rating", "newest", "oldest"];
+  const sortOptions: SortMode[] = ["popular", "newest", "oldest"];
 
   if (!hasCast && !hasDirector) return null;
 
@@ -65,7 +70,7 @@ export default function PersonCreditsGrid({ castCredits, directorCredits }: Prop
           {tabs.map((tab) => (
             <button
               key={tab.key}
-              onClick={() => { setActiveTab(tab.key); setSort("rating"); }}
+              onClick={() => { setActiveTab(tab.key); setSort("popular"); }}
               className={`px-4 py-2.5 text-sm font-medium transition-colors ${
                 activeTab === tab.key
                   ? "border-b-2 border-[#1d1d1f] text-[#1d1d1f]"

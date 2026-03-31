@@ -80,7 +80,7 @@ export default function FollowsPage() {
                     <img
                       src={`https://image.tmdb.org/t/p/w342${item.posterPath}`}
                       alt={item.title}
-                      className="aspect-[2/3] w-full object-cover transition-transform duration-300"
+                      className="aspect-[2/3] w-full rounded-[4px] object-cover transition-transform duration-300"
                       loading="lazy"
                     />
                   ) : (

@@ -13,7 +13,8 @@ interface Props {
 function formatDate(dateStr: string) {
   if (dateStr === "未定") return "公開日未定";
   const d = new Date(dateStr);
-  return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+  const days = ["日", "月", "火", "水", "木", "金", "土"];
+  return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日（${days[d.getDay()]}）`;
 }
 
 function groupByDate(movies: Movie[]) {
