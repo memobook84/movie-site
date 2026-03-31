@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { IMAGE_BASE_URL, Movie } from "@/lib/tmdb";
 import { useRouter } from "next/navigation";
-import { PiBuildingsFill } from "react-icons/pi";
+import { BiSolidCameraMovie } from "react-icons/bi";
 import { IoPlayCircle } from "react-icons/io5";
 
 interface CarouselItem {
@@ -244,7 +244,7 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
             </div>
 
             {/* 左上 雷アイコン */}
-            <PiBuildingsFill className="absolute top-3 left-3 md:top-4 md:left-4 w-7 h-7 md:w-9 md:h-9 text-red-500 drop-shadow-lg z-10" />
+            <BiSolidCameraMovie className="absolute top-3 left-3 md:top-4 md:left-4 w-7 h-7 md:w-9 md:h-9 text-red-500 drop-shadow-lg z-10" />
 
             {/* 下部グラデーション */}
             <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-[5]" />
@@ -311,7 +311,7 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
           <div className="relative py-3">
             <div className="flex items-center justify-between px-2 mb-2">
               <span className="flex items-center gap-1 text-red-500 font-bold text-xs tracking-wide">
-                <PiBuildingsFill className="w-4 h-4" />
+                <BiSolidCameraMovie className="w-4 h-4" />
                 上映中
               </span>
               <div className="flex gap-1">
@@ -368,7 +368,7 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
                         No Image
                       </div>
                     )}
-                    <PiBuildingsFill className="absolute top-1 left-1 w-4 h-4 text-red-500 drop-shadow-md" />
+                    <BiSolidCameraMovie className="absolute top-1 left-1 w-4 h-4 text-red-500 drop-shadow-md" />
                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-1 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                       <p className="text-white text-[10px] leading-tight line-clamp-1">{mTitle}</p>
                     </div>

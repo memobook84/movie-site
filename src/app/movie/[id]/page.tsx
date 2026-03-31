@@ -191,10 +191,10 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
 
       {/* ポスター + テキスト情報（白背景） */}
       <div className="relative z-10 -mt-8 px-6 md:-mt-12 md:px-16">
-        <div className="flex flex-col gap-5 md:flex-row md:gap-0">
+        <div className="flex flex-row gap-3 md:gap-0">
           {/* ポスター + スマホ版ウォッチリストボタン */}
           {movie.poster_path && (
-            <div className="flex-shrink-0 self-start flex items-end gap-2">
+            <div className="flex-shrink-0 self-start">
               <div style={{ boxShadow: "0 20px 40px rgba(0,0,0,0.15), 0 0 20px rgba(250,204,21,0.3)" }}>
                 <PosterTappable
                   posterPath={movie.poster_path}
@@ -203,28 +203,30 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                   images={images}
                 />
               </div>
-              <div className="md:hidden">
-                <FollowButton movieId={movie.id} title={title} posterPath={movie.poster_path} mediaType={type || "movie"} />
-              </div>
             </div>
           )}
 
           {/* テキスト情報 */}
-          <div className="flex-1 flex flex-col gap-5 pt-0 md:pl-4">
+          <div className="flex-1 flex flex-col gap-3 md:gap-5 pt-0 md:pl-4">
             <div>
-              <h1 className="text-lg font-normal tracking-tight text-gray-900 md:text-4xl">
+              <h1 className="text-sm font-normal tracking-tight text-gray-900 md:text-4xl">
                 {title}
               </h1>
               {movie.tagline && (
-                <p className="mt-2 text-sm leading-7 text-gray-600">
+                <p className="mt-1 text-[10px] leading-4 text-gray-600 md:mt-2 md:text-sm md:leading-7">
                   &ldquo;{movie.tagline}&rdquo;
                 </p>
               )}
             </div>
 
-            {/* 年代 + ジャンルタグ */}
+            {/* 年代タグ（スマホ）+ 年代+ジャンルタグ（PC） */}
+            {year && (
+              <div className="md:hidden text-[10px] text-gray-500">
+                <span className="rounded-md bg-gray-100 px-2 py-0.5">{year}</span>
+              </div>
+            )}
             {(year || movie.genres.length > 0) && (
-              <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500">
+              <div className="hidden md:flex flex-wrap items-center gap-2 text-xs text-gray-500">
                 {year && (
                   <span className="rounded-md bg-gray-100 px-2.5 py-1">{year}</span>
                 )}
@@ -243,8 +245,13 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               </div>
             )}
 
-            {/* あらすじ */}
-            <div className="space-y-2">
+            {/* スマホ版ウォッチリストボタン（ポスター下端に揃える） */}
+            <div className="mt-auto md:hidden">
+              <FollowButton movieId={movie.id} title={title} posterPath={movie.poster_path} mediaType={type || "movie"} />
+            </div>
+
+            {/* あらすじ（PC版のみここに表示） */}
+            <div className="hidden md:block space-y-2">
               <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
                 ストーリー
               </h2>
@@ -253,12 +260,40 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               </p>
             </div>
 
-            {/* ウォッチリストボタン（PC版：ポスター下端に揃える） */}
+            {/* ウォッチリストボタン（PC版） */}
             <div className="mt-auto hidden md:block">
               <FollowButton movieId={movie.id} title={title} posterPath={movie.poster_path} mediaType={type || "movie"} />
             </div>
 
           </div>
+        </div>
+
+        {/* ジャンルタグ（スマホ版） */}
+        {movie.genres.length > 0 && (
+          <div className="mt-6 flex flex-wrap items-center gap-1.5 text-[10px] text-gray-500 md:hidden">
+            {movie.genres.map((genre) => {
+              const Icon = GENRE_ICONS[genre.id];
+              return (
+                <span
+                  key={genre.id}
+                  className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-2 py-0.5"
+                >
+                  {genre.name}
+                  {Icon && <Icon className="h-3 w-3" />}
+                </span>
+              );
+            })}
+          </div>
+        )}
+
+        {/* あらすじ（スマホ版） */}
+        <div className="mt-4 space-y-2 md:hidden">
+          <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
+            ストーリー
+          </h2>
+          <p className="text-sm leading-7 text-gray-600">
+            {movie.overview || "この作品の説明はまだ登録されていません。"}
+          </p>
         </div>
       </div>
 
@@ -763,6 +798,68 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
           </div>
         )}
 
+        {/* キャスト（ポラロイド風） */}
+        {cast.length > 0 && (
+          <div className="mt-8 md:mt-16 space-y-5">
+            <div className="flex items-center justify-between border-b border-gray-300 pb-2">
+              <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400">
+                キャスト
+              </h2>
+              <Link
+                href={`/movie/${id}/cast?type=${type || "movie"}`}
+                className="flex items-center gap-1 text-xs text-gray-400 transition-colors hover:text-gray-700"
+              >
+                出演者一覧
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
+            <div className="flex gap-2 overflow-x-auto pb-8 scrollbar-hide md:gap-4">
+              {cast.map((person, i) => {
+                const rotations = [-3, 2, -1.5, 3, -2, 1.5, -2.5, 2.5, -1, 3.5];
+                const rot = rotations[i % rotations.length];
+                return (
+                  <Link
+                    key={person.id}
+                    href={`/person/${person.id}`}
+                    className="flex-shrink-0 group transition-all duration-300 hover:scale-110 hover:z-10"
+                  >
+                    <div className="w-[110px] rounded-sm bg-[#faf8f5] p-2 pb-8 shadow-md transition-shadow duration-300 group-hover:shadow-xl md:w-[130px] md:p-2.5 md:pb-10" style={{ boxShadow: '2px 3px 12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.08)' }}>
+                      {person.profile_path ? (
+                        <div className="relative">
+                          <img
+                            src={`${IMAGE_BASE_URL}/w185${person.profile_path}`}
+                            alt={person.name}
+                            className="aspect-[3/4] w-full object-cover grayscale contrast-[1.2] transition-all duration-500 group-hover:grayscale-0 group-hover:contrast-100"
+                            loading="lazy"
+                          />
+                          <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_8px_rgba(0,0,0,0.3)]" />
+                        </div>
+                      ) : (
+                        <div className="relative">
+                          <div className="flex aspect-[3/4] w-full items-center justify-center bg-gray-100 text-3xl text-gray-300">
+                            ?
+                          </div>
+                          <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_8px_rgba(0,0,0,0.3)]" />
+                        </div>
+                      )}
+                      <div className="mt-2 text-center">
+                        <p className="truncate text-[11px] font-semibold text-gray-800">
+                          {person.name}
+                        </p>
+                        <p className="mt-0.5 truncate text-[10px] text-gray-400">
+                          {person.character}
+                          </p>
+                        </div>
+                      </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* ビデオ */}
         {allVideos.length > 0 && (
           <div className="mt-8 md:mt-16 space-y-5">
@@ -841,68 +938,6 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                         {(part.release_date || part.first_air_date || "").slice(0, 4)}
                       </p>
                     )}
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* キャスト（ポラロイド風） */}
-        {cast.length > 0 && (
-          <div className="mt-8 md:mt-16 space-y-5">
-            <div className="flex items-center justify-between border-b border-gray-300 pb-2">
-              <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400">
-                キャスト
-              </h2>
-              <Link
-                href={`/movie/${id}/cast?type=${type || "movie"}`}
-                className="flex items-center gap-1 text-xs text-gray-400 transition-colors hover:text-gray-700"
-              >
-                出演者一覧
-                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            </div>
-            <div className="flex gap-2 overflow-x-auto pb-8 scrollbar-hide md:gap-4">
-              {cast.map((person, i) => {
-                const rotations = [-3, 2, -1.5, 3, -2, 1.5, -2.5, 2.5, -1, 3.5];
-                const rot = rotations[i % rotations.length];
-                return (
-                  <Link
-                    key={person.id}
-                    href={`/person/${person.id}`}
-                    className="flex-shrink-0 group transition-all duration-300 hover:scale-110 hover:z-10"
-                  >
-                    <div className="w-[110px] rounded-sm bg-[#faf8f5] p-2 pb-8 shadow-md transition-shadow duration-300 group-hover:shadow-xl md:w-[130px] md:p-2.5 md:pb-10" style={{ boxShadow: '2px 3px 12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.08)' }}>
-                      {person.profile_path ? (
-                        <div className="relative">
-                          <img
-                            src={`${IMAGE_BASE_URL}/w185${person.profile_path}`}
-                            alt={person.name}
-                            className="aspect-[3/4] w-full object-cover grayscale contrast-[1.2] transition-all duration-500 group-hover:grayscale-0 group-hover:contrast-100"
-                            loading="lazy"
-                          />
-                          <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_8px_rgba(0,0,0,0.3)]" />
-                        </div>
-                      ) : (
-                        <div className="relative">
-                          <div className="flex aspect-[3/4] w-full items-center justify-center bg-gray-100 text-3xl text-gray-300">
-                            ?
-                          </div>
-                          <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_8px_rgba(0,0,0,0.3)]" />
-                        </div>
-                      )}
-                      <div className="mt-2 text-center">
-                        <p className="truncate text-[11px] font-semibold text-gray-800">
-                          {person.name}
-                        </p>
-                        <p className="mt-0.5 truncate text-[10px] text-gray-400">
-                          {person.character}
-                          </p>
-                        </div>
-                      </div>
                   </Link>
                 );
               })}
