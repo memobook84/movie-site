@@ -252,8 +252,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
 
             {/* あらすじ（PC版のみここに表示） */}
             <div className="hidden md:block space-y-2">
-              <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
-                ストーリー
+              <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b border-gray-400 pb-2">
+                あらすじ
               </h2>
               <p className="text-sm leading-7 text-gray-600">
                 {movie.overview || "この作品の説明はまだ登録されていません。"}
@@ -288,8 +288,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
 
         {/* あらすじ（スマホ版） */}
         <div className="mt-4 space-y-2 md:hidden">
-          <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
-            ストーリー
+          <h2 className="text-sm font-normal uppercase tracking-widest text-gray-600 border-b border-gray-400 pb-2">
+            あらすじ
           </h2>
           <p className="text-sm leading-7 text-gray-600">
             {movie.overview || "この作品の説明はまだ登録されていません。"}
@@ -667,8 +667,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* 作品情報 */}
         {(directors.length > 0 || screenwriters.length > 0 || composers.length > 0 || movie.runtime > 0 || movie.budget > 0 || movie.revenue > 0 || movie.production_companies.length > 0) && (
           <div className="mt-8 md:mt-16 space-y-5">
-            <div className="flex items-center justify-between border-b border-gray-300 pb-2">
-              <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400">
+            <div className="flex items-center justify-between border-b border-gray-400 pb-2">
+              <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600">
                 作品情報
               </h2>
               <div className="flex flex-wrap gap-[10px]">
@@ -685,11 +685,109 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                 <ShareButton title={`${title} `} />
               </div>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
-              {/* スタッフ行: 監督・脚本・音楽 */}
+            {/* スマホ: IMDb風 */}
+            <div className="text-sm md:hidden">
+              <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+                {directors.length > 0 && (
+                  <div>
+                    <p className="text-[10px] font-normal uppercase text-gray-400">監督</p>
+                    <p className="mt-0.5 text-xs text-gray-800">
+                      {directors.map((d, i) => (
+                        <span key={d.id}>
+                          {i > 0 && ", "}
+                          <Link href={`/person/${d.id}`} className="text-blue-600 hover:underline">{d.name}</Link>
+                        </span>
+                      ))}
+                    </p>
+                  </div>
+                )}
+                {screenwriters.length > 0 && (
+                  <div>
+                    <p className="text-[10px] font-normal uppercase text-gray-400">脚本</p>
+                    <p className="mt-0.5 text-xs text-gray-800">{screenwriters.map((w) => w.name).join(", ")}</p>
+                  </div>
+                )}
+                {composers.length > 0 && (
+                  <div>
+                    <p className="text-[10px] font-normal uppercase text-gray-400">音楽</p>
+                    <p className="mt-0.5 text-xs text-gray-800">{composers.map((c) => c.name).join(", ")}</p>
+                  </div>
+                )}
+                {movie.runtime > 0 && (
+                  <div>
+                    <p className="text-[10px] font-normal uppercase text-gray-400">上映時間</p>
+                    <p className="mt-0.5 text-xs text-gray-800">{Math.floor(movie.runtime / 60)}時間{movie.runtime % 60}分</p>
+                  </div>
+                )}
+                {movie.production_countries && movie.production_countries.length > 0 && (
+                  <div>
+                    <p className="text-[10px] font-normal uppercase text-gray-400">製作国</p>
+                    <p className="mt-0.5 text-xs text-gray-800">{movie.production_countries.map((c) => getCountryName(c.iso_3166_1, c.name)).join(", ")}</p>
+                  </div>
+                )}
+                {movie.original_language && (
+                  <div>
+                    <p className="text-[10px] font-normal uppercase text-gray-400">原語</p>
+                    <p className="mt-0.5 text-xs text-gray-800">{LANGUAGE_NAMES[movie.original_language] || movie.original_language}</p>
+                  </div>
+                )}
+                {movie.release_date && (
+                  <div>
+                    <p className="text-[10px] font-normal uppercase text-gray-400">公開日</p>
+                    <p className="mt-0.5 text-xs text-gray-800">{movie.release_date}</p>
+                  </div>
+                )}
+                {jpReleaseDate && (
+                  <div>
+                    <p className="text-[10px] font-normal uppercase text-gray-400">公開日（日本）</p>
+                    <p className="mt-0.5 text-xs text-gray-800">{jpReleaseDate}</p>
+                  </div>
+                )}
+                {movie.budget > 0 && (
+                  <div>
+                    <p className="text-[10px] font-normal uppercase text-gray-400">予算</p>
+                    <p className="mt-0.5 text-xs text-gray-800">約{(movie.budget * 150 / 100000000).toFixed(1)}億円</p>
+                  </div>
+                )}
+                {movie.revenue > 0 && (
+                  <div>
+                    <p className="text-[10px] font-normal uppercase text-gray-400">興行収入</p>
+                    <p className="mt-0.5 text-xs text-gray-800">約{(movie.revenue * 150 / 100000000).toFixed(1)}億円</p>
+                  </div>
+                )}
+                {certification && (
+                  <div>
+                    <p className="text-[10px] font-normal uppercase text-gray-400">年齢制限</p>
+                    <p className="mt-0.5 text-xs text-gray-800">{certification}</p>
+                  </div>
+                )}
+                {movie.status && (
+                  <div>
+                    <p className="text-[10px] font-normal uppercase text-gray-400">ステータス</p>
+                    <p className="mt-0.5 text-xs text-gray-800">{{ Released: "公開済み", "Post Production": "ポストプロダクション", "In Production": "製作中", Planned: "企画段階", Rumored: "噂", Canceled: "中止" }[movie.status] || movie.status}</p>
+                  </div>
+                )}
+                {movie.production_companies.length > 0 && (
+                  <div className="col-span-2">
+                    <p className="text-[10px] font-normal uppercase text-gray-400">制作会社</p>
+                    <p className="mt-0.5 text-xs text-gray-800">{movie.production_companies.map((c) => c.name).join(", ")}</p>
+                  </div>
+                )}
+                {movie.homepage && (
+                  <div className="col-span-2">
+                    <p className="text-[10px] font-normal uppercase text-gray-400">公式サイト</p>
+                    <a href={movie.homepage} target="_blank" rel="noopener noreferrer" className="mt-0.5 inline-flex items-center gap-1 text-xs text-blue-600 hover:underline">
+                      公式サイトを開く →
+                    </a>
+                  </div>
+                )}
+              </div>
+            </div>
+            {/* PC: グリッドレイアウト（従来通り） */}
+            <div className="hidden md:grid grid-cols-3 gap-4 text-sm">
               {directors.length > 0 && (
                 <div>
-                  <p className="text-xs md:text-sm text-gray-400">監督</p>
+                  <p className="text-sm text-gray-400">監督</p>
                   <p className="text-gray-700">
                     {directors.map((d, i) => (
                       <span key={d.id}>
@@ -702,88 +800,79 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               )}
               {screenwriters.length > 0 && (
                 <div>
-                  <p className="text-xs md:text-sm text-gray-400">脚本</p>
-                  <p className="text-gray-700">
-                    {screenwriters.map((w) => w.name).join(", ")}
-                  </p>
+                  <p className="text-sm text-gray-400">脚本</p>
+                  <p className="text-gray-700">{screenwriters.map((w) => w.name).join(", ")}</p>
                 </div>
               )}
               {composers.length > 0 && (
                 <div>
-                  <p className="text-xs md:text-sm text-gray-400">音楽</p>
-                  <p className="text-gray-700">
-                    {composers.map((c) => c.name).join(", ")}
-                  </p>
+                  <p className="text-sm text-gray-400">音楽</p>
+                  <p className="text-gray-700">{composers.map((c) => c.name).join(", ")}</p>
                 </div>
               )}
-              {/* 作品データ行 */}
               {movie.runtime > 0 && (
                 <div>
-                  <p className="text-xs md:text-sm text-gray-400">上映時間</p>
+                  <p className="text-sm text-gray-400">上映時間</p>
                   <p className="text-gray-700">{Math.floor(movie.runtime / 60)}時間{movie.runtime % 60}分</p>
                 </div>
               )}
               {movie.production_countries && movie.production_countries.length > 0 && (
                 <div>
-                  <p className="text-xs md:text-sm text-gray-400">製作国</p>
-                  <p className="text-gray-700">
-                    {movie.production_countries.map((c) => getCountryName(c.iso_3166_1, c.name)).join(", ")}
-                  </p>
+                  <p className="text-sm text-gray-400">製作国</p>
+                  <p className="text-gray-700">{movie.production_countries.map((c) => getCountryName(c.iso_3166_1, c.name)).join(", ")}</p>
                 </div>
               )}
               {movie.original_language && (
                 <div>
-                  <p className="text-xs md:text-sm text-gray-400">原語</p>
+                  <p className="text-sm text-gray-400">原語</p>
                   <p className="text-gray-700">{LANGUAGE_NAMES[movie.original_language] || movie.original_language}</p>
                 </div>
               )}
               {movie.release_date && (
                 <div>
-                  <p className="text-xs md:text-sm text-gray-400">公開日</p>
+                  <p className="text-sm text-gray-400">公開日</p>
                   <p className="text-gray-700">{movie.release_date}</p>
                 </div>
               )}
               {jpReleaseDate && (
                 <div>
-                  <p className="text-xs md:text-sm text-gray-400">公開日（日本）</p>
+                  <p className="text-sm text-gray-400">公開日（日本）</p>
                   <p className="text-gray-700">{jpReleaseDate}</p>
                 </div>
               )}
               {movie.budget > 0 && (
                 <div>
-                  <p className="text-xs md:text-sm text-gray-400">予算</p>
+                  <p className="text-sm text-gray-400">予算</p>
                   <p className="text-gray-700">約{(movie.budget * 150 / 100000000).toFixed(1)}億円</p>
                 </div>
               )}
               {movie.revenue > 0 && (
                 <div>
-                  <p className="text-xs md:text-sm text-gray-400">興行収入</p>
+                  <p className="text-sm text-gray-400">興行収入</p>
                   <p className="text-gray-700">約{(movie.revenue * 150 / 100000000).toFixed(1)}億円</p>
                 </div>
               )}
               {certification && (
                 <div>
-                  <p className="text-xs md:text-sm text-gray-400">年齢制限</p>
+                  <p className="text-sm text-gray-400">年齢制限</p>
                   <p className="text-gray-700">{certification}</p>
                 </div>
               )}
               {movie.status && (
                 <div>
-                  <p className="text-xs md:text-sm text-gray-400">ステータス</p>
+                  <p className="text-sm text-gray-400">ステータス</p>
                   <p className="text-gray-700">{{ Released: "公開済み", "Post Production": "ポストプロダクション", "In Production": "製作中", Planned: "企画段階", Rumored: "噂", Canceled: "中止" }[movie.status] || movie.status}</p>
                 </div>
               )}
               {movie.production_companies.length > 0 && (
-                <div className="col-span-2 md:col-span-3">
-                  <p className="text-xs md:text-sm text-gray-400">制作会社</p>
-                  <p className="text-gray-700">
-                    {movie.production_companies.map((c) => c.name).join(", ")}
-                  </p>
+                <div className="col-span-3">
+                  <p className="text-sm text-gray-400">制作会社</p>
+                  <p className="text-gray-700">{movie.production_companies.map((c) => c.name).join(", ")}</p>
                 </div>
               )}
               {movie.homepage && (
-                <div className="col-span-2 md:col-span-3">
-                  <p className="text-xs md:text-sm text-gray-400">公式サイト</p>
+                <div className="col-span-3">
+                  <p className="text-sm text-gray-400">公式サイト</p>
                   <p className="flex items-center gap-2 text-sm text-gray-700">
                     <span className="break-all">{movie.homepage}</span>
                     <a href={movie.homepage} target="_blank" rel="noopener noreferrer" className="flex-shrink-0 text-blue-500 hover:text-blue-600 transition-colors" aria-label="公式サイトを開く">
@@ -801,8 +890,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* キャスト（ポラロイド風） */}
         {cast.length > 0 && (
           <div className="mt-8 md:mt-16 space-y-5">
-            <div className="flex items-center justify-between border-b border-gray-300 pb-2">
-              <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400">
+            <div className="flex items-center justify-between border-b border-gray-400 pb-2">
+              <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600">
                 キャスト
               </h2>
               <Link
@@ -863,8 +952,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* ビデオ */}
         {allVideos.length > 0 && (
           <div className="mt-8 md:mt-16 space-y-5">
-            <div className="flex items-center justify-between border-b border-gray-300 pb-2">
-              <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400">
+            <div className="flex items-center justify-between border-b border-gray-400 pb-2">
+              <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600">
                 ビデオ
               </h2>
               <Link
@@ -888,8 +977,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* シリーズ */}
         {collection && collection.parts.length > 1 && (
           <div className="mt-8 md:mt-16 space-y-5">
-            <div className="flex items-center justify-between border-b border-gray-300 pb-2">
-              <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400">
+            <div className="flex items-center justify-between border-b border-gray-400 pb-2">
+              <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600">
                 シリーズ
               </h2>
               <Link
@@ -948,7 +1037,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* シーズン情報（TV番組のみ） */}
         {type === "tv" && movie.seasons && movie.seasons.length > 0 && (
           <div className="mt-8 md:mt-16 space-y-5">
-            <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
+            <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b border-gray-400 pb-2">
               シーズン（{movie.number_of_seasons}シーズン・{movie.number_of_episodes}エピソード）
             </h2>
             <div className="space-y-3">
@@ -990,7 +1079,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* 配信情報 */}
         {watchProviders && (watchProviders.flatrate || watchProviders.rent || watchProviders.buy) && (
           <div className="mt-8 md:mt-16 space-y-5">
-            <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
+            <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b border-gray-400 pb-2">
               配信情報
             </h2>
             <div className="space-y-4">
@@ -1055,7 +1144,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* 公式SNS */}
         {(externalIds.instagram_id || externalIds.twitter_id || externalIds.facebook_id || externalIds.tiktok_id) && (
           <div className="mt-8 md:mt-16 space-y-5">
-            <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
+            <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b border-gray-400 pb-2">
               公式SNS
             </h2>
             <div className="flex gap-3">
@@ -1095,7 +1184,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* 関連作品 */}
         {recommendations.length > 0 && (
           <div className="mt-8 md:mt-16 space-y-5">
-            <h2 className="text-sm md:text-base font-semibold uppercase tracking-widest text-gray-400 border-b border-gray-300 pb-2">
+            <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b border-gray-400 pb-2">
               関連作品
             </h2>
             <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">

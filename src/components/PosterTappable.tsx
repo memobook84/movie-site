@@ -30,7 +30,7 @@ export default function PosterTappable({ posterPath, title, imageBase, images }:
         <img
           src={`${imageBase}/w342${posterPath}`}
           alt={title}
-          className="w-44 rounded-[4px] md:w-[360px] transition-transform active:scale-95"
+          className="w-44 rounded-[4px] md:w-80 transition-transform active:scale-95"
         />
       </div>
 

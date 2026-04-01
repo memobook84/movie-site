@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { IMAGE_BASE_URL, Movie } from "@/lib/tmdb";
 
+const IMG_SM = `${IMAGE_BASE_URL}/w185`;
+const IMG_PC = `${IMAGE_BASE_URL}/w342`;
+
 interface MovieCardProps {
   movie: Movie;
   variant?: "default" | "oscar";
@@ -17,7 +20,7 @@ export default function MovieCard({ movie, variant = "default" }: MovieCardProps
         <div className="w-[105px] overflow-hidden rounded-[3px] bg-white shadow-md transition-all duration-300 group-hover:shadow-lg group-hover:shadow-xl md:hidden">
           {movie.poster_path ? (
             <img
-              src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}
+              src={`${IMG_SM}${movie.poster_path}`}
               alt={title}
               className="aspect-[2/3] w-full object-cover"
               loading="lazy"
@@ -27,8 +30,8 @@ export default function MovieCard({ movie, variant = "default" }: MovieCardProps
               No Image
             </div>
           )}
-          <div className="px-2 py-2">
-            <p className="truncate text-xs font-medium text-gray-900">
+          <div className="px-1.5 py-1.5">
+            <p className="truncate text-[9px] font-medium text-gray-900">
               {title}
             </p>
           </div>
@@ -37,7 +40,7 @@ export default function MovieCard({ movie, variant = "default" }: MovieCardProps
         <div className="hidden w-[170px] overflow-hidden rounded-[3px] bg-white shadow-md transition-all duration-300 group-hover:shadow-lg group-hover:shadow-xl md:block">
           {movie.poster_path ? (
             <img
-              src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}
+              src={`${IMG_PC}${movie.poster_path}`}
               alt={title}
               className="aspect-[2/3] w-full object-cover"
               loading="lazy"
@@ -63,7 +66,7 @@ export default function MovieCard({ movie, variant = "default" }: MovieCardProps
       <div className="w-[105px] overflow-hidden rounded-[3px] bg-white shadow-md transition-all duration-300 group-hover:shadow-lg group-hover:shadow-xl md:hidden">
         {movie.poster_path ? (
           <img
-            src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}
+            src={`${IMG_SM}${movie.poster_path}`}
             alt={title}
             className="aspect-[2/3] w-full object-cover"
             loading="lazy"
@@ -73,8 +76,8 @@ export default function MovieCard({ movie, variant = "default" }: MovieCardProps
             No Image
           </div>
         )}
-        <div className="px-2 py-2">
-          <p className="line-clamp-2 min-h-[2lh] text-xs font-medium text-gray-900">
+        <div className="px-1.5 py-1.5">
+          <p className="truncate min-h-[2lh] text-[9px] font-medium text-gray-900">
             {title}
           </p>
         </div>
@@ -83,7 +86,7 @@ export default function MovieCard({ movie, variant = "default" }: MovieCardProps
       <div className="hidden w-[170px] overflow-hidden rounded-[3px] bg-white shadow-md transition-all duration-300 group-hover:shadow-lg group-hover:shadow-xl md:block">
         {movie.poster_path ? (
           <img
-            src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}
+            src={`${IMG_PC}${movie.poster_path}`}
             alt={title}
             className="aspect-[2/3] w-full object-cover"
             loading="lazy"

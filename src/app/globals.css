@@ -18,6 +18,9 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* スクロールバー非表示 */
