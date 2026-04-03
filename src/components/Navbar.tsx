@@ -129,7 +129,7 @@ export default function Navbar() {
             href="/"
             className="flex items-center gap-3 text-xl font-semibold tracking-[0.2em] text-[#1d1d1f] md:text-white md:text-2xl"
           >
-            <img src="/icon-192.png" alt="Logo" className="h-7 w-7 object-contain md:hidden" />
+            <img src="/logo-mobile.png" alt="Logo" className="h-7 w-7 object-contain md:hidden" />
             <img src="/logo.png?v=2" alt="Logo" className="hidden h-11 w-11 object-contain md:block" />
             <span className="hidden xl:inline">ARD CINEMA</span>
           </Link>

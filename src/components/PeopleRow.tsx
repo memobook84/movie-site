@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import { Person } from "@/lib/tmdb";
 import PersonCard from "./PersonCard";
 
@@ -8,9 +9,10 @@ interface PeopleRowProps {
   title: string;
   subtitle?: string;
   people: Person[];
+  href?: string;
 }
 
-export default function PeopleRow({ title, subtitle, people }: PeopleRowProps) {
+export default function PeopleRow({ title, subtitle, people, href }: PeopleRowProps) {
   const rowRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -24,9 +26,16 @@ export default function PeopleRow({ title, subtitle, people }: PeopleRowProps) {
     <div className="space-y-3 px-6 md:px-16">
       {title && (
         <div>
-          <h2 className="text-lg font-semibold tracking-wide text-[#1d1d1f] md:text-xl">
-            {title}
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold tracking-wide text-[#1d1d1f] md:text-xl">
+              {title}
+            </h2>
+            {href && (
+              <Link href={href} className="text-xs font-medium text-gray-400 transition-colors hover:text-[#1d1d1f] md:text-sm">
+                一覧を見る →
+              </Link>
+            )}
+          </div>
           {subtitle && (
             <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-gray-400 md:text-xs">{subtitle}</p>
           )}

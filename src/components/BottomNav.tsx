@@ -43,7 +43,7 @@ export default function BottomNav() {
   }, [activeIndex, pathname]);
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50 xl:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-4 xl:hidden">
       <div className="mx-auto max-w-md rounded-full bg-white shadow-[0_4px_20px_rgba(0,0,0,0.12)] px-4 py-2.5">
         <div ref={containerRef} className="relative flex items-center justify-around">
           {/* スライドするカプセル背景 */}

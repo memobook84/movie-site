@@ -137,7 +137,7 @@ export default async function Home() {
             <MovieRow title="" movies={movies} />
             {i === 4 && trendingPeople.length > 0 && (
               <div className="mt-6 border-y border-gray-200 bg-gray-50 py-6">
-                <PeopleRow title="注目の人物" subtitle="Trending People" people={trendingPeople} />
+                <PeopleRow title="注目の人物" subtitle="Trending People" people={trendingPeople} href="/people" />
               </div>
             )}
             {i === 9 && topRatedMovies.length > 0 && (
@@ -147,6 +147,7 @@ export default async function Home() {
                   subtitle="Timeless Classics"
                   movies={topRatedMovies}
                   cardVariant="oscar"
+                  href="/classics"
                 />
               </div>
             )}

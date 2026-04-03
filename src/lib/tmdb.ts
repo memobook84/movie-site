@@ -114,6 +114,27 @@ export async function getTrendingPeople(): Promise<Person[]> {
   return data.results;
 }
 
+interface PaginatedPersonResponse {
+  results: Person[];
+  total_pages: number;
+}
+
+export async function getTrendingPeoplePage(page = 1): Promise<{ people: Person[]; totalPages: number }> {
+  const data = await fetchTMDb<PaginatedPersonResponse>(
+    `/person/popular?page=${page}`,
+    { results: [], total_pages: 1 }
+  );
+  return { people: data.results, totalPages: Math.min(data.total_pages, 500) };
+}
+
+export async function getTopRatedPage(page = 1): Promise<{ movies: Movie[]; totalPages: number }> {
+  const data = await fetchTMDb<PaginatedResponse>(
+    `/movie/top_rated?page=${page}`,
+    { results: [], total_pages: 1 }
+  );
+  return { movies: data.results, totalPages: Math.min(data.total_pages, 500) };
+}
+
 export async function getTrending(): Promise<Movie[]> {
   const data = await fetchTMDb<TMDbResponse>("/trending/movie/week", emptyResponse);
   return data.results;
@@ -251,6 +272,7 @@ export interface PersonDetail {
   biography: string;
   profile_path: string | null;
   birthday: string | null;
+  deathday: string | null;
   place_of_birth: string | null;
   known_for_department: string;
   combined_credits?: {
@@ -261,7 +283,7 @@ export interface PersonDetail {
 
 const emptyPerson: PersonDetail = {
   id: 0, name: "", biography: "", profile_path: null,
-  birthday: null, place_of_birth: null, known_for_department: "",
+  birthday: null, deathday: null, place_of_birth: null, known_for_department: "",
 };
 
 export async function getPersonDetail(id: number): Promise<PersonDetail> {
