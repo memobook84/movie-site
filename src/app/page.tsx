@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "ARD CINEMA — 映画・ドラマの最新情報・ランキング・レビュー",
-  description: "話題の映画やドラマの最新情報、トレンド、人気作品、おすすめセレクションをチェック。ジャンル別検索やランキングも充実。",
+  description: "ARD CINEMA（ardcinema）- 話題の映画やドラマの最新情報、トレンド、人気作品、おすすめセレクションをチェック。ジャンル別検索やランキングも充実。",
 };
 
 export const revalidate = 86400;
@@ -128,8 +128,26 @@ export default async function Home() {
     }
   }
 
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "ARD CINEMA",
+    alternateName: ["ardcinema", "アードシネマ"],
+    url: "https://ardcinema.com",
+    description: "話題の映画やドラマの最新情報、ランキング、おすすめセレクション、ジャンル別検索が無料で楽しめる映画情報サイト。",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://ardcinema.com/discover?q={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+      />
       <Hero movies={heroMovies} upcomingMovies={upcomingMovies} trailerKeys={heroTrailerKeys} casts={heroCasts} />
       <main className="space-y-6 pb-12">
         {rows.map((movies, i) => (

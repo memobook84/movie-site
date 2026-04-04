@@ -2,13 +2,20 @@ import type { Metadata } from "next";
 import { getTopRatedPage, IMAGE_BASE_URL } from "@/lib/tmdb";
 import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: "不朽の名作一覧",
-  description: "映画史に残る名作・高評価作品を一覧で紹介。",
-};
-
 interface PageProps {
   searchParams: Promise<{ page?: string }>;
+}
+
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
+  const { page } = await searchParams;
+  const currentPage = Math.max(1, Number(page) || 1);
+  return {
+    title: "不朽の名作一覧",
+    description: "映画史に残る名作・高評価作品を一覧で紹介。",
+    alternates: {
+      canonical: `https://ardcinema.com/classics${currentPage > 1 ? `?page=${currentPage}` : ""}`,
+    },
+  };
 }
 
 export default async function ClassicsPage({ searchParams }: PageProps) {
@@ -29,6 +36,9 @@ export default async function ClassicsPage({ searchParams }: PageProps) {
   const hasPrev = currentPage > 1;
 
   return (
+    <>
+      {hasPrev && <link rel="prev" href={`/classics?page=${currentPage - 1}`} />}
+      {hasNext && <link rel="next" href={`/classics?page=${currentPage + 1}`} />}
     <main className="min-h-screen pt-24 pb-28 px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
       <div className="flex items-center gap-3">
         <Link
@@ -123,5 +133,6 @@ export default async function ClassicsPage({ searchParams }: PageProps) {
         </div>
       </div>
     </main>
+    </>
   );
 }

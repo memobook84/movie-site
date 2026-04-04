@@ -7,12 +7,18 @@ interface PageProps {
   searchParams: Promise<{ name?: string; page?: string }>;
 }
 
-export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
-  const { name } = await searchParams;
+export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
+  const { id } = await params;
+  const { name, page } = await searchParams;
   const genreName = name || "ジャンル";
+  const currentPage = Math.max(1, Number(page) || 1);
+  const baseQuery = `name=${encodeURIComponent(genreName)}`;
   return {
     title: `${genreName}の映画一覧`,
     description: `${genreName}ジャンルの人気映画・新作映画を一覧で紹介。`,
+    alternates: {
+      canonical: `https://ardcinema.com/genre/${id}?${baseQuery}${currentPage > 1 ? `&page=${currentPage}` : ""}`,
+    },
   };
 }
 
@@ -37,6 +43,9 @@ export default async function GenrePage({ params, searchParams }: PageProps) {
   const baseQuery = `name=${encodeURIComponent(genreName)}`;
 
   return (
+    <>
+      {hasPrev && <link rel="prev" href={`/genre/${id}?${baseQuery}&page=${currentPage - 1}`} />}
+      {hasNext && <link rel="next" href={`/genre/${id}?${baseQuery}&page=${currentPage + 1}`} />}
     <main className="min-h-screen pt-24 pb-28 px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
       <div className="flex items-center gap-3">
         <Link
@@ -132,5 +141,6 @@ export default async function GenrePage({ params, searchParams }: PageProps) {
         </div>
       </div>
     </main>
+    </>
   );
 }

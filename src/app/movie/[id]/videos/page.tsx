@@ -39,7 +39,7 @@ export default async function VideosPage({ params, searchParams }: PageProps) {
   }
 
   return (
-    <main className="min-h-screen bg-white pt-20 pb-24 px-6 md:px-16">
+    <main className="min-h-screen bg-white pt-20 pb-24 px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
       {/* ヘッダー */}
       <div className="mb-8">
         <Link
@@ -49,7 +49,7 @@ export default async function VideosPage({ params, searchParams }: PageProps) {
           <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
-          作品ページに戻る
+          {title}
         </Link>
         <h1 className="text-lg font-normal tracking-tight text-gray-900 md:text-3xl">
           {title}（{allVideos.length}）

@@ -16,12 +16,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description = person.biography?.slice(0, 150) || `${person.name}の出演作品・プロフィール`;
   const image = person.profile_path ? `${IMAGE_BASE_URL}/w780${person.profile_path}` : undefined;
 
+  const canonicalUrl = `https://ardcinema.com/person/${id}`;
+
   return {
     title: `${person.name} `,
     description,
+    alternates: { canonical: canonicalUrl },
     openGraph: {
       title: `${person.name} `,
       description,
+      url: canonicalUrl,
       ...(image && { images: [{ url: image, width: 780, height: 1170 }] }),
       type: "website",
     },
@@ -87,8 +91,24 @@ export default async function PersonPage({ params }: PageProps) {
     .sort((a, b) => b.vote_average - a.vote_average);
 
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: person.name,
+    ...(person.biography && { description: person.biography.slice(0, 300) }),
+    ...(person.profile_path && { image: `${IMAGE_BASE_URL}/w780${person.profile_path}` }),
+    ...(person.birthday && { birthDate: person.birthday }),
+    ...(person.place_of_birth && { birthPlace: person.place_of_birth }),
+    ...(person.known_for_department && { jobTitle: departmentMap[person.known_for_department] || person.known_for_department }),
+    url: `https://ardcinema.com/person/${id}`,
+  };
+
   return (
     <main className="min-h-screen pt-24 pb-28 px-6 md:px-16 max-w-7xl mx-auto">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* プロフィール */}
       <div className="flex flex-col items-start gap-6 sm:flex-row">
         <div className="flex items-end gap-2 sm:block">

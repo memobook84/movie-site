@@ -29,7 +29,7 @@ export default async function CastPage({ params, searchParams }: PageProps) {
   const allCast = movie.credits?.cast || [];
 
   return (
-    <main className="min-h-screen bg-white pt-24 pb-28 px-6 md:px-16 max-w-5xl mx-auto">
+    <main className="min-h-screen bg-white pt-24 pb-28 px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
       {/* 戻るリンク + タイトル */}
       <Link
         href={`/movie/${id}?type=${type || "movie"}`}

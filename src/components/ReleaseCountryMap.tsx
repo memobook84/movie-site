@@ -78,8 +78,8 @@ function ReleaseCountryMap({ releaseCountries, productionCountries }: Props) {
 
   return (
     <div className="mt-16 space-y-5">
-      <div className="border-b-2 border-gray-300">
-        <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-[3px] border-gray-900 pb-2 -mb-px">
+      <div className="border-b border-gray-300">
+        <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
           製作・上映国        </h2>
       </div>
       <div className="w-full max-w-4xl">

@@ -89,12 +89,16 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
       ? `${IMAGE_BASE_URL}/w780${movie.poster_path}`
       : undefined;
 
+  const canonicalUrl = `https://ardcinema.com/movie/${id}?type=${type || "movie"}`;
+
   return {
     title: `${title} `,
     description,
+    alternates: { canonical: canonicalUrl },
     openGraph: {
       title: `${title} `,
       description,
+      url: canonicalUrl,
       ...(image && { images: [{ url: image, width: 1280, height: 720 }] }),
       type: "website",
     },
@@ -173,8 +177,34 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
   const relationData = getRelationData(movie.id);
   const allCast = movie.credits?.cast || [];
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": type === "tv" ? "TVSeries" : "Movie",
+    name: title,
+    ...(movie.overview && { description: movie.overview }),
+    ...(movie.poster_path && { image: `${IMAGE_BASE_URL}/w780${movie.poster_path}` }),
+    ...(movie.release_date && { datePublished: movie.release_date }),
+    ...(movie.first_air_date && { datePublished: movie.first_air_date }),
+    ...(directors.length > 0 && { director: directors.map((d) => ({ "@type": "Person", name: d.name })) }),
+    ...(movie.genres?.length > 0 && { genre: movie.genres.map((g) => g.name) }),
+    ...(movie.vote_average > 0 && {
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: movie.vote_average.toFixed(1),
+        bestRating: "10",
+        ratingCount: movie.vote_count,
+      },
+    }),
+    ...(cast.length > 0 && { actor: cast.map((c) => ({ "@type": "Person", name: c.name })) }),
+    url: `https://ardcinema.com/movie/${id}?type=${type || "movie"}`,
+  };
+
   return (
     <main className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* ヒーロー画像 */}
       <div className="relative w-full overflow-hidden h-[60vw] max-h-[400px] md:h-[30vw] md:max-h-[450px]">
         <div className="absolute top-0 left-0 right-0 h-11 md:h-16 bg-white md:bg-[#424242] z-10" />
@@ -252,8 +282,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
 
             {/* あらすじ（PC版のみここに表示） */}
             <div className="hidden md:block space-y-2">
-              <div className="border-b-2 border-gray-300">
-                <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-[3px] border-gray-900 pb-2 -mb-px">
+              <div className="border-b border-gray-300">
+                <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
                   あらすじ                </h2>
               </div>
               <p className="text-sm leading-7 text-gray-600">
@@ -289,8 +319,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
 
         {/* あらすじ（スマホ版） */}
         <div className="mt-4 space-y-2 md:hidden">
-          <div className="border-b-2 border-gray-300">
-            <h2 className="inline-block text-sm font-normal uppercase tracking-widest text-gray-600 border-b-[3px] border-gray-900 pb-2 -mb-px">
+          <div className="border-b border-gray-300">
+            <h2 className="inline-block text-sm font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
               あらすじ            </h2>
           </div>
           <p className="text-sm leading-7 text-gray-600">
@@ -670,8 +700,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {(directors.length > 0 || screenwriters.length > 0 || composers.length > 0 || movie.runtime > 0 || movie.budget > 0 || movie.revenue > 0 || movie.production_companies.length > 0) && (
           <div className="mt-8 md:mt-16 space-y-5">
             <div className="flex items-center justify-between">
-              <div className="flex-1 border-b-2 border-gray-300">
-                <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-[3px] border-gray-900 pb-2 -mb-px">
+              <div className="flex-1 border-b border-gray-300">
+                <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
                   作品情報                </h2>
               </div>
               <div className="flex flex-wrap gap-[10px] pb-2 pl-4">
@@ -893,8 +923,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* キャスト（ポラロイド風） */}
         {cast.length > 0 && (
           <div className="mt-8 md:mt-16 space-y-5">
-            <div className="flex items-center justify-between border-b-2 border-gray-300">
-              <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-[3px] border-gray-900 pb-2 -mb-px">
+            <div className="flex items-center justify-between border-b border-gray-300">
+              <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
                 キャスト              </h2>
               <Link
                 href={`/movie/${id}/cast?type=${type || "movie"}`}
@@ -954,8 +984,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* ビデオ */}
         {allVideos.length > 0 && (
           <div className="mt-8 md:mt-16 space-y-5">
-            <div className="flex items-center justify-between border-b-2 border-gray-300">
-              <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-[3px] border-gray-900 pb-2 -mb-px">
+            <div className="flex items-center justify-between border-b border-gray-300">
+              <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
                 ビデオ              </h2>
               <Link
                 href={`/movie/${id}/videos?type=${type || "movie"}`}
@@ -978,8 +1008,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* シリーズ */}
         {collection && collection.parts.length > 1 && (
           <div className="mt-8 md:mt-16 space-y-5">
-            <div className="flex items-center justify-between border-b-2 border-gray-300">
-              <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-[3px] border-gray-900 pb-2 -mb-px">
+            <div className="flex items-center justify-between border-b border-gray-300">
+              <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
                 シリーズ              </h2>
               <Link
                 href={`/collection/${collection.id}`}
@@ -1037,8 +1067,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* シーズン情報（TV番組のみ） */}
         {type === "tv" && movie.seasons && movie.seasons.length > 0 && (
           <div className="mt-8 md:mt-16 space-y-5">
-            <div className="border-b-2 border-gray-300">
-              <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-[3px] border-gray-900 pb-2 -mb-px">
+            <div className="border-b border-gray-300">
+              <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
                 シーズン（{movie.number_of_seasons}シーズン・{movie.number_of_episodes}エピソード）              </h2>
             </div>
             <div className="space-y-3">
@@ -1080,8 +1110,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* 配信情報 */}
         {watchProviders && (watchProviders.flatrate || watchProviders.rent || watchProviders.buy) && (
           <div className="mt-8 md:mt-16 space-y-5">
-            <div className="border-b-2 border-gray-300">
-              <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-[3px] border-gray-900 pb-2 -mb-px">
+            <div className="border-b border-gray-300">
+              <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
                 配信情報              </h2>
             </div>
             <div className="space-y-4">
@@ -1146,8 +1176,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* 公式SNS */}
         {(externalIds.instagram_id || externalIds.twitter_id || externalIds.facebook_id || externalIds.tiktok_id) && (
           <div className="mt-8 md:mt-16 space-y-5">
-            <div className="border-b-2 border-gray-300">
-              <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-[3px] border-gray-900 pb-2 -mb-px">
+            <div className="border-b border-gray-300">
+              <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
                 公式SNS              </h2>
             </div>
             <div className="flex gap-3">
@@ -1187,8 +1217,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* 関連作品 */}
         {recommendations.length > 0 && (
           <div className="mt-8 md:mt-16 space-y-5">
-            <div className="border-b-2 border-gray-300">
-              <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-[3px] border-gray-900 pb-2 -mb-px">
+            <div className="border-b border-gray-300">
+              <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
                 関連作品              </h2>
             </div>
             <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">

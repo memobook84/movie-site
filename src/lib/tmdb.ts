@@ -80,7 +80,7 @@ async function fetchTMDb<T>(endpoint: string, fallback: T): Promise<T> {
         next: { revalidate: 86400 },
       });
       if (res.status === 429) {
-        await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
+        await new Promise((r) => setTimeout(r, 2000 * (attempt + 1)));
         continue;
       }
       if (!res.ok) throw new Error(`TMDb API error: ${res.status}`);
