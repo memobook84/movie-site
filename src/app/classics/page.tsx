@@ -29,7 +29,7 @@ export default async function ClassicsPage({ searchParams }: PageProps) {
   const hasPrev = currentPage > 1;
 
   return (
-    <main className="min-h-screen pt-24 pb-28 px-6 md:px-16">
+    <main className="min-h-screen pt-24 pb-28 px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
       <div className="flex items-center gap-3">
         <Link
           href="/"

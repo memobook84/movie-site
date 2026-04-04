@@ -21,7 +21,7 @@ export default async function PeoplePage({ searchParams }: PageProps) {
   const hasPrev = currentPage > 1;
 
   return (
-    <main className="min-h-screen pt-24 pb-28 px-6 md:px-16">
+    <main className="min-h-screen pt-24 pb-28 px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
       <div className="flex items-center gap-3">
         <Link
           href="/"
@@ -41,7 +41,7 @@ export default async function PeoplePage({ searchParams }: PageProps) {
             href={`/person/${person.id}`}
             className="group"
           >
-            <div className="overflow-hidden rounded-[4px] transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:shadow-black/10">
+            <div className="relative overflow-hidden rounded-[4px] transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:shadow-black/10">
               {person.profile_path ? (
                 <img
                   src={`${IMAGE_BASE_URL}/w342${person.profile_path}`}
@@ -54,11 +54,14 @@ export default async function PeoplePage({ searchParams }: PageProps) {
                   No Image
                 </div>
               )}
+              {/* グラデーションオーバーレイ + テキスト */}
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-3 pb-3 pt-12">
+                <p className="truncate text-sm font-bold text-white drop-shadow-md">{person.name}</p>
+                <p className="truncate text-[10px] text-white/70">
+                  {person.known_for_department === "Acting" ? "俳優" : person.known_for_department === "Directing" ? "監督" : person.known_for_department}
+                </p>
+              </div>
             </div>
-            <p className="mt-1.5 truncate text-xs font-medium text-[#1d1d1f]">{person.name}</p>
-            <p className="truncate text-[10px] text-gray-400">
-              {person.known_for_department === "Acting" ? "俳優" : person.known_for_department === "Directing" ? "監督" : person.known_for_department}
-            </p>
           </Link>
         ))}
       </div>

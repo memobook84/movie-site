@@ -26,7 +26,7 @@ export default function FollowsPage() {
 
   return (
     <main className="min-h-screen bg-white pt-24 pb-28">
-      <div className="mx-auto max-w-5xl px-5 md:px-8">
+      <div className="mx-auto max-w-[1280px] px-6 md:px-16">
         <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl">
           ウォッチリスト
         </h1>

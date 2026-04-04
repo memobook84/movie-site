@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { getPersonDetail, getExternalIds, IMAGE_BASE_URL } from "@/lib/tmdb";
+import { getPersonDetail, getExternalIds, getPersonImages, IMAGE_BASE_URL } from "@/lib/tmdb";
 import Link from "next/link";
 import PersonCreditsGrid from "@/components/PersonCreditsGrid";
-import { FaInstagramSquare, FaFacebookSquare, FaTiktok } from "react-icons/fa";
-import { FaSquareXTwitter } from "react-icons/fa6";
+import PersonProfileWithGallery from "@/components/PersonGalleryButton";
+import { FaInstagram, FaFacebookF, FaTiktok } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -51,9 +52,10 @@ export default async function PersonPage({ params }: PageProps) {
     Lighting: "照明",
   };
 
-  const [person, externalIds] = await Promise.all([
+  const [person, externalIds, personImages] = await Promise.all([
     getPersonDetail(Number(id)),
     getExternalIds(Number(id), "person"),
+    getPersonImages(Number(id)),
   ]);
 
   const snsLinks = [
@@ -90,25 +92,12 @@ export default async function PersonPage({ params }: PageProps) {
       {/* プロフィール */}
       <div className="flex flex-col items-start gap-6 sm:flex-row">
         <div className="flex items-end gap-2 sm:block">
-          <div className="w-40 flex-shrink-0 rounded-sm bg-[#faf8f5] p-3 pb-12 sm:w-52 sm:p-3.5 sm:pb-14" style={{ boxShadow: '2px 3px 12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.08)' }}>
-            {person.profile_path ? (
-              <div className="relative">
-                <img
-                  src={`${IMAGE_BASE_URL}/w342${person.profile_path}`}
-                  alt={person.name}
-                  className="aspect-[3/4] w-full object-cover"
-                />
-                <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_8px_rgba(0,0,0,0.3)]" />
-              </div>
-            ) : (
-              <div className="relative">
-                <div className="flex aspect-[3/4] w-full items-center justify-center bg-gray-100 text-3xl text-gray-300">
-                  ?
-                </div>
-                <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_8px_rgba(0,0,0,0.3)]" />
-              </div>
-            )}
-          </div>
+          <PersonProfileWithGallery
+            profilePath={person.profile_path}
+            name={person.name}
+            imageBase={IMAGE_BASE_URL}
+            images={personImages}
+          />
           {/* スマホ版SNSアイコン */}
           {snsLinks.length > 0 && (
             <div className="flex flex-row items-end gap-2 sm:hidden">
@@ -118,13 +107,13 @@ export default async function PersonPage({ params }: PageProps) {
                   href={sns.url(sns.id!)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center text-gray-500 transition-colors hover:text-gray-700"
+                  className="inline-flex items-center justify-center text-gray-400 transition-colors hover:text-gray-600"
                   aria-label={sns.label}
                 >
-                  {sns.label === "Instagram" && <FaInstagramSquare className="h-7 w-7" />}
-                  {sns.label === "X" && <FaSquareXTwitter className="h-7 w-7" />}
-                  {sns.label === "Facebook" && <FaFacebookSquare className="h-7 w-7" />}
-                  {sns.label === "TikTok" && <FaTiktok className="h-7 w-7" />}
+                  {sns.label === "Instagram" && <FaInstagram className="h-5 w-5" />}
+                  {sns.label === "X" && <FaXTwitter className="h-5 w-5" />}
+                  {sns.label === "Facebook" && <FaFacebookF className="h-5 w-5" />}
+                  {sns.label === "TikTok" && <FaTiktok className="h-5 w-5" />}
                 </a>
               ))}
             </div>
@@ -167,9 +156,9 @@ export default async function PersonPage({ params }: PageProps) {
                   rel="noopener noreferrer"
                   className={`inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-500 transition-colors ${sns.color}`}
                 >
-                  {sns.label === "Instagram" && <FaInstagramSquare className="h-3.5 w-3.5" />}
-                  {sns.label === "X" && <FaSquareXTwitter className="h-3.5 w-3.5" />}
-                  {sns.label === "Facebook" && <FaFacebookSquare className="h-3.5 w-3.5" />}
+                  {sns.label === "Instagram" && <FaInstagram className="h-3.5 w-3.5" />}
+                  {sns.label === "X" && <FaXTwitter className="h-3.5 w-3.5" />}
+                  {sns.label === "Facebook" && <FaFacebookF className="h-3.5 w-3.5" />}
                   {sns.label === "TikTok" && <FaTiktok className="h-3.5 w-3.5" />}
                   {sns.label}
                 </a>

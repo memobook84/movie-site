@@ -120,21 +120,21 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`fixed top-0 z-50 w-full px-6 py-2 transition-all duration-500 md:px-16 md:py-4 bg-white md:bg-[#424242] ${
+        className={`fixed top-0 z-50 w-full py-2 transition-all duration-500 md:py-4 bg-white md:bg-[#424242] ${
           scrolled ? "shadow-sm" : ""
         } ${hidden ? "-translate-y-full" : "translate-y-0"}`}
       >
-        <div className="relative flex items-center justify-between">
+        <div className="relative flex items-center justify-between px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
           <Link
             href="/"
             className="flex items-center gap-3 text-xl font-semibold tracking-[0.2em] text-[#1d1d1f] md:text-white md:text-2xl"
           >
             <img src="/logo-mobile.png" alt="Logo" className="h-7 w-7 object-contain md:hidden" />
-            <img src="/logo.png?v=2" alt="Logo" className="hidden h-11 w-11 object-contain md:block" />
+            <img src="/logo-pc.png" alt="ARD CINEMA" className="hidden h-11 object-contain md:block" />
             <span className="hidden xl:inline">ARD CINEMA</span>
           </Link>
           {/* スマホ: 中央タイトル */}
-          <span className="absolute left-1/2 -translate-x-1/2 font-[family-name:var(--font-noto-sans-jp)] text-sm font-bold tracking-widest text-[#1d1d1f] md:text-white xl:hidden">
+          <span className="absolute left-1/2 -translate-x-1/2 font-[family-name:var(--font-noto-sans-jp)] text-sm font-bold tracking-widest text-[#1d1d1f] md:hidden">
             ARD CINEMA
           </span>
           <div className="flex items-center gap-4 font-[family-name:var(--font-noto-sans-jp)] text-sm font-medium text-[#1d1d1f] md:text-white">

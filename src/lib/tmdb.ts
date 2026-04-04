@@ -322,6 +322,21 @@ export async function getMovieImages(id: number, mediaType: string = "movie"): P
   return [...data.backdrops, ...data.posters].slice(0, 16);
 }
 
+// 人物画像
+interface PersonImagesResponse {
+  profiles: TMDbImage[];
+}
+
+const emptyPersonImages: PersonImagesResponse = { profiles: [] };
+
+export async function getPersonImages(id: number): Promise<TMDbImage[]> {
+  const data = await fetchTMDb<PersonImagesResponse>(
+    `/person/${id}/images`,
+    emptyPersonImages
+  );
+  return data.profiles;
+}
+
 // 関連作品
 export async function getRecommendations(id: number, mediaType: string = "movie"): Promise<Movie[]> {
   const endpoint = mediaType === "tv" ? `/tv/${id}/recommendations` : `/movie/${id}/recommendations`;

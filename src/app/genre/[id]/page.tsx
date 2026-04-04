@@ -37,7 +37,7 @@ export default async function GenrePage({ params, searchParams }: PageProps) {
   const baseQuery = `name=${encodeURIComponent(genreName)}`;
 
   return (
-    <main className="min-h-screen pt-24 pb-28 px-6 md:px-16">
+    <main className="min-h-screen pt-24 pb-28 px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
       <div className="flex items-center gap-3">
         <Link
           href="/genres"

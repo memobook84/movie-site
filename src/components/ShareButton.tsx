@@ -42,7 +42,7 @@ export default function ShareButton({ title }: ShareButtonProps) {
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="group inline-flex items-center justify-center h-10 w-10 rounded border-none cursor-pointer transition-all bg-gray-50 hover:bg-gray-100"
+        className="group inline-flex items-center justify-center h-10 w-10 rounded border-none cursor-pointer transition-all hover:bg-gray-100"
         aria-label="シェア"
       >
         <svg className="h-5 w-5 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

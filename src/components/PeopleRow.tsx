@@ -23,7 +23,7 @@ export default function PeopleRow({ title, subtitle, people, href }: PeopleRowPr
   };
 
   return (
-    <div className="space-y-3 px-6 md:px-16">
+    <div className="space-y-3 px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
       {title && (
         <div>
           <div className="flex items-center justify-between">
