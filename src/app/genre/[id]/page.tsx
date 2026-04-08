@@ -2,6 +2,14 @@ import type { Metadata } from "next";
 import { getMoviesByGenrePage, IMAGE_BASE_URL } from "@/lib/tmdb";
 import Link from "next/link";
 
+const GENRE_NAMES: Record<number, string> = {
+  28: "アクション", 12: "アドベンチャー", 16: "アニメーション", 35: "コメディ",
+  80: "犯罪", 99: "ドキュメンタリー", 18: "ドラマ", 10751: "ファミリー",
+  14: "ファンタジー", 36: "歴史", 27: "ホラー", 10402: "音楽",
+  9648: "ミステリー", 10749: "ロマンス", 878: "SF", 10770: "テレビ映画",
+  53: "スリラー", 10752: "戦争", 37: "西部劇",
+};
+
 interface PageProps {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ name?: string; page?: string }>;
@@ -9,15 +17,14 @@ interface PageProps {
 
 export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
   const { id } = await params;
-  const { name, page } = await searchParams;
-  const genreName = name || "ジャンル";
+  const { page } = await searchParams;
+  const genreName = GENRE_NAMES[Number(id)] || "ジャンル";
   const currentPage = Math.max(1, Number(page) || 1);
-  const baseQuery = `name=${encodeURIComponent(genreName)}`;
   return {
     title: `${genreName}の映画一覧`,
     description: `${genreName}ジャンルの人気映画・新作映画を一覧で紹介。`,
     alternates: {
-      canonical: `https://ardcinema.com/genre/${id}?${baseQuery}${currentPage > 1 ? `&page=${currentPage}` : ""}`,
+      canonical: `https://ardcinema.com/genre/${id}${currentPage > 1 ? `?page=${currentPage}` : ""}`,
     },
   };
 }
@@ -25,7 +32,7 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
 export default async function GenrePage({ params, searchParams }: PageProps) {
   const { id } = await params;
   const { name, page } = await searchParams;
-  const genreName = name || "ジャンル";
+  const genreName = GENRE_NAMES[Number(id)] || name || "ジャンル";
   const currentPage = Math.max(1, Number(page) || 1);
 
   const { movies, totalPages } = await getMoviesByGenrePage(Number(id), currentPage);

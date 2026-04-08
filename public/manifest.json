@@ -1,6 +1,6 @@
 {
-  "name": "CINEMA",
-  "short_name": "CINEMA",
+  "name": "ARD CINEMA",
+  "short_name": "ARD CINEMA",
   "description": "映画・アニメ情報サイト",
   "start_url": "/",
   "display": "standalone",

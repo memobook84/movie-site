@@ -6,6 +6,7 @@ export const revalidate = 86400;
 export const metadata = {
   title: "おすすめセレクション",
   description: "厳選した名作映画をジャンル別に一言レビュー付きで紹介。アクション、SF、ドラマ、アニメなど。",
+  alternates: { canonical: "https://ardcinema.com/selection" },
 };
 
 interface Pick {

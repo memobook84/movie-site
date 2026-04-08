@@ -4,6 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "ジャンル一覧",
   description: "アクション、SF、ホラー、ロマンスなど全19ジャンルから映画を探そう。",
+  alternates: { canonical: "https://ardcinema.com/genres" },
 };
 import {
   Zap, Compass, Sparkles, Laugh, SearchCheck,

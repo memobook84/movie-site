@@ -89,7 +89,7 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
       ? `${IMAGE_BASE_URL}/w780${movie.poster_path}`
       : undefined;
 
-  const canonicalUrl = `https://ardcinema.com/movie/${id}?type=${type || "movie"}`;
+  const canonicalUrl = `https://ardcinema.com/movie/${id}`;
 
   return {
     title: `${title} `,

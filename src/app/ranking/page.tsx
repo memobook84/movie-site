@@ -4,6 +4,7 @@ import { getTrending, getPopular, getPopularJP, getTopRated, IMAGE_BASE_URL, Mov
 export const metadata: Metadata = {
   title: "映画ランキング",
   description: "今話題のトレンド映画、人気映画、高評価映画のランキングをチェック。",
+  alternates: { canonical: "https://ardcinema.com/ranking" },
 };
 import Link from "next/link";
 

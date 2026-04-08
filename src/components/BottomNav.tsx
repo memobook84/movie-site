@@ -4,7 +4,7 @@ import { useRef, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Home, CalendarDays, SquareMenu, ChevronLeft } from "lucide-react";
-import { LuBlocks } from "react-icons/lu";
+import { PiEyeglassesFill } from "react-icons/pi";
 
 export default function BottomNav() {
   const router = useRouter();
@@ -12,13 +12,13 @@ export default function BottomNav() {
 
   const isHome = pathname === "/";
   const isSchedule = pathname === "/schedule";
-  const isGenres = pathname.startsWith("/genre");
+  const isFollows = pathname === "/follows";
   const isMenu = pathname === "/menu";
 
   const navItems = [
     { href: "/", icon: Home, active: isHome },
     { href: "/schedule", icon: CalendarDays, active: isSchedule },
-    { href: "/genres", icon: LuBlocks, active: isGenres },
+    { href: "/follows", icon: PiEyeglassesFill, active: isFollows },
     { href: "/menu", icon: SquareMenu, active: isMenu },
   ];
 
