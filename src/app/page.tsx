@@ -10,7 +10,7 @@ export const revalidate = 86400;
 import Hero from "@/components/Hero";
 import MovieRow from "@/components/MovieRow";
 import PeopleRow from "@/components/PeopleRow";
-import { getTrending, getPopular, getTopRated, getUpcoming, getMoviesByGenre, getMovieDetail, getNowPlayingJP, getUpcomingJP, getTrendingPeople, GENRES, Movie } from "@/lib/tmdb";
+import { getTrending, getPopular, getTopRated, getUpcoming, getMoviesByGenre, getMovieDetail, getNowPlayingJP, getUpcomingJP, getTrendingPeoplePage, GENRES, Movie } from "@/lib/tmdb";
 
 function shuffle(arr: Movie[]): Movie[] {
   const a = [...arr];
@@ -46,7 +46,20 @@ export default async function Home() {
     ]),
     // 日本のアニメを複数ページ取得して多めに確保
     getMoviesByGenre(GENRES.ANIMATION, 3, "ja"),
-    getTrendingPeople(),
+    Promise.all([
+      getTrendingPeoplePage(1),
+      getTrendingPeoplePage(2),
+      getTrendingPeoplePage(3),
+    ]).then((pages) => {
+      const seen = new Set<number>();
+      const all = [];
+      for (const { people } of pages) {
+        for (const p of people) {
+          if (!seen.has(p.id)) { seen.add(p.id); all.push(p); }
+        }
+      }
+      return shuffle(all);
+    }),
     getTopRated(),
   ]);
 
