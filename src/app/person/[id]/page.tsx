@@ -110,17 +110,17 @@ export default async function PersonPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       {/* プロフィール */}
-      <div className="flex flex-col items-start gap-6 sm:flex-row">
-        <div className="flex items-end gap-2 sm:block">
+      <div className="flex flex-col items-center sm:flex-row sm:items-start sm:gap-6">
+        <div className="flex-shrink-0 relative">
           <PersonProfileWithGallery
             profilePath={person.profile_path}
             name={person.name}
             imageBase={IMAGE_BASE_URL}
             images={personImages}
           />
-          {/* スマホ版SNSアイコン */}
+          {/* スマホ版SNSアイコン（写真の右下に重ねる） */}
           {snsLinks.length > 0 && (
-            <div className="flex flex-row items-end gap-2 sm:hidden">
+            <div className="absolute bottom-0 right-0 flex flex-row gap-1.5 p-1.5 sm:hidden">
               {snsLinks.map((sns) => (
                 <a
                   key={sns.label}
@@ -139,53 +139,81 @@ export default async function PersonPage({ params }: PageProps) {
             </div>
           )}
         </div>
-        <div className="space-y-2">
-          <h1 className="text-base font-normal tracking-tight text-gray-900 md:text-3xl">{person.name}</h1>
-          <div className="flex flex-wrap items-center gap-1.5 -ml-0.5">
-            {person.known_for_department && (
-              <span className="inline-flex items-center rounded-md bg-[#f3f4f6] px-2.5 py-1 text-xs text-[#6b7280]">
-                {departmentMap[person.known_for_department] || person.known_for_department}
-              </span>
-            )}
-            {person.birthday && (() => {
-              const birth = new Date(person.birthday!);
-              const end = person.deathday ? new Date(person.deathday) : new Date();
-              let age = end.getFullYear() - birth.getFullYear();
-              if (end.getMonth() < birth.getMonth() || (end.getMonth() === birth.getMonth() && end.getDate() < birth.getDate())) age--;
-              const ageText = person.deathday ? `${age}歳没` : `${age}歳`;
-              return (
+        <div className="space-y-2 mt-4 sm:mt-0 text-center sm:text-left">
+          <h1 className="text-sm font-normal tracking-tight text-gray-900 md:text-3xl">{person.name}</h1>
+          {/* PC版: タグ + SNS */}
+          <div className="hidden sm:block space-y-2">
+            <div className="flex flex-wrap items-center gap-1.5 -ml-0.5">
+              {person.known_for_department && (
                 <span className="inline-flex items-center rounded-md bg-[#f3f4f6] px-2.5 py-1 text-xs text-[#6b7280]">
-                  {person.birthday}（{ageText}）
+                  {departmentMap[person.known_for_department] || person.known_for_department}
                 </span>
-              );
-            })()}
-            {person.place_of_birth && (
-              <span className="inline-flex items-center rounded-md bg-[#f3f4f6] px-2.5 py-1 text-xs text-[#6b7280]">
-                {person.place_of_birth}
-              </span>
+              )}
+              {person.birthday && (() => {
+                const birth = new Date(person.birthday!);
+                const end = person.deathday ? new Date(person.deathday) : new Date();
+                let age = end.getFullYear() - birth.getFullYear();
+                if (end.getMonth() < birth.getMonth() || (end.getMonth() === birth.getMonth() && end.getDate() < birth.getDate())) age--;
+                const ageText = person.deathday ? `${age}歳没` : `${age}歳`;
+                return (
+                  <span className="inline-flex items-center rounded-md bg-[#f3f4f6] px-2.5 py-1 text-xs text-[#6b7280]">
+                    {person.birthday}（{ageText}）
+                  </span>
+                );
+              })()}
+              {person.place_of_birth && (
+                <span className="inline-flex items-center rounded-md bg-[#f3f4f6] px-2.5 py-1 text-xs text-[#6b7280]">
+                  {person.place_of_birth}
+                </span>
+              )}
+            </div>
+            {snsLinks.length > 0 && (
+              <div className="flex flex-wrap gap-3 pt-1">
+                {snsLinks.map((sns) => (
+                  <a
+                    key={sns.label}
+                    href={sns.url(sns.id!)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-500 transition-colors ${sns.color}`}
+                  >
+                    {sns.label === "Instagram" && <FaInstagram className="h-3.5 w-3.5" />}
+                    {sns.label === "X" && <FaXTwitter className="h-3.5 w-3.5" />}
+                    {sns.label === "Facebook" && <FaFacebookF className="h-3.5 w-3.5" />}
+                    {sns.label === "TikTok" && <FaTiktok className="h-3.5 w-3.5" />}
+                    {sns.label}
+                  </a>
+                ))}
+              </div>
             )}
           </div>
-          {/* PC版SNSリンク */}
-          {snsLinks.length > 0 && (
-            <div className="hidden sm:flex flex-wrap gap-3 pt-1">
-              {snsLinks.map((sns) => (
-                <a
-                  key={sns.label}
-                  href={sns.url(sns.id!)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-500 transition-colors ${sns.color}`}
-                >
-                  {sns.label === "Instagram" && <FaInstagram className="h-3.5 w-3.5" />}
-                  {sns.label === "X" && <FaXTwitter className="h-3.5 w-3.5" />}
-                  {sns.label === "Facebook" && <FaFacebookF className="h-3.5 w-3.5" />}
-                  {sns.label === "TikTok" && <FaTiktok className="h-3.5 w-3.5" />}
-                  {sns.label}
-                </a>
-              ))}
-            </div>
-          )}
         </div>
+      </div>
+
+      {/* スマホ版: 俳優・年齢・出身地（写真の下） */}
+      <div className="sm:hidden mt-3 flex flex-wrap justify-center items-center gap-1.5">
+        {person.known_for_department && (
+          <span className="inline-flex items-center rounded-md bg-[#f3f4f6] px-2.5 py-1 text-xs text-[#6b7280]">
+            {departmentMap[person.known_for_department] || person.known_for_department}
+          </span>
+        )}
+        {person.birthday && (() => {
+          const birth = new Date(person.birthday!);
+          const end = person.deathday ? new Date(person.deathday) : new Date();
+          let age = end.getFullYear() - birth.getFullYear();
+          if (end.getMonth() < birth.getMonth() || (end.getMonth() === birth.getMonth() && end.getDate() < birth.getDate())) age--;
+          const ageText = person.deathday ? `${age}歳没` : `${age}歳`;
+          return (
+            <span className="inline-flex items-center rounded-md bg-[#f3f4f6] px-2.5 py-1 text-xs text-[#6b7280]">
+              {person.birthday}（{ageText}）
+            </span>
+          );
+        })()}
+        {person.place_of_birth && (
+          <span className="inline-flex items-center rounded-md bg-[#f3f4f6] px-2.5 py-1 text-xs text-[#6b7280]">
+            {person.place_of_birth}
+          </span>
+        )}
       </div>
 
       {/* 出演作品・監督作品（タブ切り替え） */}

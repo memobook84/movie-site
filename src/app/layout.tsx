@@ -13,7 +13,7 @@ const notoSansJP = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "500", "70
 
 export const metadata: Metadata = {
   title: {
-    default: "ARD CINEMA — 映画・ドラマの最新情報・ランキング・レビュー",
+    default: "ARD CINEMA",
     template: "%s | ARD CINEMA",
   },
   description: "話題の映画やドラマの最新情報、ランキング、おすすめセレクション、ジャンル別検索が無料で楽しめる映画情報サイト。",
@@ -32,20 +32,20 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
-    title: "ARD CINEMA — 映画・ドラマの最新情報・ランキング・レビュー",
+    title: "ARD CINEMA",
     description: "話題の映画やドラマの最新情報、ランキング、おすすめセレクション、ジャンル別検索が無料で楽しめる映画情報サイト。",
     siteName: "ARD CINEMA",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "ARD CINEMA — 映画・ドラマの最新情報・ランキング・レビュー",
+    title: "ARD CINEMA",
     description: "話題の映画やドラマの最新情報、ランキング、おすすめセレクション、ジャンル別検索が無料で楽しめる映画情報サイト。",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: "#E6A723",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
