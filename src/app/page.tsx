@@ -12,7 +12,7 @@ import MovieRow from "@/components/MovieRow";
 import PeopleRow from "@/components/PeopleRow";
 import { getTrending, getPopular, getTopRated, getUpcoming, getMoviesByGenre, getMovieDetail, getNowPlayingJP, getUpcomingJP, getTrendingPeoplePage, GENRES, Movie } from "@/lib/tmdb";
 
-function shuffle(arr: Movie[]): Movie[] {
+function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
