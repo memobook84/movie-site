@@ -127,6 +127,11 @@ export async function getTrendingPeoplePage(page = 1): Promise<{ people: Person[
   return { people: data.results, totalPages: Math.min(data.total_pages, 500) };
 }
 
+export async function getPersonBirthday(id: number): Promise<string | null> {
+  const data = await fetchTMDb<{ birthday: string | null }>(`/person/${id}`, { birthday: null });
+  return data.birthday;
+}
+
 export async function getTopRatedPage(page = 1): Promise<{ movies: Movie[]; totalPages: number }> {
   const data = await fetchTMDb<PaginatedResponse>(
     `/movie/top_rated?page=${page}`,

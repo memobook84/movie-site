@@ -64,8 +64,6 @@ export default async function GenrePage({ params, searchParams }: PageProps) {
         <span className="text-gray-300">/</span>
         <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl">{genreName}</h1>
       </div>
-      <p className="mt-2 text-sm text-gray-400">ページ {currentPage} / {totalPages}</p>
-
       <div className="mt-6 grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
         {unique.map((movie) => {
           const title = movie.title || movie.name || "";

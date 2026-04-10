@@ -18,6 +18,11 @@ import {
 } from "lucide-react";
 import { ComponentType } from "react";
 
+function jaOverview(text: string | undefined): string {
+  if (!text) return "";
+  return /[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/.test(text) ? text : "";
+}
+
 const GENRE_ICONS: Record<number, ComponentType<{ className?: string }>> = {
   28: Zap, 12: Compass, 16: Sparkles, 35: Laugh, 80: SearchCheck,
   99: Film, 18: Drama, 10751: Home, 14: Wand2, 36: Landmark,
@@ -287,7 +292,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                   あらすじ                </h2>
               </div>
               <p className="text-sm leading-7 text-gray-600">
-                {movie.overview || "この作品の説明はまだ登録されていません。"}
+                {jaOverview(movie.overview) || "この作品の説明はまだ登録されていません。"}
               </p>
             </div>
 
