@@ -193,13 +193,13 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
 
   return (
     <>
-      <div className="relative pt-20 md:pt-24 bg-black overflow-hidden">
+      <div className="relative pt-11 md:pt-24 bg-gray-50 overflow-hidden">
 
         {/* メインビジュアル */}
         <div className="relative">
           <div
             ref={mainRef}
-            className="relative w-full cursor-pointer overflow-hidden"
+            className="relative w-full cursor-pointer overflow-hidden md:rounded"
             style={{ aspectRatio: "16/9", maxWidth: "900px", margin: "0 auto" }}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
@@ -307,8 +307,8 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
         </div>
 
         {/* 下部カルーセル */}
-        <div className="relative bg-black/80">
-          <div className="relative py-3">
+        <div className="relative bg-gray-50">
+          <div className="relative pt-3 pb-14">
             <div className="flex items-center justify-between px-2 mb-2">
               <span className="flex items-center gap-1 text-red-500 font-bold text-xs tracking-wide">
                 <AiFillVideoCamera className="w-4 h-4" />
@@ -380,8 +380,6 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
         </div>
       </div>
 
-      {/* 黒→ライトグレーのグラデーション */}
-      <div className="h-24 bg-gradient-to-b from-black to-[#f5f5f7]" />
 
       {/* トレーラーモーダル */}
       {trailerOpen && trailerKey && (

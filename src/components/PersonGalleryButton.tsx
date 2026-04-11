@@ -23,7 +23,7 @@ export default function PersonProfileWithGallery({ profilePath, name, imageBase,
   return (
     <>
       <div
-        className={`w-40 flex-shrink-0 rounded-sm bg-[#faf8f5] p-3 pb-12 sm:w-52 sm:p-3.5 sm:pb-14 ${hasGallery ? "cursor-pointer" : ""}`}
+        className={`w-48 flex-shrink-0 rounded-sm bg-[#faf8f5] p-3 pb-12 sm:w-52 sm:p-3.5 sm:pb-14 ${hasGallery ? "cursor-pointer" : ""}`}
         style={{ boxShadow: '2px 3px 12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.08)' }}
         onClick={() => hasGallery && setOpen(true)}
       >

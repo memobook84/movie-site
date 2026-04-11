@@ -120,42 +120,42 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`fixed top-0 z-50 w-full py-2 transition-all duration-500 md:py-4 bg-[#E6A723] ${
-          scrolled ? "shadow-sm" : ""
-        } ${hidden ? "-translate-y-full" : "translate-y-0"}`}
+        className={`fixed top-0 z-50 w-full py-2 transition-all duration-500 md:py-4 bg-[#E6A723] shadow-[0_2px_8px_rgba(0,0,0,0.15)] translate-y-0 ${
+          hidden ? "md:-translate-y-full" : ""
+        }`}
       >
         <div className="relative flex items-center justify-between px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
           <Link
             href="/"
-            className="flex items-center gap-3 text-xl font-black tracking-[0.2em] text-[#C82418] md:text-2xl"
+            className="flex items-center gap-3 text-xl font-black tracking-[0.2em] text-[#B01E14] md:text-2xl"
           >
-            <img src="/logo-mobile.png" alt="Logo" className="h-7 w-7 object-contain md:hidden" />
+            <img src="/logo.png" alt="Logo" className="h-7 w-7 object-contain md:hidden" />
             <span className="hidden md:inline">ARD CINEMA</span>
           </Link>
           {/* スマホ: 中央タイトル */}
-          <span className="absolute left-1/2 -translate-x-1/2 font-[family-name:var(--font-noto-sans-jp)] text-sm font-black tracking-widest text-[#C82418] md:hidden">
+          <span className="absolute left-1/2 -translate-x-1/2 font-[family-name:var(--font-noto-sans-jp)] text-sm font-black tracking-widest text-[#B01E14] md:hidden">
             ARD CINEMA
           </span>
-          <div className="flex items-center gap-4 font-[family-name:var(--font-noto-sans-jp)] text-sm font-black text-[#C82418]">
-            <Link href="/schedule" className={`relative hidden xl:inline-flex items-center px-3 py-1.5 text-[#C82418]/70 transition-all duration-300 hover:text-[#C82418] ${pathname === "/schedule" ? "text-[#C82418]" : ""}`}>
+          <div className="flex items-center gap-4 font-[family-name:var(--font-noto-sans-jp)] text-sm font-black text-[#B01E14]">
+            <Link href="/schedule" className={`relative hidden xl:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/schedule" ? "text-[#B01E14]" : ""}`}>
               Schedule
-              <span className={`absolute top-1.5 right-2 h-1 w-1 rounded-full bg-[#C82418] transition-all duration-300 ${pathname === "/schedule" ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
+              <span className={`absolute top-1.5 right-2 h-1 w-1 rounded-full bg-[#B01E14] transition-all duration-300 ${pathname === "/schedule" ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
             </Link>
-            <Link href="/genres" className={`relative hidden xl:inline-flex items-center px-3 py-1.5 text-[#C82418]/70 transition-all duration-300 hover:text-[#C82418] ${pathname.startsWith("/genre") ? "text-[#C82418]" : ""}`}>
-              Genre
-              <span className={`absolute top-1.5 right-2 h-1 w-1 rounded-full bg-[#C82418] transition-all duration-300 ${pathname.startsWith("/genre") ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
+            <Link href="/streaming" className={`relative hidden xl:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/streaming" ? "text-[#B01E14]" : ""}`}>
+              Streaming
+              <span className={`absolute top-1.5 right-2 h-1 w-1 rounded-full bg-[#B01E14] transition-all duration-300 ${pathname === "/streaming" ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
             </Link>
-            <Link href="/selection" className={`relative hidden xl:inline-flex items-center px-3 py-1.5 text-[#C82418]/70 transition-all duration-300 hover:text-[#C82418] ${pathname === "/selection" ? "text-[#C82418]" : ""}`}>
+            <Link href="/selection" className={`relative hidden xl:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/selection" ? "text-[#B01E14]" : ""}`}>
               Selection
-              <span className={`absolute top-1.5 right-2 h-1 w-1 rounded-full bg-[#C82418] transition-all duration-300 ${pathname === "/selection" ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
+              <span className={`absolute top-1.5 right-2 h-1 w-1 rounded-full bg-[#B01E14] transition-all duration-300 ${pathname === "/selection" ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
             </Link>
-            <Link href="/follows" className={`relative hidden xl:inline-flex items-center px-3 py-1.5 text-[#C82418]/70 transition-all duration-300 hover:text-[#C82418] ${pathname === "/follows" ? "text-[#C82418]" : ""}`}>
+            <Link href="/follows" className={`relative hidden xl:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/follows" ? "text-[#B01E14]" : ""}`}>
               Watchlist
-              <span className={`absolute top-1.5 right-2 h-1 w-1 rounded-full bg-[#C82418] transition-all duration-300 ${pathname === "/follows" ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
+              <span className={`absolute top-1.5 right-2 h-1 w-1 rounded-full bg-[#B01E14] transition-all duration-300 ${pathname === "/follows" ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
             </Link>
             <button
               onClick={() => setShowSearch(!showSearch)}
-              className="text-[#C82418] transition-opacity hover:opacity-60"
+              className="text-[#B01E14] transition-opacity hover:opacity-60"
               aria-label="検索"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">

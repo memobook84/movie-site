@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { X, Home, CalendarDays, LayoutGrid, Film, ShieldCheck } from "lucide-react";
+import { X, Home, CalendarDays, LayoutGrid, Film, ShieldCheck, Tv } from "lucide-react";
 import { GiImperialCrown } from "react-icons/gi";
 import { TiStopwatch } from "react-icons/ti";
 
 const menuItems = [
   { href: "/", label: "ホーム", icon: Home },
   { href: "/schedule", label: "スケジュール", icon: CalendarDays },
+  { href: "/streaming", label: "ストリーミング", icon: Tv },
   { href: "/genres", label: "ジャンル", icon: LayoutGrid },
   { href: "/selection", label: "セレクション", icon: Film },
   { href: "/ranking", label: "ランキング", icon: GiImperialCrown },
