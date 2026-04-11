@@ -18,7 +18,7 @@ const PLATFORMS = [
 type MediaType = "movie" | "tv";
 
 export default function StreamingPage() {
-  const [activeProvider, setActiveProvider] = useState(PLATFORMS[0]);
+  const [activeProvider, setActiveProvider] = useState<typeof PLATFORMS[number]>(PLATFORMS[0]);
   const [mediaType, setMediaType] = useState<MediaType>("movie");
   const [movies, setMovies] = useState<Movie[]>([]);
   const [page, setPage] = useState(1);
