@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTrendingPeoplePage, getPersonBirthday } from "@/lib/tmdb";
+import { getTrendingPeoplePage } from "@/lib/tmdb";
 import Link from "next/link";
 import PeopleClient from "@/components/PeopleClient";
 
@@ -25,9 +25,6 @@ export default async function PeoplePage() {
     return true;
   });
 
-  const birthdays = await Promise.all(allPeople.map((p) => getPersonBirthday(p.id)));
-  const peopleWithBirthday = allPeople.map((p, i) => ({ ...p, birthday: birthdays[i] }));
-
   return (
     <main className="min-h-screen pt-24 pb-28 px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
       <div className="flex items-center gap-3">
@@ -35,9 +32,9 @@ export default async function PeoplePage() {
           ホーム
         </Link>
         <span className="text-gray-300">/</span>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl">注目の人物</h1>
+        <h1 className="text-2xl font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl">注目の人物</h1>
       </div>
-      <PeopleClient people={peopleWithBirthday} />
+      <PeopleClient people={allPeople} />
     </main>
   );
 }

@@ -41,7 +41,7 @@ function RankingSection({
   return (
     <section className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl">
+        <h2 className="text-2xl font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl">
           {title}
         </h2>
         <p className="mt-1 text-sm text-gray-400">{subtitle}</p>

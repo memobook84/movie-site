@@ -58,7 +58,7 @@ export default function FollowButton({ movieId, title, posterPath, mediaType = "
   return (
     <button
       onClick={toggle}
-      className={`inline-flex items-center justify-center h-10 w-10 rounded border-none cursor-pointer transition-all ${followed ? "bg-yellow-400 text-gray-900" : "bg-gray-50 hover:bg-gray-100 text-gray-900"}`}
+      className={`inline-flex items-center justify-center h-10 w-10 rounded border-none cursor-pointer transition-all ${followed ? "bg-[#E6A723] text-gray-900" : "bg-gray-50 hover:bg-gray-100 text-gray-900"}`}
       aria-label={followed ? "ウォッチリストに追加済み" : "ウォッチリストに追加"}
     >
       {followed ? (

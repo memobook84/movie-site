@@ -41,7 +41,7 @@ export default async function CastPage({ params, searchParams }: PageProps) {
         {title}
       </Link>
 
-      <h1 className="mt-4 text-2xl font-bold tracking-tight text-gray-900 md:text-3xl">
+      <h1 className="mt-4 text-2xl font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl">
         出演者一覧（{allCast.length}名）
       </h1>
 

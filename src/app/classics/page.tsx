@@ -32,7 +32,7 @@ export default async function ClassicsPage() {
           ホーム
         </Link>
         <span className="text-gray-300">/</span>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl">不朽の名作</h1>
+        <h1 className="text-2xl font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl">不朽の名作</h1>
       </div>
       <ClassicsClient movies={allMovies} />
     </main>

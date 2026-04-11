@@ -211,7 +211,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       {/* ヒーロー画像 */}
-      <div className="relative w-full overflow-hidden h-[60vw] max-h-[400px] md:h-[30vw] md:max-h-[450px]">
+      <div className="relative w-full overflow-hidden h-[60vw] max-h-[400px] md:h-[45vw] md:max-h-[560px] lg:h-[30vw] lg:max-h-[500px]">
         <div className="absolute top-0 left-0 right-0 h-11 md:h-16 bg-white md:bg-[#424242] z-10" />
         {movie.backdrop_path && (
           <img

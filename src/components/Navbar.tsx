@@ -120,20 +120,20 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`fixed top-0 z-50 w-full py-2 transition-all duration-500 md:py-4 bg-[#E6A723] shadow-[0_2px_8px_rgba(0,0,0,0.15)] translate-y-0 ${
-          hidden ? "md:-translate-y-full" : ""
+        className={`fixed top-0 z-50 w-full py-2 transition-all duration-500 md:py-4 bg-[#E6A723] shadow-[0_2px_8px_rgba(0,0,0,0.15)] ${
+          hidden ? "-translate-y-full" : "translate-y-0"
         }`}
       >
         <div className="relative flex items-center justify-between px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
           <Link
             href="/"
-            className="flex items-center gap-3 text-xl font-black tracking-[0.2em] text-[#B01E14] md:text-2xl"
+            className="flex items-center gap-3 text-2xl font-black tracking-[0.2em] text-[#B01E14] md:text-3xl"
           >
             <img src="/logo.png" alt="Logo" className="h-7 w-7 object-contain md:hidden" />
             <span className="hidden md:inline">ARD CINEMA</span>
           </Link>
           {/* スマホ: 中央タイトル */}
-          <span className="absolute left-1/2 -translate-x-1/2 font-[family-name:var(--font-noto-sans-jp)] text-sm font-black tracking-widest text-[#B01E14] md:hidden">
+          <span className="absolute left-1/2 -translate-x-1/2 font-[family-name:var(--font-noto-sans-jp)] text-base font-black tracking-widest text-[#B01E14] md:hidden">
             ARD CINEMA
           </span>
           <div className="flex items-center gap-4 font-[family-name:var(--font-noto-sans-jp)] text-sm font-black text-[#B01E14]">

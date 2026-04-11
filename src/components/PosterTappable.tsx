@@ -26,11 +26,16 @@ export default function PosterTappable({ posterPath, title, imageBase, images }:
 
   return (
     <>
-      <div className="flex-shrink-0 cursor-pointer" onClick={() => setOpen(true)}>
+      <div
+        className="flex-shrink-0 cursor-pointer transition-all duration-300 ease-in-out active:scale-95 rounded-[4px]"
+        onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 0 0 3px #E6A723")}
+        onMouseLeave={e => (e.currentTarget.style.boxShadow = "none")}
+        onClick={() => setOpen(true)}
+      >
         <img
           src={`${imageBase}/w342${posterPath}`}
           alt={title}
-          className="w-44 rounded-[4px] md:w-80 transition-transform active:scale-95"
+          className="w-44 rounded-[4px] md:w-80"
         />
       </div>
 

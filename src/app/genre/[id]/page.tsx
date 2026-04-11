@@ -62,7 +62,7 @@ export default async function GenrePage({ params, searchParams }: PageProps) {
           ジャンル
         </Link>
         <span className="text-gray-300">/</span>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl">{genreName}</h1>
+        <h1 className="text-2xl font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl">{genreName}</h1>
       </div>
       <div className="mt-6 grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
         {unique.map((movie) => {

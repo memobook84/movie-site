@@ -15,7 +15,7 @@ const PLATFORMS = [
   { id: "337", name: "Disney+",     logo: "/97yvRBw1GzX7fXprcF80er19ot.jpg" },
 ] as const;
 
-type MediaType = "movie" | "tv";
+type MediaType = "movie" | "tv" | "anime";
 
 export default function StreamingPage() {
   const [activeProvider, setActiveProvider] = useState<typeof PLATFORMS[number]>(PLATFORMS[0]);
@@ -66,11 +66,11 @@ export default function StreamingPage() {
   return (
     <main className="min-h-screen pt-24 pb-28">
       <div className="mx-auto max-w-[1280px] px-6 md:px-16">
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl">
+        <h1 className="text-2xl font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl">
           定額配信
         </h1>
         <p className="mt-1 text-sm text-gray-500">
-          日本で配信中の映画・ドラマをプラットフォーム別に探す
+          日本で配信中の映画・ドラマ・アニメをアプリ別に探す
         </p>
 
         {/* プラットフォームタブ */}
@@ -91,8 +91,8 @@ export default function StreamingPage() {
                   className="h-9 w-9 rounded-full object-cover md:h-12 md:w-12"
                 />
                 <span
-                  className={`h-0.5 w-full rounded-full transition-all duration-200 ${
-                    isActive ? "bg-gray-900" : "bg-transparent"
+                  className={`h-1.5 w-1.5 rounded-full transition-all duration-200 ${
+                    isActive ? "bg-[#E6A723]" : "bg-transparent"
                   }`}
                 />
               </button>
@@ -102,7 +102,7 @@ export default function StreamingPage() {
 
         {/* 映画 / ドラマ切替 */}
         <div className="mt-4 flex gap-2">
-          {(["movie", "tv"] as MediaType[]).map((type) => (
+          {(["movie", "tv", "anime"] as MediaType[]).map((type) => (
             <button
               key={type}
               onClick={() => setMediaType(type)}
@@ -112,7 +112,7 @@ export default function StreamingPage() {
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             >
-              {type === "movie" ? "映画" : "ドラマ・TV"}
+              {type === "movie" ? "映画" : type === "tv" ? "ドラマ・TV" : "アニメ"}
             </button>
           ))}
         </div>
@@ -130,7 +130,7 @@ export default function StreamingPage() {
                 return (
                   <Link
                     key={movie.id}
-                    href={`/movie/${movie.id}?type=${mediaType}`}
+                    href={`/movie/${movie.id}?type=${mediaType === "anime" ? "tv" : mediaType}`}
                     className="group"
                   >
                     <div className="overflow-hidden rounded bg-gray-100 shadow-sm transition-all duration-300 group-hover:scale-105 group-hover:shadow-md">

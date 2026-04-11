@@ -27,7 +27,7 @@ const otherItems = [
 export default function MenuPage() {
   return (
     <main className="min-h-screen bg-white pt-20 pb-32 px-6">
-      <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl mb-6">メニュー</h1>
+      <h1 className="text-2xl font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl mb-6">メニュー</h1>
 
       {/* メイン */}
       <div className="space-y-1">
