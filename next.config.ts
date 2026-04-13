@@ -8,6 +8,12 @@ const nextConfig: NextConfig = {
       destination: "https://ardcinema.com/:path*",
       permanent: true,
     },
+    {
+      source: "/:path*",
+      has: [{ type: "host", value: "movie-site-delta-lilac.vercel.app" }],
+      destination: "https://ardcinema.com/:path*",
+      permanent: true,
+    },
   ],
   images: {
     remotePatterns: [

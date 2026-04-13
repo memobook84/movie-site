@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "ARD CINEMA",
   description: "ARD CINEMA（ardcinema）- 話題の映画やドラマの最新情報、トレンド、人気作品、おすすめセレクションをチェック。ジャンル別検索やランキングも充実。",
+  alternates: { canonical: "https://ardcinema.com" },
 };
 
 export const revalidate = 86400;
