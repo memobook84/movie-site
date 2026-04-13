@@ -4,13 +4,14 @@ import { useState } from "react";
 
 interface ShareButtonProps {
   title: string;
+  url?: string;
 }
 
-export default function ShareButton({ title }: ShareButtonProps) {
+export default function ShareButton({ title, url }: ShareButtonProps) {
   const [copied, setCopied] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const getUrl = () => typeof window !== "undefined" ? window.location.href : "";
+  const getUrl = () => url || (typeof window !== "undefined" ? window.location.href : "");
 
   const shareX = () => {
     const url = getUrl();

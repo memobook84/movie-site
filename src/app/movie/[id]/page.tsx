@@ -213,7 +213,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
       />
       {/* ヒーロー画像 */}
       <div className="relative w-full overflow-hidden h-[60vw] max-h-[400px] md:h-[45vw] md:max-h-[560px] lg:h-[30vw] lg:max-h-[500px]">
-        <div className="absolute top-0 left-0 right-0 h-11 md:h-16 bg-white md:bg-[#424242] z-10" />
+        <div className="absolute top-0 left-0 right-0 hidden md:block h-16 bg-[#424242] z-10" />
         {movie.backdrop_path && (
           <img
             src={`${IMAGE_BASE_URL}/original${movie.backdrop_path}`}
@@ -721,7 +721,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                     cast={allCast}
                   />
                 )}
-                <ShareButton title={`${title} `} />
+                <ShareButton title={`${title} `} url={`https://ardcinema.com/movie/${id}`} />
               </div>
             </div>
             {/* スマホ: IMDb風 */}
