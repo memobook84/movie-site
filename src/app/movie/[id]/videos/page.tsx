@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getMovieDetail, getTvDetail, getVideosEn, IMAGE_BASE_URL } from "@/lib/tmdb";
 import Link from "next/link";
 import TrailerModal from "@/components/TrailerModal";
@@ -5,6 +6,20 @@ import TrailerModal from "@/components/TrailerModal";
 interface PageProps {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ type?: string }>;
+}
+
+export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
+  const { id } = await params;
+  const { type } = await searchParams;
+  const movie = type === "tv"
+    ? await getTvDetail(Number(id))
+    : await getMovieDetail(Number(id));
+  const title = movie.title || movie.name || "";
+  return {
+    title: `${title} - 動画一覧`,
+    alternates: { canonical: `https://ardcinema.com/movie/${id}/videos` },
+    ...(type && { robots: { index: false, follow: true } }),
+  };
 }
 
 export default async function VideosPage({ params, searchParams }: PageProps) {

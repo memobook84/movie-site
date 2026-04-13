@@ -16,6 +16,8 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
   const title = movie.title || movie.name || "";
   return {
     title: `${title} - 出演者一覧`,
+    alternates: { canonical: `https://ardcinema.com/movie/${id}/cast` },
+    ...(type && { robots: { index: false, follow: true } }),
   };
 }
 

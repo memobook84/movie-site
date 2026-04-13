@@ -99,6 +99,7 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
   return {
     title: `${title} `,
     description,
+    ...(type && { robots: { index: false, follow: true } }),
     alternates: { canonical: canonicalUrl },
     openGraph: {
       title: `${title} `,
