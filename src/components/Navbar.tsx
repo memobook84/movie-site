@@ -129,7 +129,7 @@ export default function Navbar() {
             href="/"
             className="flex items-center gap-3 text-2xl font-black tracking-[0.2em] text-[#B01E14] md:text-3xl"
           >
-            <img src="/logo.png" alt="Logo" className="h-7 w-7 object-contain md:hidden" />
+            <img src="/logo.png" alt="Logo" className="hidden" />
             <span className="hidden md:inline">ARD CINEMA</span>
           </Link>
           {/* スマホ: 中央タイトル */}
