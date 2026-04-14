@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Home, CalendarDays, Film, ShieldCheck, Star, Compass, Users, Award, Tv } from "lucide-react";
 import { LuBlocks } from "react-icons/lu";
 import { GiImperialCrown } from "react-icons/gi";
-import { PiEyeglassesFill } from "react-icons/pi";
+import { PiBinocularsFill } from "react-icons/pi";
 
 const mainItems = [
   { href: "/", label: "ホーム", icon: Home },
@@ -14,7 +14,7 @@ const mainItems = [
 
 const featureItems = [
   { href: "/ranking", label: "ランキング", icon: GiImperialCrown },
-  { href: "/follows", label: "ウォッチリスト", icon: PiEyeglassesFill },
+  { href: "/follows", label: "ウォッチリスト", icon: PiBinocularsFill },
   { href: "/people", label: "注目の人物", icon: Users },
   { href: "/classics", label: "不朽の名作", icon: Award },
   // { href: "/discover", label: "ディスカバー", icon: Compass },

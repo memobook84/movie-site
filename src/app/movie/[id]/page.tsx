@@ -225,14 +225,28 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         )}
         {/* 下部を白へフェード */}
         <div className="absolute bottom-0 left-0 right-0 h-1/2" style={{ background: "linear-gradient(to top, white 0%, rgba(255,255,255,0.7) 40%, transparent 100%)" }} />
+        {/* スマホ: ヒーロー内左下にポスター */}
+        {movie.poster_path && (
+          <div className="absolute bottom-3 left-4 z-10 md:hidden">
+            <img
+              src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`}
+              alt={title}
+              className="w-[22vw] max-w-[90px] aspect-[2/3] rounded-[4px] object-cover shadow-[0_8px_24px_rgba(0,0,0,0.5),0_0_20px_rgba(255,255,255,0.35)]"
+            />
+          </div>
+        )}
+        {/* スマホ: ヒーロー内右下にウォッチリストボタン（ポスター底辺に揃える） */}
+        <div className="absolute bottom-3 right-4 z-10 md:hidden">
+          <FollowButton movieId={movie.id} title={title} posterPath={movie.poster_path} mediaType={type || "movie"} year={(movie.release_date || movie.first_air_date)?.slice(0, 4)} runtime={movie.runtime ?? undefined} providers={watchProviders?.flatrate?.map((p) => ({ logo_path: p.logo_path, provider_name: p.provider_name }))} small />
+        </div>
       </div>
 
       {/* ポスター + テキスト情報（白背景） */}
-      <div className="relative z-10 -mt-8 px-6 md:-mt-12 md:px-16 md:max-w-[1280px] md:mx-auto">
+      <div className="relative z-10 mt-4 px-6 md:-mt-12 md:px-16 md:max-w-[1280px] md:mx-auto">
         <div className="flex flex-row gap-3 md:gap-0">
-          {/* ポスター + スマホ版ウォッチリストボタン */}
+          {/* ポスター + スマホ版ウォッチリストボタン（スマホは非表示） */}
           {movie.poster_path && (
-            <div className="flex-shrink-0 self-start">
+            <div className="hidden md:block flex-shrink-0 self-start">
               <div style={{ boxShadow: "0 20px 40px rgba(0,0,0,0.15)" }}>
                 <PosterTappable
                   posterPath={movie.poster_path}
@@ -247,7 +261,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
           {/* テキスト情報 */}
           <div className="flex-1 flex flex-col gap-3 md:gap-5 pt-0 md:pl-4">
             <div>
-              <h1 className="text-sm font-normal tracking-tight text-gray-900 md:text-4xl">
+              <h1 className="text-base font-normal tracking-tight text-gray-900 md:text-4xl">
                 {title}
               </h1>
               {movie.tagline && (
@@ -284,7 +298,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
             )}
 
             {/* スマホ版ウォッチリストボタン（ポスター下端に揃える） */}
-            <div className="mt-auto md:hidden">
+            <div className="mt-auto hidden">
               <FollowButton movieId={movie.id} title={title} posterPath={movie.poster_path} mediaType={type || "movie"} year={(movie.release_date || movie.first_air_date)?.slice(0, 4)} runtime={movie.runtime ?? undefined} providers={watchProviders?.flatrate?.map((p) => ({ logo_path: p.logo_path, provider_name: p.provider_name }))} />
             </div>
 
