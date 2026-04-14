@@ -104,7 +104,7 @@ export default async function PersonPage({ params }: PageProps) {
   };
 
   return (
-    <main className="min-h-screen pt-24 pb-28 px-6 md:px-16 max-w-7xl mx-auto">
+    <main className="min-h-screen pt-14 md:pt-24 pb-28 px-6 md:px-16 max-w-7xl mx-auto">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

@@ -193,7 +193,7 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
 
   return (
     <>
-      <div className="relative pt-0 md:pt-24 bg-gray-50 overflow-hidden">
+      <div className="relative pt-10 md:pt-24 md:bg-gray-50 overflow-hidden">
 
         {/* メインビジュアル */}
         <div className="relative">

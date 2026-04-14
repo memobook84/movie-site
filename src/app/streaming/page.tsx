@@ -64,12 +64,12 @@ export default function StreamingPage() {
   };
 
   return (
-    <main className="min-h-screen pt-24 pb-28">
+    <main className="min-h-screen pt-14 md:pt-24 pb-28">
       <div className="mx-auto max-w-[1280px] px-6 md:px-16">
-        <h1 className="text-2xl font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl">
+        <h1 className="text-lg font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl">
           定額配信
         </h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="mt-1 text-xs text-gray-500 md:text-sm">
           日本で配信中の映画・ドラマ・アニメをアプリ別に探す
         </p>
 

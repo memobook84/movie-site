@@ -211,6 +211,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {/* スマホ用ナビバー高さスペーサー（透明） */}
+      <div className="h-10 md:hidden" />
       {/* ヒーロー画像 */}
       <div className="relative w-full overflow-hidden h-[60vw] max-h-[400px] md:h-[45vw] md:max-h-[560px] lg:h-[30vw] lg:max-h-[500px]">
         <div className="absolute top-0 left-0 right-0 hidden md:block h-16 bg-[#424242] z-10" />
@@ -231,7 +233,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
           {/* ポスター + スマホ版ウォッチリストボタン */}
           {movie.poster_path && (
             <div className="flex-shrink-0 self-start">
-              <div style={{ boxShadow: "0 20px 40px rgba(0,0,0,0.15), 0 0 20px rgba(250,204,21,0.3)" }}>
+              <div style={{ boxShadow: "0 20px 40px rgba(0,0,0,0.15)" }}>
                 <PosterTappable
                   posterPath={movie.poster_path}
                   title={title}
@@ -283,7 +285,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
 
             {/* スマホ版ウォッチリストボタン（ポスター下端に揃える） */}
             <div className="mt-auto md:hidden">
-              <FollowButton movieId={movie.id} title={title} posterPath={movie.poster_path} mediaType={type || "movie"} />
+              <FollowButton movieId={movie.id} title={title} posterPath={movie.poster_path} mediaType={type || "movie"} year={(movie.release_date || movie.first_air_date)?.slice(0, 4)} runtime={movie.runtime ?? undefined} providers={watchProviders?.flatrate?.map((p) => ({ logo_path: p.logo_path, provider_name: p.provider_name }))} />
             </div>
 
             {/* あらすじ（PC版のみここに表示） */}
@@ -299,7 +301,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
 
             {/* ウォッチリストボタン（PC版） */}
             <div className="mt-auto hidden md:block">
-              <FollowButton movieId={movie.id} title={title} posterPath={movie.poster_path} mediaType={type || "movie"} />
+              <FollowButton movieId={movie.id} title={title} posterPath={movie.poster_path} mediaType={type || "movie"} year={(movie.release_date || movie.first_air_date)?.slice(0, 4)} runtime={movie.runtime ?? undefined} providers={watchProviders?.flatrate?.map((p) => ({ logo_path: p.logo_path, provider_name: p.provider_name }))} />
             </div>
 
           </div>

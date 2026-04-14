@@ -41,10 +41,10 @@ function RankingSection({
   return (
     <section className="space-y-6">
       <div>
-        <h2 className="text-2xl font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl">
+        <h2 className="text-lg font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl">
           {title}
         </h2>
-        <p className="mt-1 text-sm text-gray-400">{subtitle}</p>
+        <p className="mt-1 text-xs text-gray-400 md:text-sm">{subtitle}</p>
       </div>
       <div className="space-y-2">
         {movies.slice(0, 20).map((movie, i) => {
@@ -104,7 +104,7 @@ export default async function RankingPage() {
   ]);
 
   return (
-    <main className="min-h-screen bg-[#f5f5f7] pt-24 pb-28">
+    <main className="min-h-screen bg-[#f5f5f7] pt-14 md:pt-24 pb-28">
       <div className="mx-auto max-w-5xl px-5 md:px-8">
         <div className="space-y-14">
           <RankingSection

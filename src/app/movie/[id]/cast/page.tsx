@@ -31,7 +31,7 @@ export default async function CastPage({ params, searchParams }: PageProps) {
   const allCast = movie.credits?.cast || [];
 
   return (
-    <main className="min-h-screen bg-white pt-24 pb-28 px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
+    <main className="min-h-screen bg-white pt-14 md:pt-24 pb-28 px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
       {/* 戻るリンク + タイトル */}
       <Link
         href={`/movie/${id}?type=${type || "movie"}`}
@@ -43,7 +43,7 @@ export default async function CastPage({ params, searchParams }: PageProps) {
         {title}
       </Link>
 
-      <h1 className="mt-4 text-2xl font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl">
+      <h1 className="mt-4 text-lg font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl">
         出演者一覧（{allCast.length}名）
       </h1>
 

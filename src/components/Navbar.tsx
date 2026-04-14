@@ -127,15 +127,11 @@ export default function Navbar() {
         <div className="relative flex items-center justify-between px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
           <Link
             href="/"
-            className="flex items-center gap-3 text-2xl font-black tracking-[0.2em] text-[#B01E14] md:text-3xl"
+            className="flex items-center gap-3 font-[family-name:var(--font-noto-sans-jp)] text-base font-black tracking-widest text-[#B01E14] md:text-3xl md:tracking-[0.2em]"
           >
             <img src="/logo.png" alt="Logo" className="hidden" />
-            <span className="hidden md:inline">ARD CINEMA</span>
+            <span>ARD CINEMA</span>
           </Link>
-          {/* スマホ: 中央タイトル */}
-          <span className="absolute left-1/2 -translate-x-1/2 font-[family-name:var(--font-noto-sans-jp)] text-base font-black tracking-widest text-[#B01E14] md:hidden">
-            ARD CINEMA
-          </span>
           <div className="flex items-center gap-4 font-[family-name:var(--font-noto-sans-jp)] text-sm font-black text-[#B01E14]">
             <Link href="/schedule" className={`relative hidden xl:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/schedule" ? "text-[#B01E14]" : ""}`}>
               Schedule

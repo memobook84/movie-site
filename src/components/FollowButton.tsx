@@ -9,6 +9,9 @@ interface FollowButtonProps {
   title: string;
   posterPath: string | null;
   mediaType?: string;
+  year?: string;
+  runtime?: number;
+  providers?: { logo_path: string; provider_name: string }[];
 }
 
 export interface FollowedItem {
@@ -17,6 +20,9 @@ export interface FollowedItem {
   posterPath: string | null;
   mediaType: string;
   followedAt: number;
+  year?: string;
+  runtime?: number;
+  providers?: { logo_path: string; provider_name: string }[];
 }
 
 const STORAGE_KEY = "cinema_followed";
@@ -34,7 +40,12 @@ function setFollowed(items: FollowedItem[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
 }
 
-export default function FollowButton({ movieId, title, posterPath, mediaType = "movie" }: FollowButtonProps) {
+export function removeFollowed(id: number, mediaType: string) {
+  const updated = getFollowed().filter((item) => !(item.id === id && item.mediaType === mediaType));
+  setFollowed(updated);
+}
+
+export default function FollowButton({ movieId, title, posterPath, mediaType = "movie", year, runtime, providers }: FollowButtonProps) {
   const [followed, setFollowedState] = useState(false);
 
   useEffect(() => {
@@ -49,7 +60,7 @@ export default function FollowButton({ movieId, title, posterPath, mediaType = "
       setFollowed(updated);
       setFollowedState(false);
     } else {
-      list.push({ id: movieId, title, posterPath, mediaType, followedAt: Date.now() });
+      list.push({ id: movieId, title, posterPath, mediaType, followedAt: Date.now(), year, runtime, providers });
       setFollowed(list);
       setFollowedState(true);
     }

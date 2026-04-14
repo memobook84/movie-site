@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <main className="min-h-screen pt-24 pb-28 px-6 md:px-16 space-y-8">
+    <main className="min-h-screen pt-14 md:pt-24 pb-28 px-6 md:px-16 space-y-8">
       {Array.from({ length: 10 }).map((_, row) => (
         <div key={row}>
           <div className="mt-3 flex gap-3 overflow-hidden">

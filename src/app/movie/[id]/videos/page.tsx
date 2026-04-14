@@ -54,7 +54,7 @@ export default async function VideosPage({ params, searchParams }: PageProps) {
   }
 
   return (
-    <main className="min-h-screen bg-white pt-20 pb-24 px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
+    <main className="min-h-screen bg-white pt-12 md:pt-20 pb-24 px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
       {/* ヘッダー */}
       <div className="mb-8">
         <Link

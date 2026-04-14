@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <main className="min-h-screen pt-24 pb-28 px-6 md:px-16">
+    <main className="min-h-screen pt-14 md:pt-24 pb-28 px-6 md:px-16">
       <div className="flex items-center gap-3">
         <div className="h-5 w-12 animate-pulse rounded bg-gray-200" />
         <span className="text-gray-300">/</span>

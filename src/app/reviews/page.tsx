@@ -40,8 +40,8 @@ export default async function ReviewsPage() {
   );
 
   return (
-    <main className="min-h-screen bg-white pt-24 pb-28 px-6 md:px-16">
-      <h1 className="text-2xl font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl">
+    <main className="min-h-screen bg-white pt-14 md:pt-24 pb-28 px-6 md:px-16">
+      <h1 className="text-lg font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl">
         レビュー
       </h1>
       <p className="mt-2 text-sm text-gray-500">

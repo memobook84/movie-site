@@ -181,7 +181,7 @@ export default function DiscoverClient() {
     <main className="fixed inset-0 z-10 flex flex-col bg-white pt-16 pb-16 px-4 md:relative md:inset-auto md:z-auto md:min-h-screen md:pb-28 md:pt-24 md:px-16 xl:pb-12">
       {/* タイトル */}
       <div className="flex items-baseline gap-3 pt-2">
-        <h1 className="text-2xl font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl">
+        <h1 className="text-lg font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl">
           ディスカバー
         </h1>
         <p className="text-[10px] text-gray-400 md:text-xs">興行収入とジャンルで映画を探す</p>

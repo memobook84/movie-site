@@ -53,7 +53,7 @@ export default async function GenrePage({ params, searchParams }: PageProps) {
     <>
       {hasPrev && <link rel="prev" href={`/genre/${id}?${baseQuery}&page=${currentPage - 1}`} />}
       {hasNext && <link rel="next" href={`/genre/${id}?${baseQuery}&page=${currentPage + 1}`} />}
-    <main className="min-h-screen pt-24 pb-28 px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
+    <main className="min-h-screen pt-14 md:pt-24 pb-28 px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
       <div className="flex items-center gap-3">
         <Link
           href="/genres"
@@ -62,7 +62,7 @@ export default async function GenrePage({ params, searchParams }: PageProps) {
           ジャンル
         </Link>
         <span className="text-gray-300">/</span>
-        <h1 className="text-2xl font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl">{genreName}</h1>
+        <h1 className="text-lg font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl">{genreName}</h1>
       </div>
       <div className="mt-6 grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
         {unique.map((movie) => {
