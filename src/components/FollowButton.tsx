@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
+import { PiEyesFill } from "react-icons/pi";
 
 interface FollowButtonProps {
   movieId: number;
@@ -69,11 +70,11 @@ export default function FollowButton({ movieId, title, posterPath, mediaType = "
   return (
     <button
       onClick={toggle}
-      className={`inline-flex items-center justify-center rounded border-none cursor-pointer transition-all ${small ? "h-7 w-7" : "h-10 w-10"} ${followed ? (small ? "bg-[#E6A723] text-gray-900" : "bg-[#E6A723] text-gray-900") : "bg-gray-50 hover:bg-gray-100 text-gray-900"}`}
+      className={`inline-flex items-center justify-center rounded border-none cursor-pointer transition-all ${small ? "h-7 w-7" : "h-10 w-10"} ${followed ? "bg-[#E6A723] text-gray-900" : "bg-gray-50 hover:bg-gray-100 text-gray-900"}`}
       aria-label={followed ? "ウォッチリストに追加済み" : "ウォッチリストに追加"}
     >
       {followed ? (
-        <FaPlus className={`shrink-0 ${small ? "h-3.5 w-3.5" : "h-5 w-5"}`} />
+        <PiEyesFill className={`shrink-0 ${small ? "h-3.5 w-3.5" : "h-5 w-5"}`} />
       ) : (
         <FaPlus className={`shrink-0 ${small ? "h-3.5 w-3.5" : "h-5 w-5"}`} />
       )}

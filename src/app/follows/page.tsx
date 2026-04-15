@@ -1,15 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import { MdOutlineDoNotTouch } from "react-icons/md";
+import { useRouter } from "next/navigation";
 import { getFollowed, removeFollowed, FollowedItem } from "@/components/FollowButton";
 
 type Tab = "all" | "movie" | "tv";
 
+const ALLOWED_PROVIDERS = ["Netflix", "U-NEXT", "Hulu", "Disney Plus", "Amazon Prime Video"];
+
 export default function FollowsPage() {
   const [items, setItems] = useState<FollowedItem[]>([]);
   const [activeTab, setActiveTab] = useState<Tab>("all");
+  const [swipedId, setSwipedId] = useState<string | null>(null);
+  const touchStartX = useRef<number>(0);
+  const touchStartY = useRef<number>(0);
+  const router = useRouter();
 
   useEffect(() => {
     setItems(getFollowed().sort((a, b) => b.followedAt - a.followedAt));
@@ -18,6 +24,31 @@ export default function FollowsPage() {
   const handleRemove = (id: number, mediaType: string) => {
     removeFollowed(id, mediaType);
     setItems((prev) => prev.filter((item) => !(item.id === id && item.mediaType === mediaType)));
+    setSwipedId(null);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent, key: string) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent, key: string) => {
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    const dy = Math.abs(e.changedTouches[0].clientY - touchStartY.current);
+    if (dy > 30) return; // 縦スクロール中は無視
+    if (dx < -50) {
+      setSwipedId(key);
+    } else if (dx > 20) {
+      setSwipedId(null);
+    }
+  };
+
+  const handleContentClick = (key: string, href: string) => {
+    if (swipedId === key) {
+      setSwipedId(null);
+    } else {
+      router.push(href);
+    }
   };
 
   const tabs: { key: Tab; label: string }[] = [
@@ -77,48 +108,67 @@ export default function FollowsPage() {
           <>
             {/* スマホ: 縦リスト */}
             <div className="mt-4 flex flex-col max-w-2xl md:hidden">
-              {filtered.map((item) => (
-                <Link
-                  key={`${item.mediaType}-${item.id}`}
-                  href={`/movie/${item.id}?type=${item.mediaType}`}
-                  className="flex items-stretch gap-4 border-b border-gray-100 py-4"
-                >
-                  <div className="w-20 shrink-0 overflow-hidden rounded-[4px]">
-                    {item.posterPath ? (
-                      <img
-                        src={`https://image.tmdb.org/t/p/w154${item.posterPath}`}
-                        alt={item.title}
-                        className="aspect-[2/3] w-full object-cover"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="flex aspect-[2/3] w-full items-center justify-center bg-gray-100 text-[10px] text-gray-400">
-                        No Image
-                      </div>
-                    )}
-                  </div>
-                  <div className="min-w-0 flex-1 flex flex-col">
-                    <h3 className="text-sm font-normal text-gray-900 leading-tight line-clamp-2">{item.title}</h3>
-                    <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-gray-400">
-                      <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px]">{item.mediaType === "tv" ? "TV" : "映画"}</span>
-                      {item.year && <span>{item.year}年</span>}
-                      {item.runtime && <span>{item.runtime >= 60 ? `${Math.floor(item.runtime / 60)}時間${item.runtime % 60 > 0 ? `${item.runtime % 60}分` : ""}` : `${item.runtime}分`}</span>}
-                    </div>
-                    {item.providers && item.providers.length > 0 && (
-                      <div className="mt-2 flex flex-wrap gap-1">
-                        {item.providers.map((p) => (
-                          <span key={p.provider_name} className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] text-gray-600">{p.provider_name}</span>
-                        ))}
-                      </div>
-                    )}
-                    <div className="flex justify-end mt-auto pt-2">
-                      <button onClick={(e) => { e.preventDefault(); handleRemove(item.id, item.mediaType); }} className="p-1 text-gray-300 hover:text-red-400 transition-colors" aria-label="削除">
-                        <MdOutlineDoNotTouch className="h-4 w-4" />
+              {filtered.map((item) => {
+                const key = `${item.mediaType}-${item.id}`;
+                const href = `/movie/${item.id}?type=${item.mediaType}`;
+                const isSwiped = swipedId === key;
+                return (
+                  <div
+                    key={key}
+                    className="relative overflow-hidden border-b border-gray-100"
+                    onTouchStart={(e) => handleTouchStart(e, key)}
+                    onTouchEnd={(e) => handleTouchEnd(e, key)}
+                  >
+                    {/* 削除ボタン（背面） */}
+                    <div className="absolute inset-y-0 right-0 flex w-20 items-center justify-center bg-red-500">
+                      <button
+                        onClick={() => handleRemove(item.id, item.mediaType)}
+                        className="text-white text-sm font-medium"
+                        aria-label="削除"
+                      >
+                        削除
                       </button>
                     </div>
+
+                    {/* コンテンツ行（前面） */}
+                    <div
+                      className="flex items-stretch gap-4 py-4 bg-white transition-transform duration-200 ease-out cursor-pointer"
+                      style={{ transform: isSwiped ? "translateX(-80px)" : "translateX(0)" }}
+                      onClick={() => handleContentClick(key, href)}
+                    >
+                      <div className="w-20 shrink-0 overflow-hidden rounded-[4px]">
+                        {item.posterPath ? (
+                          <img
+                            src={`https://image.tmdb.org/t/p/w154${item.posterPath}`}
+                            alt={item.title}
+                            className="aspect-[2/3] w-full object-cover"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="flex aspect-[2/3] w-full items-center justify-center bg-gray-100 text-[10px] text-gray-400">
+                            No Image
+                          </div>
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1 flex flex-col">
+                        <h3 className="text-sm font-normal text-gray-900 leading-tight line-clamp-2">{item.title}</h3>
+                        <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-gray-400">
+                          <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px]">{item.mediaType === "tv" ? "TV" : "映画"}</span>
+                          {item.year && <span>{item.year}年</span>}
+                          {item.runtime && <span>{item.runtime >= 60 ? `${Math.floor(item.runtime / 60)}時間${item.runtime % 60 > 0 ? `${item.runtime % 60}分` : ""}` : `${item.runtime}分`}</span>}
+                        </div>
+                        {item.providers && item.providers.filter((p) => ALLOWED_PROVIDERS.includes(p.provider_name)).length > 0 && (
+                          <div className="mt-2 flex flex-wrap gap-1">
+                            {item.providers.filter((p) => ALLOWED_PROVIDERS.includes(p.provider_name)).map((p) => (
+                              <span key={p.provider_name} className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] text-gray-600">{p.provider_name}</span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </Link>
-              ))}
+                );
+              })}
             </div>
 
             {/* PC: グリッド */}
@@ -146,9 +196,9 @@ export default function FollowsPage() {
                       {item.year && <span>{item.year}年</span>}
                       {item.runtime && <span>{item.runtime >= 60 ? `${Math.floor(item.runtime / 60)}時間${item.runtime % 60 > 0 ? `${item.runtime % 60}分` : ""}` : `${item.runtime}分`}</span>}
                     </div>
-                    {item.providers && item.providers.length > 0 && (
+                    {item.providers && item.providers.filter((p) => ALLOWED_PROVIDERS.includes(p.provider_name)).length > 0 && (
                       <div className="mt-1.5 flex flex-wrap gap-1">
-                        {item.providers.map((p) => (
+                        {item.providers.filter((p) => ALLOWED_PROVIDERS.includes(p.provider_name)).map((p) => (
                           <span key={p.provider_name} className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] text-gray-600">{p.provider_name}</span>
                         ))}
                       </div>
