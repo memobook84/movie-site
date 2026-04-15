@@ -124,15 +124,16 @@ export default function Navbar() {
           hidden ? "-translate-y-full" : "translate-y-0"
         }`}
       >
-        <div className="relative flex items-center justify-between px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center md:flex md:justify-between px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
+          <div className="md:hidden" />
           <Link
             href="/"
-            className="flex items-center gap-3 font-[family-name:var(--font-noto-sans-jp)] text-base font-black tracking-widest text-[#B01E14] md:text-3xl md:tracking-[0.2em]"
+            className="justify-self-center md:justify-self-auto flex items-center gap-3 font-[family-name:var(--font-noto-sans-jp)] text-base font-black tracking-widest text-[#B01E14] md:text-3xl md:tracking-[0.2em]"
           >
             <img src="/logo.png" alt="Logo" className="hidden" />
             <span>ARD CINEMA</span>
           </Link>
-          <div className="flex items-center gap-4 font-[family-name:var(--font-noto-sans-jp)] text-sm font-black text-[#B01E14]">
+          <div className="flex items-center justify-end gap-4 font-[family-name:var(--font-noto-sans-jp)] text-sm font-black text-[#B01E14]">
             <Link href="/schedule" className={`relative hidden xl:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/schedule" ? "text-[#B01E14]" : ""}`}>
               Schedule
               <span className={`absolute top-1.5 right-2 h-1 w-1 rounded-full bg-[#B01E14] transition-all duration-300 ${pathname === "/schedule" ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
