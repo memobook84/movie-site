@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { getMovieDetail, getTvDetail, getMovieImages, getRecommendations, getWatchProviders, getReleaseDates, getJPReleaseDate, getCertification, getExternalIds, getCollectionDetail, getVideosEn, IMAGE_BASE_URL } from "@/lib/tmdb";
 import Link from "next/link";
 import FollowButton from "@/components/FollowButton";
@@ -99,7 +100,6 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
   return {
     title: `${title} `,
     description,
-    ...(type && { robots: { index: false, follow: true } }),
     alternates: { canonical: canonicalUrl },
     openGraph: {
       title: `${title} `,
@@ -144,6 +144,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
   const movie = type === "tv"
     ? await getTvDetail(Number(id))
     : await getMovieDetail(Number(id));
+  if (movie.id === 0) notFound();
   const title = movie.title || movie.name || "";
   const findVideos = (videos: { key: string; site: string; type: string; name?: string; published_at?: string }[]) =>
     videos.filter((v) => v.site === "YouTube" && (v.type === "Trailer" || v.type === "Teaser"));

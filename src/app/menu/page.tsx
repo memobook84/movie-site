@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Home, CalendarDays, Film, ShieldCheck, Star, Compass, Users, Award, Tv } from "lucide-react";
+import { Home, CalendarDays, Film, ShieldCheck, Star, Compass, Users, Award, Tv, QrCode } from "lucide-react";
 import { LuBlocks } from "react-icons/lu";
 import { GiImperialCrown } from "react-icons/gi";
 import { PiBinocularsFill } from "react-icons/pi";
@@ -21,6 +21,7 @@ const featureItems = [
 ];
 
 const otherItems = [
+  { href: "/qr", label: "QRコード", icon: QrCode },
   { href: "/privacy", label: "プライバシーポリシー", icon: ShieldCheck },
 ];
 

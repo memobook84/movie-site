@@ -3,6 +3,8 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
+import { SquareMenu } from "lucide-react";
+import DesktopMenu from "./DesktopMenu";
 
 interface SearchResult {
   id: number;
@@ -31,6 +33,7 @@ export default function Navbar() {
   const debounceRef = useRef<NodeJS.Timeout>(null);
   const lastScrollY = useRef(0);
   const [hidden, setHidden] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -134,22 +137,29 @@ export default function Navbar() {
             <span>ARD CINEMA</span>
           </Link>
           <div className="flex items-center justify-end gap-4 font-[family-name:var(--font-noto-sans-jp)] text-sm font-black text-[#B01E14]">
-            <Link href="/schedule" className={`relative hidden xl:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/schedule" ? "text-[#B01E14]" : ""}`}>
+            <Link href="/schedule" className={`relative hidden md:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/schedule" ? "text-[#B01E14]" : ""}`}>
               Schedule
               <span className={`absolute top-1.5 right-2 h-1 w-1 rounded-full bg-[#B01E14] transition-all duration-300 ${pathname === "/schedule" ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
             </Link>
-            <Link href="/streaming" className={`relative hidden xl:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/streaming" ? "text-[#B01E14]" : ""}`}>
+            <Link href="/streaming" className={`relative hidden md:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/streaming" ? "text-[#B01E14]" : ""}`}>
               Streaming
               <span className={`absolute top-1.5 right-2 h-1 w-1 rounded-full bg-[#B01E14] transition-all duration-300 ${pathname === "/streaming" ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
             </Link>
-            <Link href="/selection" className={`relative hidden xl:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/selection" ? "text-[#B01E14]" : ""}`}>
+            <Link href="/selection" className={`relative hidden md:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/selection" ? "text-[#B01E14]" : ""}`}>
               Selection
               <span className={`absolute top-1.5 right-2 h-1 w-1 rounded-full bg-[#B01E14] transition-all duration-300 ${pathname === "/selection" ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
             </Link>
-            <Link href="/follows" className={`relative hidden xl:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/follows" ? "text-[#B01E14]" : ""}`}>
+            <Link href="/follows" className={`relative hidden md:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/follows" ? "text-[#B01E14]" : ""}`}>
               Watchlist
               <span className={`absolute top-1.5 right-2 h-1 w-1 rounded-full bg-[#B01E14] transition-all duration-300 ${pathname === "/follows" ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
             </Link>
+            <button
+              onClick={() => setShowMenu(true)}
+              className="hidden md:flex text-[#B01E14] transition-opacity hover:opacity-60"
+              aria-label="メニュー"
+            >
+              <SquareMenu className="h-5 w-5" />
+            </button>
             <button
               onClick={() => setShowSearch(!showSearch)}
               className="text-[#B01E14] transition-opacity hover:opacity-60"
@@ -163,6 +173,9 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
+
+      {/* PCメニュー */}
+      {showMenu && <DesktopMenu onClose={() => setShowMenu(false)} />}
 
       {/* 検索バー */}
       {showSearch && (

@@ -18,7 +18,6 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
   return {
     title: `${title} - 動画一覧`,
     alternates: { canonical: `https://ardcinema.com/movie/${id}/videos` },
-    ...(type && { robots: { index: false, follow: true } }),
   };
 }
 
