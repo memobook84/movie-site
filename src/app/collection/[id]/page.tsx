@@ -43,7 +43,7 @@ export default async function CollectionPage({ params }: PageProps) {
   return (
     <main className="min-h-screen bg-white">
       {/* ヒーロー画像 */}
-      <div className="relative mt-16 h-[40vw] max-h-[350px] w-full">
+      <div className="relative h-[56vw] max-h-[400px] w-full">
         {collection.backdrop_path ? (
           <div
             className="absolute inset-0 bg-cover bg-center"
@@ -54,23 +54,25 @@ export default async function CollectionPage({ params }: PageProps) {
         ) : (
           <div className="absolute inset-0 bg-gradient-to-r from-gray-800 to-gray-600" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent" />
+      </div>
 
-        {/* タイトル */}
-        <div className="absolute bottom-0 left-0 right-0 px-6 pb-6 md:px-16 md:pb-10">
-          <h1 className="text-lg font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl">
-            {collection.name}
-          </h1>
-          <p className="mt-1 text-xs text-gray-500 md:text-sm">
+      {/* タイトル */}
+      <div className="px-6 pt-5 pb-2 md:px-16 md:pt-8">
+        <h1 className="text-lg font-normal tracking-tight text-gray-900 font-[family-name:var(--font-noto-sans-jp)] md:text-3xl">
+          {collection.name}
+        </h1>
+        <div className="mt-2">
+          <span className="rounded-md bg-gray-100 px-2 py-0.5 text-[10px] text-gray-500 md:px-2.5 md:py-1 md:text-xs">
             {collection.parts.length}作品
-          </p>
+          </span>
         </div>
       </div>
 
       {/* 概要 */}
       {collection.overview && (
-        <div className="px-6 pt-6 md:px-16">
-          <p className="max-w-2xl text-sm leading-7 text-gray-600">
+        <div className="px-6 pb-4 md:px-16">
+          <p className="max-w-2xl text-xs leading-6 text-gray-600 md:text-sm md:leading-7">
             {collection.overview}
           </p>
         </div>

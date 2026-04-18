@@ -13,9 +13,10 @@ interface MovieRowProps {
   cardVariant?: "default" | "oscar";
   showUnderline?: boolean;
   href?: string;
+  accent?: boolean;
 }
 
-export default function MovieRow({ title, movies, titleClassName, subtitle, cardVariant = "default", showUnderline = false, href }: MovieRowProps) {
+export default function MovieRow({ title, movies, titleClassName, subtitle, cardVariant = "default", showUnderline = false, href, accent }: MovieRowProps) {
   const rowRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -31,7 +32,11 @@ export default function MovieRow({ title, movies, titleClassName, subtitle, card
         <div>
           <div className="flex items-center justify-between">
             <h2 className={titleClassName || "text-lg font-semibold tracking-wide text-[#1d1d1f] md:text-xl"}>
-              {title}
+              {accent ? (
+                <span style={{ background: "linear-gradient(to top, #E6A72399 40%, transparent 40%)" }}>
+                  {title}
+                </span>
+              ) : title}
             </h2>
             {href && (
               <Link href={href} className="text-xs font-medium text-gray-400 transition-colors hover:text-[#1d1d1f] md:text-sm">

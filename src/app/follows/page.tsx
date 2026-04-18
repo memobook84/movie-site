@@ -72,16 +72,15 @@ export default function FollowsPage() {
         </p>
 
         {/* タブナビゲーション */}
-        <div className="mt-6 border-b border-gray-200">
-          <div className="flex overflow-x-auto scrollbar-hide">
+        <div className="mt-8 flex gap-1 border-b border-gray-200">
             {tabs.map((tab) => (
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
-                className={`shrink-0 px-5 py-3 text-sm font-medium transition-colors border-b-2 ${
+                className={`px-4 py-2.5 text-sm font-medium transition-colors ${
                   activeTab === tab.key
-                    ? "border-gray-900 text-gray-900"
-                    : "border-transparent text-gray-400 hover:text-gray-600"
+                    ? "border-b-2 border-gray-900 text-gray-900"
+                    : "text-gray-400 hover:text-gray-600"
                 }`}
               >
                 {tab.label}
@@ -94,7 +93,6 @@ export default function FollowsPage() {
                 )}
               </button>
             ))}
-          </div>
         </div>
 
         {/* コンテンツ */}

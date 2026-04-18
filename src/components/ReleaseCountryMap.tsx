@@ -79,8 +79,8 @@ function ReleaseCountryMap({ releaseCountries, productionCountries }: Props) {
   return (
     <div className="mt-16 space-y-5">
       <div className="border-b border-gray-300">
-        <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
-          製作・上映国        </h2>
+        <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600">
+          <span style={{ background: "linear-gradient(to top, #E6A72399 40%, transparent 40%)" }}>製作・上映国</span>        </h2>
       </div>
       <div className="w-full max-w-4xl">
         <svg

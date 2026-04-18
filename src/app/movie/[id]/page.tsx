@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getMovieDetail, getTvDetail, getMovieImages, getRecommendations, getWatchProviders, getReleaseDates, getJPReleaseDate, getCertification, getExternalIds, getCollectionDetail, getVideosEn, IMAGE_BASE_URL } from "@/lib/tmdb";
+import { getMovieDetail, getTvDetail, getMovieImages, getRecommendations, getWatchProviders, getReleaseDates, getJPReleaseDate, getCertification, getExternalIds, getCollectionDetail, getVideosEn, getNowPlayingJP, IMAGE_BASE_URL } from "@/lib/tmdb";
 import Link from "next/link";
 import FollowButton from "@/components/FollowButton";
 import GalleryModal from "@/components/GalleryModal";
@@ -17,6 +17,7 @@ import {
   Moon, Music, Eye, Heart, Rocket,
   Tv, Flame, Swords, Sun,
 } from "lucide-react";
+import { AiFillVideoCamera } from "react-icons/ai";
 import { ComponentType } from "react";
 
 function jaOverview(text: string | undefined): string {
@@ -170,6 +171,9 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
   const releaseCountries = type !== "tv" ? await getReleaseDates(Number(id)) : [];
   const jpReleaseDate = type !== "tv" ? await getJPReleaseDate(Number(id)) : null;
   const certification = type !== "tv" ? await getCertification(Number(id)) : null;
+  const isNowPlayingJP = type !== "tv"
+    ? (await getNowPlayingJP()).some((m) => m.id === Number(id))
+    : false;
   const externalIds = await getExternalIds(Number(id), type || "movie");
   const year = movie.release_date?.slice(0, 4);
   const directors = movie.credits?.crew?.filter((c) => c.job === "Director") || [];
@@ -249,7 +253,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
           {/* テキスト情報 */}
           <div className="flex-1 flex flex-col gap-3 md:gap-5 pt-0 md:pl-4">
             <div>
-              <h1 className="text-base font-normal tracking-tight text-gray-900 md:text-4xl">
+              <h1 className="text-sm font-normal tracking-tight text-gray-900 md:text-4xl">
                 {title}
               </h1>
               {movie.tagline && (
@@ -265,8 +269,14 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                 <span className="rounded-md bg-gray-100 px-2 py-0.5">{year}</span>
               </div>
             )}
-            {(year || movie.genres.length > 0) && (
+            {(year || movie.genres.length > 0 || isNowPlayingJP) && (
               <div className="hidden md:flex flex-wrap items-center gap-2 text-xs text-gray-500">
+                {isNowPlayingJP && (
+                  <span className="inline-flex items-center gap-1 rounded-md bg-red-50 px-2.5 py-1 text-red-500 font-bold">
+                    <AiFillVideoCamera className="h-3.5 w-3.5" />
+                    上映中
+                  </span>
+                )}
                 {year && (
                   <span className="rounded-md bg-gray-100 px-2.5 py-1">{year}</span>
                 )}
@@ -293,8 +303,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
             {/* あらすじ（PC版のみここに表示） */}
             <div className="hidden md:block space-y-2">
               <div className="border-b border-gray-300">
-                <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
-                  あらすじ                </h2>
+                <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600">
+                  <span style={{ background: "linear-gradient(to top, #E6A72399 40%, transparent 40%)" }}>あらすじ</span>                </h2>
               </div>
               <p className="text-sm leading-7 text-gray-600">
                 {jaOverview(movie.overview) || "この作品の説明はまだ登録されていません。"}
@@ -310,8 +320,14 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         </div>
 
         {/* ジャンルタグ（スマホ版） */}
-        {movie.genres.length > 0 && (
+        {(movie.genres.length > 0 || isNowPlayingJP) && (
           <div className="mt-6 flex flex-wrap items-center gap-1.5 text-[10px] text-gray-500 md:hidden">
+            {isNowPlayingJP && (
+              <span className="inline-flex items-center gap-1 rounded-md bg-red-50 px-2 py-0.5 text-red-500 font-bold">
+                <AiFillVideoCamera className="h-3 w-3" />
+                上映中
+              </span>
+            )}
             {movie.genres.map((genre) => {
               const Icon = GENRE_ICONS[genre.id];
               return (
@@ -330,8 +346,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {/* あらすじ（スマホ版） */}
         <div className="mt-4 space-y-2 md:hidden">
           <div className="border-b border-gray-300">
-            <h2 className="inline-block text-sm font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
-              あらすじ            </h2>
+            <h2 className="inline-block text-sm font-normal uppercase tracking-widest text-gray-600">
+              <span style={{ background: "linear-gradient(to top, #E6A72399 40%, transparent 40%)" }}>あらすじ</span>            </h2>
           </div>
           <p className="text-sm leading-7 text-gray-600">
             {movie.overview || "この作品の説明はまだ登録されていません。"}
@@ -711,8 +727,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
           <div className="mt-8 md:mt-16 space-y-5">
             <div className="flex items-center justify-between">
               <div className="flex-1 border-b border-gray-300">
-                <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
-                  作品情報                </h2>
+                <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600">
+                  <span style={{ background: "linear-gradient(to top, #E6A72399 40%, transparent 40%)" }}>作品情報</span>                </h2>
               </div>
               <div className="flex flex-wrap gap-[10px] pb-2 pl-4">
                 <GalleryModal images={images} imageBase={IMAGE_BASE_URL} />
@@ -934,8 +950,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {cast.length > 0 && (
           <div className="mt-8 md:mt-16 space-y-5">
             <div className="flex items-center justify-between border-b border-gray-300">
-              <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
-                キャスト              </h2>
+              <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600">
+                <span style={{ background: "linear-gradient(to top, #E6A72399 40%, transparent 40%)" }}>キャスト</span>              </h2>
               <Link
                 href={`/movie/${id}/cast?type=${type === "tv" ? "tv" : "movie"}`}
                 className="flex items-center gap-1 text-xs text-gray-400 transition-colors hover:text-gray-700"
@@ -995,8 +1011,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {allVideos.length > 0 && (
           <div className="mt-8 md:mt-16 space-y-5">
             <div className="flex items-center justify-between border-b border-gray-300">
-              <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
-                ビデオ              </h2>
+              <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600">
+                <span style={{ background: "linear-gradient(to top, #E6A72399 40%, transparent 40%)" }}>ビデオ</span>              </h2>
               <Link
                 href={`/movie/${id}/videos?type=${type === "tv" ? "tv" : "movie"}`}
                 className="flex items-center gap-1 text-xs text-gray-400 transition-colors hover:text-gray-700"
@@ -1019,8 +1035,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {collection && collection.parts.length > 1 && (
           <div className="mt-8 md:mt-16 space-y-5">
             <div className="flex items-center justify-between border-b border-gray-300">
-              <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
-                シリーズ              </h2>
+              <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600">
+                <span style={{ background: "linear-gradient(to top, #E6A72399 40%, transparent 40%)" }}>シリーズ</span>              </h2>
               <Link
                 href={`/collection/${collection.id}`}
                 className="flex items-center gap-1 text-xs text-gray-400 transition-colors hover:text-gray-700"
@@ -1078,8 +1094,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {type === "tv" && movie.seasons && movie.seasons.length > 0 && (
           <div className="mt-8 md:mt-16 space-y-5">
             <div className="border-b border-gray-300">
-              <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
-                シーズン（{movie.number_of_seasons}シーズン・{movie.number_of_episodes}エピソード）              </h2>
+              <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600">
+                <span style={{ background: "linear-gradient(to top, #E6A72399 40%, transparent 40%)" }}>シーズン（{movie.number_of_seasons}シーズン・{movie.number_of_episodes}エピソード）</span>              </h2>
             </div>
             <div className="space-y-3">
               {movie.seasons
@@ -1121,8 +1137,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {watchProviders && (watchProviders.flatrate || watchProviders.rent || watchProviders.buy) && (
           <div className="mt-8 md:mt-16 space-y-5">
             <div className="border-b border-gray-300">
-              <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
-                配信情報              </h2>
+              <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600">
+                <span style={{ background: "linear-gradient(to top, #E6A72399 40%, transparent 40%)" }}>配信情報</span>              </h2>
             </div>
             <div className="space-y-4">
               {watchProviders.flatrate && watchProviders.flatrate.length > 0 && (
@@ -1187,8 +1203,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {(externalIds.instagram_id || externalIds.twitter_id || externalIds.facebook_id || externalIds.tiktok_id) && (
           <div className="mt-8 md:mt-16 space-y-5">
             <div className="border-b border-gray-300">
-              <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
-                公式SNS              </h2>
+              <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600">
+                <span style={{ background: "linear-gradient(to top, #E6A72399 40%, transparent 40%)" }}>公式SNS</span>              </h2>
             </div>
             <div className="flex gap-3">
               {externalIds.instagram_id && (
@@ -1228,8 +1244,8 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
         {recommendations.length > 0 && (
           <div className="mt-8 md:mt-16 space-y-5">
             <div className="border-b border-gray-300">
-              <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
-                関連作品              </h2>
+              <h2 className="inline-block text-sm md:text-base font-normal uppercase tracking-widest text-gray-600">
+                <span style={{ background: "linear-gradient(to top, #E6A72399 40%, transparent 40%)" }}>関連作品</span>              </h2>
             </div>
             <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
               {recommendations.slice(0, 20).map((rec) => (

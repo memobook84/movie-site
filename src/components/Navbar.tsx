@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { SquareMenu } from "lucide-react";
+import { CgMenuCheese } from "react-icons/cg";
 import DesktopMenu from "./DesktopMenu";
 
 interface SearchResult {
@@ -154,13 +154,6 @@ export default function Navbar() {
               <span className={`absolute top-1.5 right-2 h-1 w-1 rounded-full bg-[#B01E14] transition-all duration-300 ${pathname === "/follows" ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
             </Link>
             <button
-              onClick={() => setShowMenu(true)}
-              className="hidden md:flex text-[#B01E14] transition-opacity hover:opacity-60"
-              aria-label="メニュー"
-            >
-              <SquareMenu className="h-5 w-5" />
-            </button>
-            <button
               onClick={() => setShowSearch(!showSearch)}
               className="text-[#B01E14] transition-opacity hover:opacity-60"
               aria-label="検索"
@@ -169,6 +162,13 @@ export default function Navbar() {
                 <circle cx="11" cy="11" r="8" />
                 <path d="m21 21-4.35-4.35" strokeLinecap="round" />
               </svg>
+            </button>
+            <button
+              onClick={() => setShowMenu(true)}
+              className="hidden md:flex text-[#B01E14] transition-opacity hover:opacity-60"
+              aria-label="メニュー"
+            >
+              <CgMenuCheese className="h-5 w-5" />
             </button>
           </div>
         </div>
