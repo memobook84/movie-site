@@ -63,7 +63,7 @@ export default function ClassicsClient({ movies }: { movies: Movie[] }) {
           {filtered.map((movie) => {
             const title = movie.title || movie.name || "";
             return (
-              <Link key={movie.id} href={`/movie/${movie.id}`} className="group">
+              <Link key={movie.id} href={`/movie/${movie.id}?type=${movie.media_type === "tv" ? "tv" : "movie"}`} className="group">
                 <div className="overflow-hidden rounded-[4px] transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:shadow-black/10">
                   {movie.poster_path ? (
                     <img

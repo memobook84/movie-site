@@ -174,7 +174,7 @@ export default function DiscoverClient() {
   // カードタップで遷移（スワイプ中は無視）
   const handleCardClick = useCallback((movieId: number) => {
     if (hasMoved.current) return;
-    router.push(`/movie/${movieId}`);
+    router.push(`/movie/${movieId}?type=movie`);
   }, [router]);
 
   return (

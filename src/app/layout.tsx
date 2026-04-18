@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Noto_Sans_JP } from "next/font/google";
+import { Inter, Noto_Sans_JP, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -10,6 +10,7 @@ import SplashScreen from "@/components/SplashScreen";
 
 const inter = Inter({ subsets: ["latin"] });
 const notoSansJP = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--font-noto-sans-jp" });
+const bebasNeue = Bebas_Neue({ subsets: ["latin"], weight: "400", variable: "--font-bebas-neue" });
 
 export const metadata: Metadata = {
   title: {
@@ -58,7 +59,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body className={`${inter.className} ${notoSansJP.variable}`}>
+      <body className={`${inter.className} ${notoSansJP.variable} ${bebasNeue.variable}`}>
         <ServiceWorker />
         <SplashScreen />
         <Navbar />

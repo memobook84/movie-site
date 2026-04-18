@@ -94,6 +94,30 @@ async function fetchTMDb<T>(endpoint: string, fallback: T): Promise<T> {
   return fallback;
 }
 
+async function fetchTMDbStrict<T>(endpoint: string, fallback: T): Promise<T> {
+  if (!API_KEY || API_KEY === "YOUR_API_KEY_HERE") return fallback;
+  let lastError: unknown = null;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const res = await fetch(`${BASE_URL}${endpoint}${endpoint.includes("?") ? "&" : "?"}api_key=${API_KEY}&language=ja-JP`, {
+        next: { revalidate: 86400 },
+      });
+      if (res.status === 404) return fallback;
+      if (res.status === 429) {
+        await new Promise((r) => setTimeout(r, 2000 * (attempt + 1)));
+        continue;
+      }
+      if (!res.ok) throw new Error(`TMDb API error: ${res.status}`);
+      return res.json();
+    } catch (e) {
+      lastError = e;
+      if (attempt === 2) break;
+      await new Promise((r) => setTimeout(r, 1000));
+    }
+  }
+  throw lastError instanceof Error ? lastError : new Error(`TMDb fetch failed: ${endpoint}`);
+}
+
 const emptyResponse: TMDbResponse = { results: [] };
 
 export interface Person {
@@ -229,7 +253,7 @@ const emptyDetail: MovieDetail = {
 };
 
 export async function getMovieDetail(id: number): Promise<MovieDetail> {
-  const movie = await fetchTMDb<MovieDetail>(`/movie/${id}?append_to_response=videos,credits`, emptyDetail);
+  const movie = await fetchTMDbStrict<MovieDetail>(`/movie/${id}?append_to_response=videos,credits`, emptyDetail);
   // 日本語の説明がない場合、英語版をフォールバック取得
   if (movie.id !== 0 && !movie.overview) {
     const enMovie = await fetchTMDbEn<MovieDetail>(`/movie/${id}`, emptyDetail);
@@ -261,7 +285,7 @@ export async function getVideosEn(id: number, type: string = "movie"): Promise<{
 }
 
 export async function getTvDetail(id: number): Promise<MovieDetail> {
-  const tv = await fetchTMDb<MovieDetail>(`/tv/${id}?append_to_response=videos,credits`, emptyDetail);
+  const tv = await fetchTMDbStrict<MovieDetail>(`/tv/${id}?append_to_response=videos,credits`, emptyDetail);
   // TVはtitleではなくnameを使うので統一
   if (!tv.title && tv.name) tv.title = tv.name;
   if (tv.id !== 0 && !tv.overview) {

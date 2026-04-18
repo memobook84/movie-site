@@ -137,19 +137,19 @@ export default function Navbar() {
             <span>ARD CINEMA</span>
           </Link>
           <div className="flex items-center justify-end gap-4 font-[family-name:var(--font-noto-sans-jp)] text-sm font-black text-[#B01E14]">
-            <Link href="/schedule" className={`relative hidden md:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/schedule" ? "text-[#B01E14]" : ""}`}>
+            <Link href="/schedule" className={`relative hidden xl:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/schedule" ? "text-[#B01E14]" : ""}`}>
               Schedule
               <span className={`absolute top-1.5 right-2 h-1 w-1 rounded-full bg-[#B01E14] transition-all duration-300 ${pathname === "/schedule" ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
             </Link>
-            <Link href="/streaming" className={`relative hidden md:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/streaming" ? "text-[#B01E14]" : ""}`}>
+            <Link href="/streaming" className={`relative hidden xl:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/streaming" ? "text-[#B01E14]" : ""}`}>
               Streaming
               <span className={`absolute top-1.5 right-2 h-1 w-1 rounded-full bg-[#B01E14] transition-all duration-300 ${pathname === "/streaming" ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
             </Link>
-            <Link href="/selection" className={`relative hidden md:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/selection" ? "text-[#B01E14]" : ""}`}>
+            <Link href="/selection" className={`relative hidden xl:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/selection" ? "text-[#B01E14]" : ""}`}>
               Selection
               <span className={`absolute top-1.5 right-2 h-1 w-1 rounded-full bg-[#B01E14] transition-all duration-300 ${pathname === "/selection" ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
             </Link>
-            <Link href="/follows" className={`relative hidden md:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/follows" ? "text-[#B01E14]" : ""}`}>
+            <Link href="/follows" className={`relative hidden xl:inline-flex items-center px-3 py-1.5 text-[#B01E14]/70 transition-all duration-300 hover:text-[#B01E14] ${pathname === "/follows" ? "text-[#B01E14]" : ""}`}>
               Watchlist
               <span className={`absolute top-1.5 right-2 h-1 w-1 rounded-full bg-[#B01E14] transition-all duration-300 ${pathname === "/follows" ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
             </Link>

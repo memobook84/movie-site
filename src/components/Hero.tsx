@@ -178,7 +178,8 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
 
   const handleClick = () => {
     if (!didSwipe.current) {
-      router.push(`/movie/${movie.id}`);
+      const mediaType = movie.media_type === "tv" ? "tv" : "movie";
+      router.push(`/movie/${movie.id}?type=${mediaType}`);
     }
   };
 
@@ -350,7 +351,8 @@ export default function Hero({ movies, upcomingMovies = [], trailerKeys = {}, ca
                       if (idx >= 0) {
                         setCurrent(idx);
                       } else {
-                        router.push(`/movie/${m.id}`);
+                        const mMediaType = m.media_type === "tv" ? "tv" : "movie";
+                        router.push(`/movie/${m.id}?type=${mMediaType}`);
                       }
                     }}
                     className={`relative flex-shrink-0 group transition-all duration-300 rounded overflow-hidden ${

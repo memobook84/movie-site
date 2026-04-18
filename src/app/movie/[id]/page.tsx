@@ -95,7 +95,8 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
       ? `${IMAGE_BASE_URL}/w780${movie.poster_path}`
       : undefined;
 
-  const canonicalUrl = `https://ardcinema.com/movie/${id}`;
+  const mediaType = type === "tv" ? "tv" : "movie";
+  const canonicalUrl = `https://ardcinema.com/movie/${id}?type=${mediaType}`;
 
   return {
     title: `${title} `,
@@ -203,7 +204,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
       },
     }),
     ...(cast.length > 0 && { actor: cast.map((c) => ({ "@type": "Person", name: c.name })) }),
-    url: `https://ardcinema.com/movie/${id}?type=${type || "movie"}`,
+    url: `https://ardcinema.com/movie/${id}?type=${type === "tv" ? "tv" : "movie"}`,
   };
 
   return (
@@ -724,7 +725,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                     cast={allCast}
                   />
                 )}
-                <ShareButton title={`${title} `} url={`https://ardcinema.com/movie/${id}`} />
+                <ShareButton title={`${title} `} url={`https://ardcinema.com/movie/${id}?type=${type === "tv" ? "tv" : "movie"}`} />
               </div>
             </div>
             {/* スマホ: IMDb風 */}
@@ -936,7 +937,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
                 キャスト              </h2>
               <Link
-                href={`/movie/${id}/cast?type=${type || "movie"}`}
+                href={`/movie/${id}/cast?type=${type === "tv" ? "tv" : "movie"}`}
                 className="flex items-center gap-1 text-xs text-gray-400 transition-colors hover:text-gray-700"
               >
                 出演者一覧
@@ -997,7 +998,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
               <h2 className="text-sm md:text-base font-normal uppercase tracking-widest text-gray-600 border-b-2 border-gray-900 pb-2 -mb-px">
                 ビデオ              </h2>
               <Link
-                href={`/movie/${id}/videos?type=${type || "movie"}`}
+                href={`/movie/${id}/videos?type=${type === "tv" ? "tv" : "movie"}`}
                 className="flex items-center gap-1 text-xs text-gray-400 transition-colors hover:text-gray-700"
               >
                 すべて見る
@@ -1036,7 +1037,7 @@ export default async function MovieDetailPage({ params, searchParams }: PageProp
                 return (
                   <Link
                     key={part.id}
-                    href={`/movie/${part.id}`}
+                    href={`/movie/${part.id}?type=movie`}
                     className={`flex-shrink-0 w-[130px] md:w-[150px] group ${isCurrent ? "pointer-events-none" : ""}`}
                   >
                     <div className={`relative rounded-[6px] overflow-hidden ${isCurrent ? "ring-2 ring-black" : ""}`}>

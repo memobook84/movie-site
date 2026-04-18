@@ -14,9 +14,10 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
     ? await getTvDetail(Number(id))
     : await getMovieDetail(Number(id));
   const title = movie.title || movie.name || "";
+  const mediaType = type === "tv" ? "tv" : "movie";
   return {
     title: `${title} - 出演者一覧`,
-    alternates: { canonical: `https://ardcinema.com/movie/${id}/cast` },
+    alternates: { canonical: `https://ardcinema.com/movie/${id}/cast?type=${mediaType}` },
   };
 }
 
@@ -33,7 +34,7 @@ export default async function CastPage({ params, searchParams }: PageProps) {
     <main className="min-h-screen bg-white pt-14 md:pt-24 pb-28 px-6 md:px-16 md:max-w-[1280px] md:mx-auto">
       {/* 戻るリンク + タイトル */}
       <Link
-        href={`/movie/${id}?type=${type || "movie"}`}
+        href={`/movie/${id}?type=${type === "tv" ? "tv" : "movie"}`}
         className="inline-flex items-center gap-1 text-sm text-gray-400 transition-colors hover:text-gray-700"
       >
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

@@ -74,7 +74,7 @@ export default function SelectionClient({ genres }: { genres: GenreData[] }) {
           return (
             <Link
               key={detail.id}
-              href={`/movie/${detail.id}`}
+              href={`/movie/${detail.id}?type=movie`}
               className="group"
             >
               <div className="relative overflow-hidden rounded-[4px]">

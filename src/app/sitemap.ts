@@ -40,7 +40,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (movieIds.has(movie.id)) continue;
     movieIds.add(movie.id);
     moviePages.push({
-      url: `${BASE_URL}/movie/${movie.id}`,
+      url: `${BASE_URL}/movie/${movie.id}?type=movie`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.7,

@@ -97,7 +97,7 @@ export default async function CollectionPage({ params }: PageProps) {
                 return (
                   <Link
                     key={part.id}
-                    href={`/movie/${part.id}`}
+                    href={`/movie/${part.id}?type=movie`}
                     className="relative ml-[18px] md:ml-[22px] pl-6 md:pl-8 pb-6 block group"
                   >
                     {/* ドット */}

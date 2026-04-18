@@ -15,9 +15,10 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
     ? await getTvDetail(Number(id))
     : await getMovieDetail(Number(id));
   const title = movie.title || movie.name || "";
+  const mediaType = type === "tv" ? "tv" : "movie";
   return {
     title: `${title} - 動画一覧`,
-    alternates: { canonical: `https://ardcinema.com/movie/${id}/videos` },
+    alternates: { canonical: `https://ardcinema.com/movie/${id}/videos?type=${mediaType}` },
   };
 }
 
@@ -57,7 +58,7 @@ export default async function VideosPage({ params, searchParams }: PageProps) {
       {/* ヘッダー */}
       <div className="mb-8">
         <Link
-          href={`/movie/${id}?type=${type || "movie"}`}
+          href={`/movie/${id}?type=${type === "tv" ? "tv" : "movie"}`}
           className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-gray-700 transition-colors mb-3"
         >
           <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

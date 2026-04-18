@@ -12,10 +12,12 @@ interface MovieCardProps {
 export default function MovieCard({ movie, variant = "default" }: MovieCardProps) {
   const title = movie.title || movie.name || "No Title";
   const isOscar = variant === "oscar";
+  const mediaType = movie.media_type === "tv" ? "tv" : "movie";
+  const href = `/movie/${movie.id}?type=${mediaType}`;
 
   if (isOscar) {
     return (
-      <Link href={`/movie/${movie.id}`} className="group flex-shrink-0">
+      <Link href={href} className="group flex-shrink-0">
         {/* スマホ: 縦型ポスター */}
         <div className="w-[105px] overflow-hidden rounded-[3px] bg-white shadow-md transition-all duration-300 group-hover:shadow-lg group-hover:shadow-xl md:hidden">
           {movie.poster_path ? (
@@ -61,7 +63,7 @@ export default function MovieCard({ movie, variant = "default" }: MovieCardProps
   }
 
   return (
-    <Link href={`/movie/${movie.id}`} className="group flex-shrink-0">
+    <Link href={href} className="group flex-shrink-0">
       {/* スマホ: 縦型ポスター */}
       <div className="w-[105px] overflow-hidden rounded-[3px] bg-white shadow-md transition-all duration-300 group-hover:shadow-lg group-hover:shadow-xl md:hidden">
         {movie.poster_path ? (

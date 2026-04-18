@@ -12,6 +12,12 @@
 - Next.js製の映画・ドラマ情報サイト（TMDb API使用）
 - デプロイ先: Vercel
 
+## アーキテクチャ（変更禁止・ユーザー確認必須）
+
+- TMDb API はサーバーサイドで直接呼び出し（Next.js の fetch + 24h revalidate キャッシュ）
+- API Route や外部プロキシは経由しない
+- この方針を変更する場合はユーザーに必ず確認すること
+
 ## 技術スタック
 
 - Next.js, TypeScript, Tailwind CSS
